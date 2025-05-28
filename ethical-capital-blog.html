@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Insights | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--ec-bg-white);
+            padding: 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .hero .tagline {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: 32px auto 0;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .search-button {
+            padding: 12px 24px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: var(--ec-purple-light);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 48px;
+        }
+
+        /* Featured Post */
+        .featured-section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ec-purple);
+            display: inline-block;
+        }
+
+        .featured-post {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .featured-image {
+            background: var(--ec-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            min-height: 300px;
+        }
+
+        .featured-content {
+            padding: 32px;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .post-category {
+            color: var(--ec-purple);
+            font-weight: 600;
+        }
+
+        .featured-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .featured-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .featured-title a:hover {
+            color: var(--ec-purple);
+        }
+
+        .featured-excerpt {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            color: var(--ec-purple);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        /* Recent Posts Grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .post-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+            transition: none;
+        }
+
+        .post-card:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .post-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .post-title a {
+            color: var(--ec-text);
+            text-decoration: none;
+        }
+
+        .post-title a:hover {
+            color: var(--ec-purple);
+        }
+
+        .post-excerpt {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px dotted var(--ec-border);
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .sidebar-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Categories */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--ec-text);
+        }
+
+        .category-item:hover {
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+        }
+
+        .category-count {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Popular Posts */
+        .popular-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .popular-item {
+            display: flex;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 1px dotted var(--ec-border);
+        }
+
+        .popular-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .popular-number {
+            width: 24px;
+            height: 24px;
+            background: var(--ec-purple);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+
+        .popular-content {
+            flex: 1;
+        }
+
+        .popular-title {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .popular-title a {
+            color: var(--ec-text);
+            text-decoration: none;
+        }
+
+        .popular-title a:hover {
+            color: var(--ec-purple);
+        }
+
+        .popular-meta {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Newsletter */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .newsletter-input {
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .newsletter-button {
+            padding: 10px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .newsletter-button:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .newsletter-note {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            line-height: 1.4;
+        }
+
+        /* Tags */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            text-decoration: none;
+            color: var(--ec-text);
+            border: 1px solid var(--ec-border);
+        }
+
+        .tag:hover {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        /* Load More */
+        .load-more {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .load-more-btn {
+            padding: 12px 32px;
+            background: white;
+            color: var(--ec-purple);
+            border: 2px solid var(--ec-purple);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+        }
+
+        .load-more-btn:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-post {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-image {
+                min-height: 200px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item active">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Research & Insights</h1>
+        <p class="tagline">Deep analysis on ethical investing, market trends, and the companies 
+        shaping tomorrow's economy. No greenwashing, just rigorous research.</p>
+        
+        <div class="search-container">
+            <form class="search-bar">
+                <input type="text" class="search-input" placeholder="Search articles, companies, topics...">
+                <button type="submit" class="search-button">SEARCH</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+        <main>
+            <!-- Featured Post -->
+            <section class="featured-section">
+                <h2 class="section-header">FEATURED ANALYSIS</h2>
+                <article class="featured-post">
+                    <div class="featured-image">
+                        [Featured Image]
+                    </div>
+                    <div class="featured-content">
+                        <div class="post-meta">
+                            <span class="post-category">ESG DEEP DIVE</span>
+                            <span>DECEMBER 18, 2024</span>
+                            <span>15 MIN READ</span>
+                        </div>
+                        <h3 class="featured-title">
+                            <a href="#">The Hidden 40%: How Our Proprietary Screening Catches What ESG Ratings Miss</a>
+                        </h3>
+                        <p class="featured-excerpt">
+                            MSCI rates them AAA. Sustainalytics calls them low risk. Yet we excluded 40% of 
+                            "ESG leaders" based on our proprietary research. Here's what we found when we looked 
+                            beyond the ratings, including systematic greenwashing, regulatory capture, and the 
+                            troubling gap between corporate promises and actions.
+                        </p>
+                        <a href="#" class="read-more">READ FULL ANALYSIS →</a>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Recent Posts -->
+            <section>
+                <h2 class="section-header">RECENT RESEARCH</h2>
+                <div class="posts-grid">
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">PORTFOLIO UPDATE</span>
+                            <span>DEC 15, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Why We Exited Our Position in Major Tech Co: A Lesson in Surveillance Capitalism</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Sometimes the hardest decisions are about companies everyone loves. Our exit from a 
+                            major tech holding demonstrates how our ethical framework works in practice...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>8 MIN READ</span>
+                                <span>247 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">MARKET ANALYSIS</span>
+                            <span>DEC 12, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Finding the Weird Little Flowers: Our Q4 2024 Small Cap Discoveries</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Three companies you've never heard of that are quietly revolutionizing their industries 
+                            while maintaining exceptional ethical standards. Here's what we found...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>12 MIN READ</span>
+                                <span>189 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">CLIENT EDUCATION</span>
+                            <span>DEC 8, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Understanding BDS Compliance in Investment Portfolios: A Practical Guide</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            We're the only retail investment firm offering BDS-compliant portfolios. Here's exactly 
+                            what that means, how we implement it, and why it matters for ethical investors...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>10 MIN READ</span>
+                                <span>423 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">THEMATIC RESEARCH</span>
+                            <span>DEC 5, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Infrastructure for Good: How Smart Grid Investments Power the Energy Transition</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Our infrastructure theme isn't just about roads and bridges. Companies like Quanta Services 
+                            are building the backbone of a sustainable future. Here's our investment thesis...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>14 MIN READ</span>
+                                <span>156 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">METHODOLOGY</span>
+                            <span>NOV 28, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">New Moon Rebalancing: The Method Behind Our Madness</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            Yes, we rebalance portfolios on the new moon. No, we're not crazy. Here's why this 
+                            unconventional approach actually enhances discipline and reduces emotional trading...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>6 MIN READ</span>
+                                <span>312 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span class="post-category">CASE STUDY</span>
+                            <span>NOV 22, 2024</span>
+                        </div>
+                        <h3 class="post-title">
+                            <a href="#">Alexandria Real Estate: When Lab Space Becomes a Launch Pad for Innovation</a>
+                        </h3>
+                        <p class="post-excerpt">
+                            How a REIT focused on life science properties became our largest holding. A deep dive into 
+                            finding companies where revenue and positive impact are perfectly aligned...
+                        </p>
+                        <div class="post-footer">
+                            <div class="post-stats">
+                                <span>18 MIN READ</span>
+                                <span>267 VIEWS</span>
+                            </div>
+                            <a href="#" class="read-more">READ →</a>
+                        </div>
+                    </article>
+                </div>
+                
+                <div class="load-more">
+                    <button class="load-more-btn">LOAD MORE ARTICLES</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Categories -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">RESEARCH CATEGORIES</h3>
+                <nav class="category-list">
+                    <a href="#" class="category-item">
+                        <span>Portfolio Updates</span>
+                        <span class="category-count">23</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>ESG Deep Dives</span>
+                        <span class="category-count">18</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Market Analysis</span>
+                        <span class="category-count">31</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Company Profiles</span>
+                        <span class="category-count">47</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Thematic Research</span>
+                        <span class="category-count">15</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Client Education</span>
+                        <span class="category-count">12</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Methodology</span>
+                        <span class="category-count">8</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Popular Posts -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">MOST READ THIS MONTH</h3>
+                <div class="popular-list">
+                    <article class="popular-item">
+                        <div class="popular-number">1</div>
+                        <div class="popular-content">
+                            <h4 class="popular-title">
+                                <a href="#">Why We're Bullish on "Boring" Infrastructure</a>
+                            </h4>
+                            <div class="popular-meta">1,247 views</div>
+                        </div>
+                    </article>
+                    <article class="popular-item">
+                        <div class="popular-number">2</div>
+                        <div class="popular-content">
+                            <h4 class="popular-title">
+                                <a href="#">The Complete Guide to Our Exclusion Lists</a>
+                            </h4>
+                            <div class="popular-meta">982 views</div>
+                        </div>
+                    </article>
+                    <article class="popular-item">
+                        <div class="popular-number">3</div>
+                        <div class="popular-content">
+                            <h4 class="popular-title">
+                                <a href="#">Q4 2024: Major Position Changes Explained</a>
+                            </h4>
+                            <div class="popular-meta">856 views</div>
+                        </div>
+                    </article>
+                    <article class="popular-item">
+                        <div class="popular-number">4</div>
+                        <div class="popular-content">
+                            <h4 class="popular-title">
+                                <a href="#">Ethics as a Liberal Art: Our Investment Philosophy</a>
+                            </h4>
+                            <div class="popular-meta">723 views</div>
+                        </div>
+                    </article>
+                    <article class="popular-item">
+                        <div class="popular-number">5</div>
+                        <div class="popular-content">
+                            <h4 class="popular-title">
+                                <a href="#">Climate Transition Leaders: 2025 Outlook</a>
+                            </h4>
+                            <div class="popular-meta">654 views</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">WEEKLY INSIGHTS</h3>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Your email address" required>
+                    <button type="submit" class="newsletter-button">SUBSCRIBE</button>
+                </form>
+                <p class="newsletter-note">
+                    Get our weekly research digest. No marketing fluff, just our latest analysis on 
+                    ethical investing and market insights.
+                </p>
+            </div>
+
+            <!-- Tags -->
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">RESEARCH TOPICS</h3>
+                <div class="tag-cloud">
+                    <a href="#" class="tag">Climate Risk</a>
+                    <a href="#" class="tag">BDS Compliance</a>
+                    <a href="#" class="tag">Labor Practices</a>
+                    <a href="#" class="tag">Renewable Energy</a>
+                    <a href="#" class="tag">Supply Chain</a>
+                    <a href="#" class="tag">Governance</a>
+                    <a href="#" class="tag">Small Cap</a>
+                    <a href="#" class="tag">Infrastructure</a>
+                    <a href="#" class="tag">Healthcare Access</a>
+                    <a href="#" class="tag">Digital Privacy</a>
+                    <a href="#" class="tag">Circular Economy</a>
+                    <a href="#" class="tag">Community Banking</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor<br>
+                All research is for informational purposes only and should not be considered investment advice.
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Disclosures</a>
+                <a href="#">RSS Feed</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
