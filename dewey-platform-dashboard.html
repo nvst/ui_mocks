@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Platform Dashboard</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* View Selector */
+        .view-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .view-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            background: var(--ec-bg-gray);
+        }
+        
+        .view-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .view-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .view-icon {
+            width: 16px;
+            text-align: center;
+        }
+        
+        /* System Status */
+        .system-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .system-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+        
+        .system-name {
+            color: var(--ec-text-muted);
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        
+        .status-online {
+            background: var(--ec-positive);
+        }
+        
+        .status-limited {
+            background: var(--ec-caution);
+        }
+        
+        .status-offline {
+            background: var(--ec-negative);
+        }
+        
+        /* Quick Actions */
+        .action-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .action-item {
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .action-key {
+            margin-left: auto;
+            background: var(--ec-text);
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Grid Layout for Dashboard Panels */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: auto 1fr 1fr;
+            gap: 16px;
+            padding: 16px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .panel {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .panel-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--ec-bg-gray);
+        }
+        
+        .panel-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        /* Portfolio Summary Panel */
+        .portfolio-summary {
+            grid-column: span 2;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 100%;
+        }
+        
+        .summary-item {
+            padding: 16px;
+            border-right: 1px solid var(--ec-border);
+            text-align: center;
+        }
+        
+        .summary-item:last-child {
+            border-right: none;
+        }
+        
+        .summary-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .summary-subvalue {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Activity Table */
+        .activity-table {
+            width: 100%;
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 60px 80px 1fr 100px 100px;
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            background: var(--ec-bg-gray);
+            letter-spacing: 0.5px;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 60px 80px 1fr 100px 100px;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--ec-border);
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .table-row:hover {
+            background: var(--ec-purple-pale);
+            cursor: pointer;
+        }
+        
+        .time-cell {
+            color: var(--ec-text-muted);
+            font-size: 11px;
+        }
+        
+        .type-badge {
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 2px;
+            text-align: center;
+        }
+        
+        .type-action {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        
+        .type-alert {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+        
+        .type-report {
+            background: #F3E5F5;
+            color: #7B1FA2;
+        }
+        
+        .type-analysis {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+        
+        .status-badge {
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        .status-active {
+            background: var(--ec-info);
+            color: white;
+        }
+        
+        .status-pending {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        .status-complete {
+            background: var(--ec-positive);
+            color: white;
+        }
+        
+        /* Alert Panel */
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .alert-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--ec-negative);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .alert-description {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .alert-time {
+            font-size: 10px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Workflow Panel */
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .workflow-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .workflow-info {
+            flex: 1;
+        }
+        
+        .workflow-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .workflow-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .workflow-progress {
+            width: 100px;
+            height: 6px;
+            background: var(--ec-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--ec-purple);
+            transition: width 0.3s;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">Investment Research</a>
+            <a href="#">Client Management</a>
+            <a href="#">Compliance</a>
+            <a href="#">Operations</a>
+            <a href="#">System Admin</a>
+            <a href="#">Content</a>
+        </nav>
+    </header>
+    
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Views</h3>
+                <div class="view-list">
+                    <div class="view-item active">
+                        <span class="view-icon">📊</span>
+                        <span>Executive Overview</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-icon">💹</span>
+                        <span>Performance</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-icon">⚠️</span>
+                        <span>Risk & Compliance</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-icon">📊</span>
+                        <span>Analytics</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-icon">👥</span>
+                        <span>Client Activity</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-icon">🔄</span>
+                        <span>Operations</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">System Status</h3>
+                <div class="system-list">
+                    <div class="system-item">
+                        <span class="system-name">Action Processing</span>
+                        <span class="system-status">
+                            <span class="status-dot status-online"></span>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Alert Engine</span>
+                        <span class="system-status">
+                            <span class="status-dot status-online"></span>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Email Processor</span>
+                        <span class="system-status">
+                            <span class="status-dot status-limited"></span>
+                            <span>Limited</span>
+                        </span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Media Monitor</span>
+                        <span class="system-status">
+                            <span class="status-dot status-online"></span>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Research AI</span>
+                        <span class="system-status">
+                            <span class="status-dot status-online"></span>
+                            <span>Online</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Quick Actions</h3>
+                <div class="action-list">
+                    <div class="action-item">
+                        <span>📝</span>
+                        <span>New Action</span>
+                        <span class="action-key">N</span>
+                    </div>
+                    <div class="action-item">
+                        <span>📊</span>
+                        <span>Portfolio Review</span>
+                        <span class="action-key">P</span>
+                    </div>
+                    <div class="action-item">
+                        <span>🔬</span>
+                        <span>Research Workbench</span>
+                        <span class="action-key">R</span>
+                    </div>
+                    <div class="action-item">
+                        <span>👥</span>
+                        <span>Client Management</span>
+                        <span class="action-key">C</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="dashboard-grid">
+                <!-- Portfolio Summary Panel -->
+                <div class="panel portfolio-summary">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Portfolio Summary</h3>
+                        <span style="font-size: 11px; color: var(--ec-text-muted);">As of market close</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-label">Holdings</div>
+                                <div class="summary-value">847</div>
+                                <div class="summary-subvalue">23 new this week</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Cash Position</div>
+                                <div class="summary-value">4.2%</div>
+                                <div class="summary-subvalue">$98.3M</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Avg Client Return</div>
+                                <div class="summary-value delta-positive">+11.3%</div>
+                                <div class="summary-subvalue">vs +8.7% benchmark</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">Trade Volume</div>
+                                <div class="summary-value">$183M</div>
+                                <div class="summary-subvalue">Today's volume</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Recent Activity</h3>
+                        <span style="font-size: 11px; color: var(--ec-text-muted);">Last 24 hours</span>
+                    </div>
+                    <div class="panel-content">
+                        <table class="activity-table">
+                            <thead>
+                                <tr class="table-header">
+                                    <th>TIME</th>
+                                    <th>TYPE</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>USER</th>
+                                    <th>STATUS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-row">
+                                    <td class="time-cell">2m ago</td>
+                                    <td><span class="type-badge type-action">ACTION</span></td>
+                                    <td>Client portfolio review for ACME Corp</td>
+                                    <td>S. Ortel</td>
+                                    <td><span class="status-badge status-active">ACTIVE</span></td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td class="time-cell">5m ago</td>
+                                    <td><span class="type-badge type-alert">ALERT</span></td>
+                                    <td>Position limit exceeded - XOM concentration</td>
+                                    <td>System</td>
+                                    <td><span class="status-badge status-pending">PENDING</span></td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td class="time-cell">12m ago</td>
+                                    <td><span class="type-badge type-report">REPORT</span></td>
+                                    <td>Q4 Performance Report generated</td>
+                                    <td>J. Smith</td>
+                                    <td><span class="status-badge status-complete">COMPLETE</span></td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td class="time-cell">18m ago</td>
+                                    <td><span class="type-badge type-action">ACTION</span></td>
+                                    <td>Client inquiry processed automatically</td>
+                                    <td>AI Agent</td>
+                                    <td><span class="status-badge status-complete">COMPLETE</span></td>
+                                </tr>
+                                <tr class="table-row">
+                                    <td class="time-cell">25m ago</td>
+                                    <td><span class="type-badge type-analysis">ANALYSIS</span></td>
+                                    <td>Risk assessment for TECH portfolio</td>
+                                    <td>M. Chen</td>
+                                    <td><span class="status-badge status-complete">COMPLETE</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Active Alerts Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Active Alerts</h3>
+                        <span style="font-size: 11px; color: var(--ec-negative);">8 require attention</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="alert-list">
+                            <div class="alert-item">
+                                <div class="alert-icon">!</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Concentration Risk: Energy Sector</div>
+                                    <div class="alert-description">XOM position exceeds 5% threshold in 3 accounts</div>
+                                </div>
+                                <div class="alert-time">5m ago</div>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon">$</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Price Alert: NVDA -8.3%</div>
+                                    <div class="alert-description">Significant intraday movement detected</div>
+                                </div>
+                                <div class="alert-time">1h ago</div>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon">⚠</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Portfolio Drift: Tech Overweight</div>
+                                    <div class="alert-description">Martinez account exceeds 65% tech allocation</div>
+                                </div>
+                                <div class="alert-time">2h ago</div>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon">📧</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Client SLA Breach Imminent</div>
+                                    <div class="alert-description">Wilson Foundation email response pending 3.5h</div>
+                                </div>
+                                <div class="alert-time">3h ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Workflows Panel -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Active Workflows</h3>
+                        <span style="font-size: 11px; color: var(--ec-text-muted);">31 in progress</span>
+                    </div>
+                    <div class="panel-content">
+                        <div class="workflow-list">
+                            <div class="workflow-item">
+                                <div class="workflow-info">
+                                    <div class="workflow-name">Quarterly Client Reviews</div>
+                                    <div class="workflow-stats">
+                                        <span>23/47 complete</span>
+                                        <span>•</span>
+                                        <span>Due in 5 days</span>
+                                    </div>
+                                </div>
+                                <div class="workflow-progress">
+                                    <div class="progress-fill" style="width: 49%"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-item">
+                                <div class="workflow-info">
+                                    <div class="workflow-name">Compliance Review Q4</div>
+                                    <div class="workflow-stats">
+                                        <span>156/847 positions reviewed</span>
+                                        <span>•</span>
+                                        <span>3 issues found</span>
+                                    </div>
+                                </div>
+                                <div class="workflow-progress">
+                                    <div class="progress-fill" style="width: 18%"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-item">
+                                <div class="workflow-info">
+                                    <div class="workflow-name">Tax Loss Harvesting</div>
+                                    <div class="workflow-stats">
+                                        <span>$2.3M identified</span>
+                                        <span>•</span>
+                                        <span>12 candidates</span>
+                                    </div>
+                                </div>
+                                <div class="workflow-progress">
+                                    <div class="progress-fill" style="width: 67%"></div>
+                                </div>
+                            </div>
+                            <div class="workflow-item">
+                                <div class="workflow-info">
+                                    <div class="workflow-name">Research Deep Dive: Semiconductors</div>
+                                    <div class="workflow-stats">
+                                        <span>47 sources analyzed</span>
+                                        <span>•</span>
+                                        <span>Draft ready</span>
+                                    </div>
+                                </div>
+                                <div class="workflow-progress">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">D</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">N</span>
+                <span>New Action</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">C</span>
+                <span>Clients</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Quick Search</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">/</span>
+                <span>Command</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Last refresh: 12 seconds ago</span>
+            <span>Next sync: 48s</span>
+            <span>Mode: LIVE</span>
+        </div>
+    </footer>
+    
+    <script>
+        // View selection
+        document.querySelectorAll('.view-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.view-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Quick actions
+        document.querySelectorAll('.action-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                console.log('Quick action:', action);
+            });
+        });
+        
+        // Table row interactions
+        document.querySelectorAll('.table-row').forEach(row => {
+            row.addEventListener('click', function() {
+                console.log('Activity clicked:', this.textContent.trim());
+            });
+        });
+        
+        // Alert interactions
+        document.querySelectorAll('.alert-item').forEach(item => {
+            item.addEventListener('click', function() {
+                console.log('Alert clicked:', this.querySelector('.alert-title').textContent);
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'd':
+                    e.preventDefault();
+                    console.log('Dashboard home');
+                    break;
+                case 'n':
+                    e.preventDefault();
+                    console.log('New action');
+                    break;
+                case 'c':
+                    e.preventDefault();
+                    console.log('Client management');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    console.log('Quick search');
+                    break;
+                case '/':
+                    e.preventDefault();
+                    console.log('Command palette');
+                    break;
+            }
+        });
+        
+        // Simulate real-time updates
+        function updateMetrics() {
+            // Update a random metric
+            const metrics = document.querySelectorAll('.metric-value');
+            const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+            
+            // Flash update indicator
+            randomMetric.style.color = 'var(--ec-info)';
+            setTimeout(() => {
+                randomMetric.style.color = '';
+            }, 500);
+        }
+        
+        // Update refresh timer
+        let refreshSeconds = 12;
+        setInterval(() => {
+            refreshSeconds++;
+            document.querySelector('.status-info span').textContent = `Last refresh: ${refreshSeconds} seconds ago`;
+            
+            if (refreshSeconds % 60 === 0) {
+                updateMetrics();
+                refreshSeconds = 0;
+            }
+        }, 1000);
+        
+        // Simulate workflow progress
+        setInterval(() => {
+            document.querySelectorAll('.progress-fill').forEach(fill => {
+                const currentWidth = parseInt(fill.style.width);
+                if (currentWidth < 100 && Math.random() > 0.7) {
+                    fill.style.width = Math.min(currentWidth + Math.floor(Math.random() * 5), 100) + '%';
+                }
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
