@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Intelligence Reports</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Context Header */
+        .context-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .context-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .context-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            padding: 8px 16px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        /* Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+        }
+        
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        .metric-subtext {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Topic List */
+        .topic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            background: var(--ec-bg-gray);
+        }
+        
+        .topic-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .topic-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .topic-icon {
+            width: 16px;
+            text-align: center;
+        }
+        
+        .topic-count {
+            margin-left: auto;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Quality Filters */
+        .quality-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .quality-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .quality-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .quality-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .quality-stars {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .star {
+            font-size: 10px;
+        }
+        
+        .star.filled {
+            color: var(--ec-caution);
+        }
+        
+        .star.empty {
+            color: var(--ec-border);
+        }
+        
+        /* Workflow Status */
+        .workflow-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .workflow-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 4px 0;
+        }
+        
+        .workflow-label {
+            color: var(--ec-text-muted);
+        }
+        
+        .workflow-value {
+            font-weight: 600;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Report List Header */
+        .report-header {
+            background: var(--ec-bg-white);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .report-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .report-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .control-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        /* Report List */
+        .report-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .report-item {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .report-item:hover {
+            border-color: var(--ec-purple);
+        }
+        
+        .report-item.selected {
+            border-color: var(--ec-purple);
+            border-width: 2px;
+            padding: 15px;
+        }
+        
+        .report-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .report-info {
+            flex: 1;
+        }
+        
+        .report-title-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .report-metadata {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .report-quality {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        
+        .quality-rating {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .confidence-score {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .report-topics {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .topic-tag {
+            padding: 2px 8px;
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .report-summary {
+            color: var(--ec-text-muted);
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        .report-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .report-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .workflow-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        
+        .status-attached {
+            background: var(--ec-positive);
+        }
+        
+        .status-pending {
+            background: var(--ec-caution);
+        }
+        
+        .status-none {
+            background: var(--ec-border);
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 360px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* Quality Assessment */
+        .quality-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .quality-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quality-label {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+        
+        .star-selector {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--ec-border);
+            padding: 0;
+        }
+        
+        .star-btn.active {
+            color: var(--ec-caution);
+        }
+        
+        /* Follow-up Questions */
+        .question-input {
+            width: 100%;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+            margin-bottom: 8px;
+        }
+        
+        .question-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+        
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .question-item {
+            padding: 8px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            position: relative;
+            padding-right: 24px;
+        }
+        
+        .remove-btn {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--ec-text-muted);
+            font-size: 12px;
+        }
+        
+        /* Commentary */
+        .commentary-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+            resize: vertical;
+        }
+        
+        .commentary-textarea:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+        
+        /* Workflow Actions */
+        .workflow-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .workflow-btn {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            color: var(--ec-purple);
+            border: 1px solid var(--ec-purple);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .workflow-btn:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .workflow-btn.primary {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .workflow-btn.primary:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        /* Related Items */
+        .related-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .related-item {
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .related-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .related-type {
+            font-size: 10px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#" class="active">Intelligence</a>
+            <a href="#">Operations</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Context Header -->
+    <div class="context-header">
+        <div class="context-top">
+            <div class="context-info">
+                <h1>Intelligence Reports</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary">
+                    <span>+</span>
+                    <span>New Research Task</span>
+                </button>
+                <button class="btn-primary">
+                    <span>⚡</span>
+                    <span>Bulk Process</span>
+                </button>
+            </div>
+        </div>
+        <div class="metrics-bar">
+            <div class="metric-item">
+                <span class="metric-label">Reports Today</span>
+                <span class="metric-value">47</span>
+                <span class="metric-subtext">↑ 12 (34%)</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Avg Quality</span>
+                <span class="metric-value">4.2</span>
+                <span class="metric-subtext">↑ 0.3</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Topics Covered</span>
+                <span class="metric-value">23</span>
+                <span class="metric-subtext">5 new</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Pending Review</span>
+                <span class="metric-value">18</span>
+                <span class="metric-subtext">6 critical</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Workflows Active</span>
+                <span class="metric-value">31</span>
+                <span class="metric-subtext">8 initiated</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Cross-refs</span>
+                <span class="metric-value">156</span>
+                <span class="metric-subtext">↑ 23</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Topics</h3>
+                <div class="topic-list">
+                    <div class="topic-item active">
+                        <span class="topic-icon">📊</span>
+                        <span>All Reports</span>
+                        <span class="topic-count">234</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">💹</span>
+                        <span>Market Analysis</span>
+                        <span class="topic-count">67</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">🌱</span>
+                        <span>ESG Research</span>
+                        <span class="topic-count">45</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">🏢</span>
+                        <span>Company Deep Dives</span>
+                        <span class="topic-count">38</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">⚠️</span>
+                        <span>Risk Assessment</span>
+                        <span class="topic-count">29</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">🔬</span>
+                        <span>Sector Analysis</span>
+                        <span class="topic-count">34</span>
+                    </div>
+                    <div class="topic-item">
+                        <span class="topic-icon">📈</span>
+                        <span>Performance</span>
+                        <span class="topic-count">21</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Quality Filter</h3>
+                <div class="quality-filters">
+                    <div class="quality-item">
+                        <span>All Qualities</span>
+                        <span>234</span>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                        </div>
+                        <span>42</span>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span>89</span>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span>76</span>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span>21</span>
+                    </div>
+                    <div class="quality-item">
+                        <div class="quality-stars">
+                            <span class="star filled">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span>6</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Workflow Status</h3>
+                <div class="workflow-stats">
+                    <div class="workflow-stat">
+                        <span class="workflow-label">Unprocessed</span>
+                        <span class="workflow-value">18</span>
+                    </div>
+                    <div class="workflow-stat">
+                        <span class="workflow-label">In Review</span>
+                        <span class="workflow-value">34</span>
+                    </div>
+                    <div class="workflow-stat">
+                        <span class="workflow-label">Attached</span>
+                        <span class="workflow-value">156</span>
+                    </div>
+                    <div class="workflow-stat">
+                        <span class="workflow-label">Actioned</span>
+                        <span class="workflow-value">89</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="report-header">
+                <h3 class="report-title">Intelligence Reports (47 new today)</h3>
+                <div class="report-controls">
+                    <button class="control-btn">Sort: Latest</button>
+                    <button class="control-btn">Filter</button>
+                    <button class="control-btn">Export</button>
+                </div>
+            </div>
+            
+            <div class="report-list">
+                <!-- Report 1 -->
+                <div class="report-item selected">
+                    <div class="report-meta">
+                        <div class="report-info">
+                            <h4 class="report-title-text">Semiconductor Supply Chain Vulnerability Analysis Q1 2025</h4>
+                            <div class="report-metadata">
+                                <span>Generated: 2 hours ago</span>
+                                <span>•</span>
+                                <span>Sources: 47</span>
+                                <span>•</span>
+                                <span>Cross-refs: 12</span>
+                            </div>
+                        </div>
+                        <div class="report-quality">
+                            <div class="quality-rating">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star empty">★</span>
+                            </div>
+                            <span class="confidence-score">87% confidence</span>
+                        </div>
+                    </div>
+                    <div class="report-topics">
+                        <span class="topic-tag">SEMICONDUCTORS</span>
+                        <span class="topic-tag">SUPPLY CHAIN</span>
+                        <span class="topic-tag">GEOPOLITICAL RISK</span>
+                        <span class="topic-tag">NVDA</span>
+                        <span class="topic-tag">TSM</span>
+                    </div>
+                    <div class="report-summary">
+                        Analysis reveals increasing concentration risk in advanced node production, with 92% of sub-7nm capacity concentrated in Taiwan. Recent export control escalations and regional tensions suggest portfolio exposure requires immediate hedging strategies. Three critical chokepoints identified...
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-stats">
+                            <span class="stat-item">📝 3 follow-ups</span>
+                            <span class="stat-item">💬 2 comments</span>
+                            <span class="stat-item">🔗 5 workflows</span>
+                        </div>
+                        <div class="workflow-status">
+                            <span class="status-dot status-attached"></span>
+                            <span>Risk Assessment Workflow Active</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Report 2 -->
+                <div class="report-item">
+                    <div class="report-meta">
+                        <div class="report-info">
+                            <h4 class="report-title-text">ESG Momentum Shift: Energy Sector Transformation Accelerating</h4>
+                            <div class="report-metadata">
+                                <span>Generated: 4 hours ago</span>
+                                <span>•</span>
+                                <span>Sources: 89</span>
+                                <span>•</span>
+                                <span>Cross-refs: 23</span>
+                            </div>
+                        </div>
+                        <div class="report-quality">
+                            <div class="quality-rating">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                            </div>
+                            <span class="confidence-score">94% confidence</span>
+                        </div>
+                    </div>
+                    <div class="report-topics">
+                        <span class="topic-tag">ESG</span>
+                        <span class="topic-tag">ENERGY TRANSITION</span>
+                        <span class="topic-tag">CLIMATE RISK</span>
+                        <span class="topic-tag">XOM</span>
+                        <span class="topic-tag">CVX</span>
+                    </div>
+                    <div class="report-summary">
+                        Comprehensive analysis of Q4 2024 earnings calls reveals unprecedented shift in capital allocation strategies among major energy companies. 67% increase in renewable investment commitments, with traditional O&G players announcing $340B in transition investments...
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-stats">
+                            <span class="stat-item">📝 7 follow-ups</span>
+                            <span class="stat-item">💬 4 comments</span>
+                            <span class="stat-item">🔗 3 workflows</span>
+                        </div>
+                        <div class="workflow-status">
+                            <span class="status-dot status-pending"></span>
+                            <span>Pending Review</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Report 3 -->
+                <div class="report-item">
+                    <div class="report-meta">
+                        <div class="report-info">
+                            <h4 class="report-title-text">AI Infrastructure Investment Bubble: Warning Signals Analysis</h4>
+                            <div class="report-metadata">
+                                <span>Generated: 6 hours ago</span>
+                                <span>•</span>
+                                <span>Sources: 156</span>
+                                <span>•</span>
+                                <span>Cross-refs: 34</span>
+                            </div>
+                        </div>
+                        <div class="report-quality">
+                            <div class="quality-rating">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star empty">★</span>
+                                <span class="star empty">★</span>
+                            </div>
+                            <span class="confidence-score">72% confidence</span>
+                        </div>
+                    </div>
+                    <div class="report-topics">
+                        <span class="topic-tag">AI INFRASTRUCTURE</span>
+                        <span class="topic-tag">VALUATION RISK</span>
+                        <span class="topic-tag">CAPEX ANALYSIS</span>
+                    </div>
+                    <div class="report-summary">
+                        Pattern recognition analysis across 2000-2001 telecom buildout and current AI infrastructure spending reveals concerning parallels. Hyperscaler capex at 4.2x historical average with utilization metrics suggesting significant overcapacity risk...
+                    </div>
+                    <div class="report-footer">
+                        <div class="report-stats">
+                            <span class="stat-item">📝 12 follow-ups</span>
+                            <span class="stat-item">💬 8 comments</span>
+                            <span class="stat-item">🔗 2 workflows</span>
+                        </div>
+                        <div class="workflow-status">
+                            <span class="status-dot status-none"></span>
+                            <span>No Workflow Attached</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">Quality Assessment</h3>
+                <div class="quality-form">
+                    <div class="quality-row">
+                        <span class="quality-label">Accuracy</span>
+                        <div class="star-selector">
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn">★</button>
+                        </div>
+                    </div>
+                    <div class="quality-row">
+                        <span class="quality-label">Completeness</span>
+                        <div class="star-selector">
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn">★</button>
+                        </div>
+                    </div>
+                    <div class="quality-row">
+                        <span class="quality-label">Actionability</span>
+                        <div class="star-selector">
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                        </div>
+                    </div>
+                    <div class="quality-row">
+                        <span class="quality-label">Sources Quality</span>
+                        <div class="star-selector">
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn active">★</button>
+                            <button class="star-btn">★</button>
+                            <button class="star-btn">★</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Follow-up Questions</h3>
+                <input type="text" class="question-input" placeholder="Add a follow-up question...">
+                <div class="question-list">
+                    <div class="question-item">
+                        What are the specific hedging strategies recommended for NVDA exposure?
+                        <button class="remove-btn">×</button>
+                    </div>
+                    <div class="question-item">
+                        Which alternative suppliers could mitigate Taiwan concentration risk?
+                        <button class="remove-btn">×</button>
+                    </div>
+                    <div class="question-item">
+                        Timeline for Intel's advanced node capacity coming online?
+                        <button class="remove-btn">×</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Commentary</h3>
+                <textarea class="commentary-textarea" placeholder="Add your analysis or notes...">This aligns with our internal assessment from last quarter. The concentration risk is even higher than we anticipated. Should trigger immediate portfolio review for all semiconductor holdings, especially those with >70% Taiwan exposure.</textarea>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Workflow Actions</h3>
+                <div class="workflow-actions">
+                    <button class="workflow-btn primary">
+                        <span>🔄</span>
+                        <span>Continue Current Workflow</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <span>+</span>
+                        <span>Initiate Portfolio Review</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <span>🔍</span>
+                        <span>Start Deep Dive Research</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <span>📊</span>
+                        <span>Generate Client Report</span>
+                    </button>
+                    <button class="workflow-btn">
+                        <span>⚠️</span>
+                        <span>Create Risk Alert</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Related & Cross-References</h3>
+                <div class="related-list">
+                    <div class="related-item">
+                        <span>Taiwan Geopolitical Risk Assessment</span>
+                        <span class="related-type">Report</span>
+                    </div>
+                    <div class="related-item">
+                        <span>NVDA Position Analysis - Q4 2024</span>
+                        <span class="related-type">Research</span>
+                    </div>
+                    <div class="related-item">
+                        <span>Semiconductor ETF Comparison</span>
+                        <span class="related-type">Analysis</span>
+                    </div>
+                    <div class="related-item">
+                        <span>Client Alert: Tech Concentration</span>
+                        <span class="related-type">Alert</span>
+                    </div>
+                    <div class="related-item">
+                        <span>Supply Chain Resilience Framework</span>
+                        <span class="related-type">Framework</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">R</span>
+                <span>Rate Quality</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Q</span>
+                <span>Add Question</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">W</span>
+                <span>Attach Workflow</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Quick Review</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">J/K</span>
+                <span>Navigate</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Reports: 234 total</span>
+            <span>Pending: 18</span>
+            <span>Mode: REVIEW</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Report selection
+        document.querySelectorAll('.report-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.report-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Update panel with selected report data
+                console.log('Selected report:', this.querySelector('.report-title-text').textContent);
+            });
+        });
+        
+        // Topic filtering
+        document.querySelectorAll('.topic-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.topic-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Quality filtering
+        document.querySelectorAll('.quality-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.quality-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Star rating functionality
+        document.querySelectorAll('.star-selector').forEach(selector => {
+            const stars = selector.querySelectorAll('.star-btn');
+            stars.forEach((star, index) => {
+                star.addEventListener('click', function() {
+                    stars.forEach((s, i) => {
+                        if (i <= index) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        });
+        
+        // Add follow-up question
+        const questionInput = document.querySelector('.question-input');
+        questionInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                const questionList = document.querySelector('.question-list');
+                const newQuestion = document.createElement('div');
+                newQuestion.className = 'question-item';
+                newQuestion.innerHTML = `
+                    ${this.value}
+                    <button class="remove-btn">×</button>
+                `;
+                questionList.appendChild(newQuestion);
+                this.value = '';
+                
+                // Add remove functionality
+                newQuestion.querySelector('.remove-btn').addEventListener('click', function() {
+                    newQuestion.remove();
+                });
+            }
+        });
+        
+        // Remove question buttons
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.remove();
+            });
+        });
+        
+        // Workflow actions
+        document.querySelectorAll('.workflow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                console.log('Workflow action:', action);
+            });
+        });
+        
+        // Related items
+        document.querySelectorAll('.related-item').forEach(item => {
+            item.addEventListener('click', function() {
+                console.log('Opening related:', this.textContent.trim());
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'r':
+                    e.preventDefault();
+                    document.querySelector('.star-selector').focus();
+                    break;
+                case 'q':
+                    e.preventDefault();
+                    document.querySelector('.question-input').focus();
+                    break;
+                case 'w':
+                    e.preventDefault();
+                    document.querySelector('.workflow-btn').click();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    console.log('Quick review mode');
+                    break;
+                case 'j':
+                    e.preventDefault();
+                    // Navigate down
+                    break;
+                case 'k':
+                    e.preventDefault();
+                    // Navigate up
+                    break;
+            }
+        });
+        
+        // Simulate new report arriving
+        function addNewReport() {
+            const reportTitle = document.querySelector('.report-title');
+            const currentCount = parseInt(reportTitle.textContent.match(/\d+/)[0]);
+            reportTitle.textContent = `Intelligence Reports (${currentCount + 1} new today)`;
+            
+            // Update metrics
+            const metricValue = document.querySelector('.metric-value');
+            metricValue.textContent = parseInt(metricValue.textContent) + 1;
+        }
+        
+        // Simulate periodic updates
+        setInterval(() => {
+            if (Math.random() > 0.8) {
+                addNewReport();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

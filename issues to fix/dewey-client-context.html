@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Client Context Panel</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Client Selector Sidebar */
+        .client-sidebar {
+            width: 280px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+            background: var(--ec-bg-gray);
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+            background: white;
+        }
+        
+        .client-list {
+            list-style: none;
+        }
+        
+        .client-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--ec-bg-gray);
+        }
+        
+        .client-item:hover {
+            background: var(--ec-bg-gray);
+        }
+        
+        .client-item.active {
+            background: var(--ec-purple-pale);
+            border-left: 3px solid var(--ec-purple);
+            padding-left: 17px;
+        }
+        
+        .client-avatar-small {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--ec-purple-pale);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--ec-purple);
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        
+        .client-info-small {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .client-name-small {
+            font-weight: 600;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .client-aum-small {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .alert-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--ec-negative);
+            flex-shrink: 0;
+        }
+        
+        /* Client Context Panel */
+        .client-context {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--ec-bg);
+        }
+        
+        /* Client Header */
+        .client-header {
+            background: var(--ec-bg-white);
+            padding: 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .client-profile {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .client-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--ec-purple-pale);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            flex-shrink: 0;
+        }
+        
+        .client-details {
+            flex: 1;
+        }
+        
+        .client-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .client-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .client-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .tag {
+            padding: 2px 8px;
+            font-size: 11px;
+            background: var(--ec-bg-gray);
+            border-radius: 2px;
+        }
+        
+        .tag.priority {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        .tag.ethical {
+            background: var(--ec-positive);
+            color: white;
+        }
+        
+        /* Performance Metrics */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        
+        .metric-card {
+            text-align: center;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .metric-positive {
+            color: var(--ec-positive);
+        }
+        
+        .metric-negative {
+            color: var(--ec-negative);
+        }
+        
+        /* Content Tabs */
+        .content-tabs {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .tab-nav {
+            background: var(--ec-bg-white);
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            padding: 0 24px;
+        }
+        
+        .tab-button {
+            padding: 12px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--ec-text-muted);
+            font-family: inherit;
+            position: relative;
+        }
+        
+        .tab-button:hover {
+            color: var(--ec-text);
+        }
+        
+        .tab-button.active {
+            color: var(--ec-purple);
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--ec-purple);
+        }
+        
+        .alert-badge {
+            background: var(--ec-negative);
+            color: white;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        /* Holdings Table */
+        .holdings-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            margin-bottom: 20px;
+        }
+        
+        .section-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .filter-btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .filter-btn.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        /* Holdings Grid */
+        .holdings-table {
+            width: 100%;
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 100px 100px 80px 120px;
+            padding: 8px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            background: var(--ec-bg-gray);
+            letter-spacing: 0.5px;
+        }
+        
+        .holding-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 100px 100px 80px 120px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .holding-row:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .holding-row.flagged {
+            background: #FEF2F2;
+        }
+        
+        .ticker-cell {
+            font-weight: 600;
+        }
+        
+        .company-name {
+            color: var(--ec-text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .value-cell {
+            text-align: right;
+        }
+        
+        .perf-cell {
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .flag-cell {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .flag-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .flag-esg {
+            background: var(--ec-negative);
+        }
+        
+        .flag-risk {
+            background: var(--ec-caution);
+        }
+        
+        .quick-action {
+            padding: 4px 8px;
+            font-size: 11px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .quick-action:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        /* Task Panel */
+        .task-panel {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            transform: translateX(100%);
+            transition: transform 0.2s;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .task-panel.active {
+            transform: translateX(0);
+        }
+        
+        .task-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--ec-text-muted);
+        }
+        
+        .task-form {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            text-transform: uppercase;
+            color: var(--ec-text-muted);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1px solid var(--ec-border);
+        }
+        
+        .form-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1px solid var(--ec-border);
+            resize: vertical;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1px solid var(--ec-border);
+            background: white;
+        }
+        
+        .priority-options {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .priority-btn {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        .priority-btn.selected {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        .task-actions {
+            padding: 20px;
+            border-top: 1px solid var(--ec-border);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            padding: 10px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            color: var(--ec-purple);
+            border: 1px solid var(--ec-purple);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+        }
+        
+        .activity-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--ec-bg-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .activity-time {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Client Actions Bar */
+        .client-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--ec-border);
+        }
+        
+        .action-btn {
+            padding: 8px 16px;
+            background: white;
+            color: var(--ec-purple);
+            border: 1px solid var(--ec-purple);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.1s;
+        }
+        
+        .action-btn:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .action-btn.primary {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        /* Footer Bar */
+        .footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            font-size: 12px;
+        }
+        
+        .footer-status {
+            display: flex;
+            gap: 24px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .hotkeys {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#" class="active">Clients</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Client Selector Sidebar -->
+        <aside class="client-sidebar">
+            <div class="sidebar-header">
+                <input type="text" class="search-box" placeholder="Search clients...">
+            </div>
+            <ul class="client-list">
+                <li class="client-item active">
+                    <div class="client-avatar-small">JM</div>
+                    <div class="client-info-small">
+                        <div class="client-name-small">Julia Martinez</div>
+                        <div class="client-aum-small">$12.3M AUM</div>
+                    </div>
+                    <div class="alert-indicator"></div>
+                </li>
+                <li class="client-item">
+                    <div class="client-avatar-small">RW</div>
+                    <div class="client-info-small">
+                        <div class="client-name-small">Robert Wilson</div>
+                        <div class="client-aum-small">$8.7M AUM</div>
+                    </div>
+                </li>
+                <li class="client-item">
+                    <div class="client-avatar-small">EC</div>
+                    <div class="client-info-small">
+                        <div class="client-name-small">Elizabeth Chen</div>
+                        <div class="client-aum-small">$15.2M AUM</div>
+                    </div>
+                </li>
+                <li class="client-item">
+                    <div class="client-avatar-small">MS</div>
+                    <div class="client-info-small">
+                        <div class="client-name-small">Michael Singh</div>
+                        <div class="client-aum-small">$6.4M AUM</div>
+                    </div>
+                </li>
+                <li class="client-item">
+                    <div class="client-avatar-small">ST</div>
+                    <div class="client-info-small">
+                        <div class="client-name-small">Sarah Thompson</div>
+                        <div class="client-aum-small">$22.1M AUM</div>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- Client Context Panel -->
+        <main class="client-context">
+            <!-- Client Header -->
+            <div class="client-header">
+                <div class="client-profile">
+                    <div class="client-avatar">JM</div>
+                    <div class="client-details">
+                        <h1 class="client-name">Julia Martinez</h1>
+                        <div class="client-meta">
+                            <span>Account #EC-2019-0847</span>
+                            <span>•</span>
+                            <span>Since Nov 2019</span>
+                            <span>•</span>
+                            <span>Primary: Sloane Ortel</span>
+                        </div>
+                        <div class="client-tags">
+                            <span class="tag priority">Priority Client</span>
+                            <span class="tag ethical">ESG Focus</span>
+                            <span class="tag">Tech Executive</span>
+                            <span class="tag">Family Office</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="performance-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Total AUM</div>
+                        <div class="metric-value">$12.3M</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">YTD Return</div>
+                        <div class="metric-value metric-positive">+14.2%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">3Y CAGR</div>
+                        <div class="metric-value metric-positive">+11.8%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Risk Score</div>
+                        <div class="metric-value">6.2/10</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">ESG Score</div>
+                        <div class="metric-value metric-positive">8.7/10</div>
+                    </div>
+                </div>
+                
+                <!-- Client Actions -->
+                <div class="client-actions">
+                    <button class="action-btn">
+                        <span>📧</span>
+                        Send Update
+                    </button>
+                    <button class="action-btn">
+                        <span>📅</span>
+                        Schedule Meeting
+                    </button>
+                    <button class="action-btn">
+                        <span>📊</span>
+                        Generate Report
+                    </button>
+                    <button class="action-btn primary">
+                        <span>🔄</span>
+                        Run Rebalance
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Content Tabs -->
+            <div class="content-tabs">
+                <nav class="tab-nav">
+                    <button class="tab-button active">
+                        Holdings
+                        <span class="alert-badge">2</span>
+                    </button>
+                    <button class="tab-button">Performance</button>
+                    <button class="tab-button">Activity</button>
+                    <button class="tab-button">Documents</button>
+                    <button class="tab-button">Notes</button>
+                </nav>
+                
+                <div class="tab-content">
+                    <!-- Holdings Section -->
+                    <div class="holdings-section">
+                        <div class="section-header">
+                            <h3 class="section-title">Current Holdings (47 positions)</h3>
+                            <div class="filter-controls">
+                                <button class="filter-btn active">All</button>
+                                <button class="filter-btn">Flagged</button>
+                                <button class="filter-btn">Winners</button>
+                                <button class="filter-btn">Losers</button>
+                            </div>
+                        </div>
+                        
+                        <div class="holdings-table">
+                            <div class="table-header">
+                                <div>TICKER</div>
+                                <div>COMPANY</div>
+                                <div>VALUE</div>
+                                <div>% PORT</div>
+                                <div>RETURN</div>
+                                <div>FLAGS</div>
+                                <div>ACTIONS</div>
+                            </div>
+                            
+                            <div class="holding-row flagged">
+                                <div class="ticker-cell">XOM</div>
+                                <div class="company-name">Exxon Mobil Corp</div>
+                                <div class="value-cell">$342,500</div>
+                                <div class="value-cell">2.8%</div>
+                                <div class="perf-cell metric-positive">+18.3%</div>
+                                <div class="flag-cell">
+                                    <div class="flag-icon flag-esg" title="ESG Concern">E</div>
+                                </div>
+                                <div>
+                                    <button class="quick-action" onclick="openTaskPanel('XOM', 'ESG concern')">Create Task</button>
+                                </div>
+                            </div>
+                            
+                            <div class="holding-row">
+                                <div class="ticker-cell">AAPL</div>
+                                <div class="company-name">Apple Inc</div>
+                                <div class="value-cell">$892,300</div>
+                                <div class="value-cell">7.3%</div>
+                                <div class="perf-cell metric-positive">+24.7%</div>
+                                <div class="flag-cell"></div>
+                                <div>
+                                    <button class="quick-action" onclick="openTaskPanel('AAPL')">Create Task</button>
+                                </div>
+                            </div>
+                            
+                            <div class="holding-row">
+                                <div class="ticker-cell">MSFT</div>
+                                <div class="company-name">Microsoft Corp</div>
+                                <div class="value-cell">$756,200</div>
+                                <div class="value-cell">6.2%</div>
+                                <div class="perf-cell metric-positive">+31.2%</div>
+                                <div class="flag-cell"></div>
+                                <div>
+                                    <button class="quick-action" onclick="openTaskPanel('MSFT')">Create Task</button>
+                                </div>
+                            </div>
+                            
+                            <div class="holding-row flagged">
+                                <div class="ticker-cell">META</div>
+                                <div class="company-name">Meta Platforms Inc</div>
+                                <div class="value-cell">$423,100</div>
+                                <div class="value-cell">3.4%</div>
+                                <div class="perf-cell metric-negative">-8.2%</div>
+                                <div class="flag-cell">
+                                    <div class="flag-icon flag-risk" title="Risk Alert">R</div>
+                                </div>
+                                <div>
+                                    <button class="quick-action" onclick="openTaskPanel('META', 'Underperforming')">Create Task</button>
+                                </div>
+                            </div>
+                            
+                            <div class="holding-row">
+                                <div class="ticker-cell">BRK.B</div>
+                                <div class="company-name">Berkshire Hathaway</div>
+                                <div class="value-cell">$534,800</div>
+                                <div class="value-cell">4.4%</div>
+                                <div class="perf-cell metric-positive">+12.1%</div>
+                                <div class="flag-cell"></div>
+                                <div>
+                                    <button class="quick-action" onclick="openTaskPanel('BRK.B')">Create Task</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Activity -->
+                    <div class="activity-list">
+                        <div class="section-header">
+                            <h3 class="section-title">Recent Activity</h3>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">📧</div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>Email:</strong> "Concerned about oil holdings given my ESG preferences"</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">📞</div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>Call:</strong> Quarterly review scheduled for next Tuesday</div>
+                                <div class="activity-time">Yesterday at 3:42 PM</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-text"><strong>Report:</strong> Q3 Performance Report sent</div>
+                                <div class="activity-time">Oct 15, 2024</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Task Creation Panel -->
+        <div class="task-panel" id="taskPanel">
+            <div class="task-header">
+                <h2 class="task-title">Create Task</h2>
+                <button class="close-btn" onclick="closeTaskPanel()">×</button>
+            </div>
+            
+            <form class="task-form">
+                <div class="form-group">
+                    <label class="form-label">Task Type</label>
+                    <select class="form-select">
+                        <option>Review Position</option>
+                        <option>Discuss with Client</option>
+                        <option>Research Alternative</option>
+                        <option>Rebalance Portfolio</option>
+                        <option>Schedule Meeting</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Related To</label>
+                    <input type="text" class="form-input" id="taskTicker" value="XOM - Exxon Mobil Corp" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="taskDescription" placeholder="Describe the task...">Client has ESG concerns about oil holdings. Review position and prepare alternatives that align with sustainability preferences.</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <div class="priority-options">
+                        <button type="button" class="priority-btn">Low</button>
+                        <button type="button" class="priority-btn selected">Medium</button>
+                        <button type="button" class="priority-btn">High</button>
+                        <button type="button" class="priority-btn">Critical</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input type="date" class="form-input" value="2024-10-28">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Assign To</label>
+                    <select class="form-select">
+                        <option>Me (Sloane Ortel)</option>
+                        <option>Research Team</option>
+                        <option>Compliance</option>
+                        <option>Junior Analyst</option>
+                    </select>
+                </div>
+            </form>
+            
+            <div class="task-actions">
+                <button class="btn-secondary" onclick="closeTaskPanel()">Cancel</button>
+                <button class="btn-primary">Create Task</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Bar -->
+    <footer class="footer-bar">
+        <div class="footer-status">
+            <span>Client: Julia Martinez</span>
+            <span>•</span>
+            <span>Portfolio Value: $12.3M</span>
+            <span>•</span>
+            <span>Last Sync: 2 min ago</span>
+        </div>
+        
+        <div class="hotkeys">
+            <div class="hotkey">
+                <span class="key">T</span>
+                <span>New Task</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">N</span>
+                <span>Add Note</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">E</span>
+                <span>Send Email</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">R</span>
+                <span>Reports</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Quick Search</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Task Panel Management
+        function openTaskPanel(ticker, issue) {
+            const panel = document.getElementById('taskPanel');
+            panel.classList.add('active');
+            
+            if (ticker) {
+                document.getElementById('taskTicker').value = ticker + ' - ' + getCompanyName(ticker);
+            }
+            
+            if (issue) {
+                const descriptions = {
+                    'ESG concern': 'Client has ESG concerns about oil holdings. Review position and prepare alternatives that align with sustainability preferences.',
+                    'Underperforming': 'Position is underperforming relative to portfolio. Analyze reasons and determine if reallocation is needed.'
+                };
+                document.getElementById('taskDescription').value = descriptions[issue] || '';
+            }
+        }
+        
+        function closeTaskPanel() {
+            document.getElementById('taskPanel').classList.remove('active');
+        }
+        
+        function getCompanyName(ticker) {
+            const companies = {
+                'XOM': 'Exxon Mobil Corp',
+                'AAPL': 'Apple Inc',
+                'MSFT': 'Microsoft Corp',
+                'META': 'Meta Platforms Inc',
+                'BRK.B': 'Berkshire Hathaway'
+            };
+            return companies[ticker] || ticker;
+        }
+        
+        // Tab Navigation
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Filter Controls
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Priority Selection
+        document.querySelectorAll('.priority-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+        
+        // Client Selection
+        document.querySelectorAll('.client-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.client-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 't':
+                    e.preventDefault();
+                    openTaskPanel();
+                    break;
+                case 'n':
+                    e.preventDefault();
+                    console.log('Add note');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    document.querySelector('.search-box').focus();
+                    break;
+                case 'escape':
+                    closeTaskPanel();
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

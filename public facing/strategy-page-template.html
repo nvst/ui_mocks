@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Opportunities | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Strategy Header */
+        .strategy-header {
+            background: var(--ec-bg-white);
+            padding: 32px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .strategy-info {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .strategy-info h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .strategy-meta {
+            display: flex;
+            gap: 32px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .meta-label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            color: var(--ec-text);
+            font-weight: 600;
+        }
+
+        /* Quick Stats Bar */
+        .quick-stats {
+            background: var(--ec-purple);
+            color: white;
+            padding: 16px 24px;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: var(--ec-bg-gray);
+            padding: 48px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .video-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 48px;
+            align-items: center;
+        }
+
+        .video-wrapper {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-placeholder {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            background: var(--ec-text);
+        }
+
+        .video-placeholder iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* For development/placeholder */
+        .video-placeholder:not(:has(iframe)) {
+            padding-bottom: 0;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .video-placeholder:not(:has(iframe))::before {
+            content: "Video Player\A\A Click to play strategy overview";
+            white-space: pre-line;
+        }
+
+        .video-caption h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .video-caption p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--ec-text-muted);
+        }
+
+        @media (max-width: 968px) {
+            .video-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .video-caption {
+                text-align: center;
+            }
+        }
+
+        /* Quick Stats Bar continues */
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .stat-positive { color: var(--ec-positive); }
+        .stat-negative { color: var(--ec-negative); }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--ec-border);
+            margin-bottom: 32px;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: var(--ec-text);
+        }
+
+        .tab-button.active {
+            color: var(--ec-purple);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--ec-purple);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Performance Section */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ec-purple);
+            display: inline-block;
+        }
+
+        /* Data Tables */
+        .data-table {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            background: var(--ec-bg-gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row {
+            display: grid;
+            padding: 12px 20px;
+            border-bottom: 1px dotted var(--ec-border);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row:hover:not(.table-header) {
+            background: var(--ec-purple-pale);
+        }
+
+        /* Performance Table */
+        .performance-table .table-row {
+            grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        }
+
+        /* Risk Metrics Table */
+        .risk-table .table-row {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        /* Holdings Table */
+        .holdings-table .table-row {
+            grid-template-columns: 60px 2fr 1fr 1fr 1fr;
+        }
+
+        /* Characteristics Table */
+        .characteristics-table .table-row {
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+        }
+
+        /* Theme Grid */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .theme-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+        }
+
+        .theme-card:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .theme-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .theme-description {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .theme-examples {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dotted var(--ec-border);
+        }
+
+        .theme-examples h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-text-muted);
+        }
+
+        .theme-examples ul {
+            list-style: none;
+        }
+
+        .theme-examples li {
+            padding: 6px 0;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            line-height: 1.5;
+        }
+
+        .theme-examples li strong {
+            color: var(--ec-text);
+        }
+
+        /* Charts Container */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-container {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 20px;
+        }
+
+        .chart-title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-text);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: var(--ec-bg-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ec-text-muted);
+            font-size: 12px;
+        }
+
+        /* Commentary Section */
+        .commentary-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .commentary-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .commentary-card p {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .commentary-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Highlight Values */
+        .value-positive {
+            color: var(--ec-positive);
+            font-weight: 600;
+        }
+
+        .value-negative {
+            color: var(--ec-negative);
+            font-weight: 600;
+        }
+
+        .value-highlight {
+            color: var(--ec-purple);
+            font-weight: 600;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--ec-info);
+            color: white;
+            padding: 16px 24px;
+            margin: 32px 0;
+            font-size: 12px;
+        }
+
+        .info-box a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Download Section */
+        .download-section {
+            background: var(--ec-bg-gray);
+            padding: 24px;
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--ec-purple);
+            padding: 12px 24px;
+            border: 2px solid var(--ec-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item active">STRATEGIES</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Strategy Header -->
+    <div class="strategy-header">
+        <div class="strategy-info">
+            <h1>Global Opportunities</h1>
+            <div class="strategy-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Benchmark:</span>
+                    <span class="meta-value">MSCI ACWI Net TR</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Inception:</span>
+                    <span class="meta-value">January 2015</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Assets:</span>
+                    <span class="meta-value">$127.3M</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Holdings:</span>
+                    <span class="meta-value">47</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Strategy Video Section -->
+    <div class="video-section">
+        <div class="video-container">
+            <div class="video-wrapper">
+                <div class="video-placeholder">
+                    <!-- Replace with actual video embed -->
+                    <iframe 
+                        src="https://player.vimeo.com/video/YOUR_VIDEO_ID" 
+                        width="100%" 
+                        height="100%" 
+                        frameborder="0" 
+                        allow="autoplay; fullscreen; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <div class="video-caption">
+                <h2>Why Global Opportunities?</h2>
+                <p>Watch our Chief Investment Officer explain how we find the "weird little flowers" – exceptional companies generating positive impact through their core business models.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div class="quick-stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-value">+14.2%</span>
+                <span class="stat-label">YTD Return (Net)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value stat-positive">+2.3%</span>
+                <span class="stat-label">YTD vs Benchmark</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">11.8%</span>
+                <span class="stat-label">Annualized (SI)</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">68%</span>
+                <span class="stat-label">Companies Excluded</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="showTab('performance')">Performance</button>
+            <button class="tab-button" onclick="showTab('portfolio')">Portfolio</button>
+            <button class="tab-button" onclick="showTab('commentary')">Commentary</button>
+            <button class="tab-button" onclick="showTab('process')">Process</button>
+            <button class="tab-button" onclick="showTab('documents')">Documents</button>
+        </div>
+
+        <!-- Performance Tab -->
+        <div id="performance" class="tab-content active">
+            <section class="section">
+                <h2 class="section-header">RETURNS</h2>
+                <div class="data-table performance-table">
+                    <div class="table-row table-header">
+                        <div>Period</div>
+                        <div>QTD</div>
+                        <div>YTD</div>
+                        <div>1 Year</div>
+                        <div>3 Years</div>
+                        <div>5 Years</div>
+                        <div>10 Years</div>
+                        <div>Since Inception</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Composite (Gross)</div>
+                        <div>3.7%</div>
+                        <div>14.8%</div>
+                        <div>18.2%</div>
+                        <div>9.4%</div>
+                        <div>11.2%</div>
+                        <div>10.8%</div>
+                        <div>12.3%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Composite (Net)</div>
+                        <div>3.5%</div>
+                        <div>14.2%</div>
+                        <div>17.4%</div>
+                        <div>8.7%</div>
+                        <div>10.5%</div>
+                        <div>10.1%</div>
+                        <div>11.8%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>MSCI ACWI Net TR</div>
+                        <div>2.1%</div>
+                        <div>11.9%</div>
+                        <div>15.8%</div>
+                        <div>7.6%</div>
+                        <div>9.2%</div>
+                        <div>8.9%</div>
+                        <div>10.1%</div>
+                    </div>
+                    <div class="table-row">
+                        <div><strong>Excess Return (Net)</strong></div>
+                        <div class="value-positive">+1.4%</div>
+                        <div class="value-positive">+2.3%</div>
+                        <div class="value-positive">+1.6%</div>
+                        <div class="value-positive">+1.1%</div>
+                        <div class="value-positive">+1.3%</div>
+                        <div class="value-positive">+1.2%</div>
+                        <div class="value-positive">+1.7%</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">CUMULATIVE PERFORMANCE</h2>
+                <div class="chart-container">
+                    <h3 class="chart-title">Growth of $100 (Since Inception)</h3>
+                    <div class="chart-placeholder" style="height: 300px;">
+                        [Line Chart: Portfolio (Net) vs MSCI ACWI]<br><br>
+                        Global Opportunities (Net): $218<br>
+                        MSCI ACWI Net TR: $190<br><br>
+                        Chart would show two lines tracking cumulative performance since January 2015
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">RISK ANALYTICS</h2>
+                <div class="data-table risk-table">
+                    <div class="table-row table-header">
+                        <div>Metric</div>
+                        <div>3 Years</div>
+                        <div>Since Inception</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Standard Deviation (Annualized)</div>
+                        <div>16.2%</div>
+                        <div>15.8%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Tracking Error</div>
+                        <div>3.1%</div>
+                        <div>3.4%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Information Ratio</div>
+                        <div class="value-highlight">0.35</div>
+                        <div class="value-highlight">0.50</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Beta</div>
+                        <div>0.98</div>
+                        <div>0.97</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Sharpe Ratio</div>
+                        <div>0.54</div>
+                        <div>0.75</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Upside Capture</div>
+                        <div class="value-positive">108%</div>
+                        <div class="value-positive">106%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Downside Capture</div>
+                        <div class="value-positive">94%</div>
+                        <div class="value-positive">92%</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">PERFORMANCE ATTRIBUTION (YTD)</h2>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3 class="chart-title">Sector Attribution</h3>
+                        <div class="chart-placeholder">
+                            [Sector Attribution Bar Chart]<br>
+                            Technology: +0.8%<br>
+                            Healthcare: +0.5%<br>
+                            Financials: +0.3%<br>
+                            Energy: -0.2%
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3 class="chart-title">Geographic Attribution</h3>
+                        <div class="chart-placeholder">
+                            [Geographic Attribution Bar Chart]<br>
+                            North America: +0.9%<br>
+                            Europe: +0.4%<br>
+                            EM Asia: +0.3%<br>
+                            Japan: -0.1%
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div id="portfolio" class="tab-content">
+            <section class="section">
+                <h2 class="section-header">PORTFOLIO CHARACTERISTICS</h2>
+                <div class="data-table characteristics-table">
+                    <div class="table-row table-header">
+                        <div>Metric</div>
+                        <div>Portfolio</div>
+                        <div>MSCI ACWI</div>
+                        <div>Difference</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Number of Holdings</div>
+                        <div>47</div>
+                        <div>2,872</div>
+                        <div>-2,825</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Weighted Avg Market Cap ($B)</div>
+                        <div>287.4</div>
+                        <div>312.6</div>
+                        <div>-25.2</div>
+                    </div>
+                    <div class="table-row">
+                        <div>P/E Ratio (Forward)</div>
+                        <div>18.2</div>
+                        <div>17.4</div>
+                        <div>+0.8</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Price/Book</div>
+                        <div>3.4</div>
+                        <div>3.1</div>
+                        <div>+0.3</div>
+                    </div>
+                    <div class="table-row">
+                        <div>ROE (%)</div>
+                        <div class="value-highlight">18.7</div>
+                        <div>15.2</div>
+                        <div class="value-positive">+3.5</div>
+                    </div>
+                    <div class="table-row">
+                        <div>EPS Growth (3yr)</div>
+                        <div class="value-highlight">12.4%</div>
+                        <div>9.8%</div>
+                        <div class="value-positive">+2.6%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>Active Share</div>
+                        <div class="value-highlight">87%</div>
+                        <div>—</div>
+                        <div>—</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">INVESTMENT THEMES</h2>
+                <div class="theme-grid">
+                    <div class="theme-card">
+                        <h3 class="theme-title">Innovation: New Solutions for Old Problems</h3>
+                        <p class="theme-description">We believe there will always be opportunities to equitably transform existing systems for the better, and have dedicated a significant proportion of this strategy to them since inception.</p>
+                        <div class="theme-examples">
+                            <h4>Representative Holdings:</h4>
+                            <ul>
+                                <li><strong>Duolingo (DUOL)</strong> - The learning app that democratizes language education globally</li>
+                                <li><strong>Mercadolibre (MELI)</strong> - Latin American e-commerce enabling local merchants to reach bigger markets</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-card">
+                        <h3 class="theme-title">Infrastructure: The Rails and Roads that Connect Us</h3>
+                        <p class="theme-description">The right infrastructure can make our vast planet feel like one global village. The long-term nature of these businesses can make them excellent investments.</p>
+                        <div class="theme-examples">
+                            <h4>Representative Holdings:</h4>
+                            <ul>
+                                <li><strong>Quanta Services (PWR)</strong> - Building and maintaining electric power infrastructure for the smart grid transition</li>
+                                <li><strong>Vinci SA</strong> - Global construction and engineering of essential transport infrastructure</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-card">
+                        <h3 class="theme-title">Lending: Banks that Fund Our Future</h3>
+                        <p class="theme-description">Progress hinges on the availability of capital. These banks are positively enmeshed in their communities, avoiding predatory practices through strong local linkages.</p>
+                        <div class="theme-examples">
+                            <h4>Representative Holdings:</h4>
+                            <ul>
+                                <li><strong>Farmer Mac (AGM)</strong> - America's largest agricultural lender supporting rural communities</li>
+                                <li><strong>Amalgamated Bank (AMAL)</strong> - Built by labor organizers, still at the forefront of social responsibility</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-card">
+                        <h3 class="theme-title">Real Estate: Bricks and Mortar that Build Community</h3>
+                        <p class="theme-description">Real estate investments tied to positive social systems, serving local communities directly or delivering on practical industry needs.</p>
+                        <div class="theme-examples">
+                            <h4>Representative Holdings:</h4>
+                            <ul>
+                                <li><strong>Alexandria Real Estate (ARE)</strong> - Lab space provider serving as launchpad for innovative biotech companies</li>
+                                <li><strong>Armada Hoffler (AHH)</strong> - Developer of mixed-use urban communities in the Mid-Atlantic</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">SECTOR ALLOCATION</h2>
+                <div class="chart-container">
+                    <div class="chart-placeholder" style="height: 300px;">
+                        [Comparative Bar Chart: Portfolio vs MSCI ACWI Sector Weights]
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section-header">TOP 10 HOLDINGS</h2>
+                <div class="data-table holdings-table">
+                    <div class="table-row table-header">
+                        <div>#</div>
+                        <div>Company</div>
+                        <div>Sector</div>
+                        <div>Country</div>
+                        <div>Weight</div>
+                    </div>
+                    <div class="table-row">
+                        <div>1</div>
+                        <div>Alexandria Real Estate</div>
+                        <div>Real Estate</div>
+                        <div>United States</div>
+                        <div>4.2%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>2</div>
+                        <div>Duolingo</div>
+                        <div>Technology</div>
+                        <div>United States</div>
+                        <div>3.8%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>3</div>
+                        <div>Quanta Services</div>
+                        <div>Industrials</div>
+                        <div>United States</div>
+                        <div>3.5%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>4</div>
+                        <div>Farmer Mac</div>
+                        <div>Financials</div>
+                        <div>United States</div>
+                        <div>3.2%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>5</div>
+                        <div>Mercadolibre</div>
+                        <div>Consumer Disc.</div>
+                        <div>Argentina</div>
+                        <div>2.9%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>6</div>
+                        <div>Vinci SA</div>
+                        <div>Industrials</div>
+                        <div>France</div>
+                        <div>2.7%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>7</div>
+                        <div>Amalgamated Bank</div>
+                        <div>Financials</div>
+                        <div>United States</div>
+                        <div>2.5%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>8</div>
+                        <div>Badger Meter</div>
+                        <div>Industrials</div>
+                        <div>United States</div>
+                        <div>2.4%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>9</div>
+                        <div>Armada Hoffler</div>
+                        <div>Real Estate</div>
+                        <div>United States</div>
+                        <div>2.3%</div>
+                    </div>
+                    <div class="table-row">
+                        <div>10</div>
+                        <div>Nintendo</div>
+                        <div>Communication</div>
+                        <div>Japan</div>
+                        <div>2.2%</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Commentary Tab -->
+        <div id="commentary" class="tab-content">
+            <section class="section">
+                <div class="commentary-card">
+                    <h3>Q4 2024 Market Review</h3>
+                    <p>Global equity markets delivered solid returns in the fourth quarter, with the MSCI ACWI advancing 2.1%. Technology and healthcare sectors led gains, while energy and materials lagged on concerns about slowing global growth and commodity price weakness.</p>
+                    <p>The portfolio's outperformance was driven by strong stock selection in technology and healthcare, where our focus on companies with sustainable competitive advantages and positive societal impact continues to bear fruit.</p>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Performance Drivers</h3>
+                    <p><strong>Key Contributors:</strong> Our overweight position in semiconductor companies benefited from continued AI infrastructure buildout. TSMC (+18%) and ASML (+15%) were top contributors as they remain critical enablers of technological advancement.</p>
+                    <p><strong>Key Detractors:</strong> Our underweight to traditional energy names cost approximately 20 basis points of relative performance. However, this aligns with our ethical screening process that excludes fossil fuel companies with inadequate transition plans.</p>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Portfolio Positioning</h3>
+                    <p>We maintain conviction in companies addressing critical global challenges through innovation. Key overweights include:</p>
+                    <p>• <strong>Healthcare Innovation:</strong> Companies developing breakthrough therapies and expanding global access to medicine</p>
+                    <p>• <strong>Digital Transformation:</strong> Enablers of productivity and sustainability through technology</p>
+                    <p>• <strong>Sustainable Infrastructure:</strong> Firms building the physical and digital infrastructure for a low-carbon economy</p>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Outlook</h3>
+                    <p>Looking ahead, we see continued opportunities in companies that generate positive impact through their core business models. While market volatility may persist, our focus remains on identifying high-quality businesses where ethics and excellence converge.</p>
+                    <p>Recent additions to the portfolio include leaders in renewable energy technology and companies pioneering circular economy solutions. We believe these positions align with both our ethical framework and long-term value creation.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Process Tab -->
+        <div id="process" class="tab-content">
+            <section class="section">
+                <h2 class="section-header">INVESTMENT APPROACH</h2>
+                <div class="commentary-card">
+                    <h3>Philosophy</h3>
+                    <p>The Global Opportunities strategy seeks long-term capital appreciation by investing in companies worldwide that meet our stringent ethical criteria while demonstrating strong fundamentals and growth potential.</p>
+                    <p>We believe that companies operating ethically and sustainably are better positioned for long-term success, as they face fewer regulatory, reputational, and operational risks while benefiting from growing demand for responsible business practices.</p>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Our Thematic Approach</h3>
+                    <p>We organize our research and portfolio construction around four core themes that represent enduring opportunities for positive impact and value creation:</p>
+                    
+                    <div style="margin-top: 20px;">
+                        <p><strong>1. Innovation: New Solutions for Old Problems</strong><br>
+                        Companies that equitably transform existing systems through technology, business model innovation, or creative approaches to persistent challenges.</p>
+                        
+                        <p><strong>2. Infrastructure: The Rails and Roads that Connect Us</strong><br>
+                        Businesses building and maintaining the physical and digital networks that enable global commerce and community connection.</p>
+                        
+                        <p><strong>3. Lending: Banks that Fund Our Future</strong><br>
+                        Financial institutions positively enmeshed in their communities, providing capital for productive purposes while avoiding predatory practices.</p>
+                        
+                        <p><strong>4. Real Estate: Bricks and Mortar that Build Community</strong><br>
+                        Real estate investments tied to positive social systems, whether serving local communities directly or enabling critical industry needs.</p>
+                    </div>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Our Screening Process</h3>
+                    <p><strong>Step 1: Ethical Exclusions</strong><br>
+                    We begin by excluding companies involved in weapons, tobacco, gambling, fossil fuels without credible transition plans, and human rights violations. This typically eliminates 68% of the MSCI ACWI.</p>
+                    
+                    <p><strong>Step 2: Thematic Alignment</strong><br>
+                    We evaluate remaining companies for alignment with our four investment themes, seeking businesses where positive impact and revenue generation are intrinsically linked.</p>
+                    
+                    <p><strong>Step 3: Fundamental Analysis</strong><br>
+                    Companies undergo rigorous analysis across six dimensions: People, Product, Execution, Valuation, Moat, and Risk. We seek companies with strong fundamentals trading at reasonable valuations.</p>
+                    
+                    <p><strong>Step 4: Portfolio Construction</strong><br>
+                    We build a concentrated portfolio of 40-60 high-conviction positions, balancing thematic exposure, geographic diversification, and risk management while maintaining our ethical standards.</p>
+                    
+                    <p><strong>Step 5: Continuous Monitoring</strong><br>
+                    Holdings are continuously monitored for both financial performance and ethical compliance. Client input helps shape our evolving screening criteria, making every investor a research partner.</p>
+                </div>
+
+                <div class="commentary-card">
+                    <h3>Portfolio Management</h3>
+                    <p><strong>The Gardening Approach:</strong> We actively seek "weird little flowers" - overlooked companies generating positive impact through their core business model, not as a side effect. Our research process is designed to discover these off-the-beaten-path opportunities that others miss.</p>
+                    
+                    <p><strong>Rebalancing:</strong> We rebalance portfolios monthly on the new moon, a practice that helps us maintain discipline while acknowledging that investing, like ethics, is as much art as science.</p>
+                    
+                    <p><strong>Risk Management:</strong> Through our ethical screening and fundamental analysis, we believe we're avoiding lower-quality businesses. Excluded companies often carry hidden risks - regulatory, reputational, or operational - that can destroy value over time.</p>
+                </div>
+
+                <div class="info-box">
+                    <strong>Note:</strong> This strategy is BDS-compliant and excludes companies on the UN database of businesses involved in Israeli settlements. We also exclude companies failing to meet our standards on labor practices, environmental impact, and governance. Full exclusion lists are available at <a href="#">ethicalcapital.com/exclusions</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Documents Tab -->
+        <div id="documents" class="tab-content">
+            <section class="section">
+                <h2 class="section-header">STRATEGY DOCUMENTS</h2>
+                
+                <div class="download-section">
+                    <h3>Quarterly Reports</h3>
+                    <div class="download-buttons">
+                        <a href="#" class="btn-primary">Q4 2024 Report</a>
+                        <a href="#" class="btn-secondary">Q3 2024 Report</a>
+                        <a href="#" class="btn-secondary">Q2 2024 Report</a>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <h3>Strategy Materials</h3>
+                    <div class="download-buttons">
+                        <a href="#" class="btn-primary">Fact Sheet</a>
+                        <a href="#" class="btn-primary">GIPS® Report</a>
+                        <a href="#" class="btn-secondary">Presentation</a>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <h3>Disclosures & Policies</h3>
+                    <div class="download-buttons">
+                        <a href="#" class="btn-secondary">Form ADV Part 2</a>
+                        <a href="#" class="btn-secondary">Exclusion Policy</a>
+                        <a href="#" class="btn-secondary">Fee Schedule</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor<br>
+                Performance is preliminary and subject to change. Past performance is not indicative of future results.
+            </div>
+            <div class="footer-links">
+                <a href="#">GIPS® Compliance</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Mark the clicked button as active
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

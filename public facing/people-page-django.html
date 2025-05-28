@@ -1,0 +1,640 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ person.name }} | Ethical Capital Investment Collaborative{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* People Page Specific Styles - Following Dewey Design System */
+    .person-header {
+        background: var(--ec-bg-white);
+        padding: 48px 24px;
+        border-bottom: 1px solid var(--ec-border);
+    }
+
+    .person-header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 48px;
+        align-items: start;
+    }
+
+    .person-photo {
+        width: 200px;
+        height: 200px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 2px solid var(--ec-purple);
+    }
+
+    .person-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .person-info h1 {
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--ec-purple);
+        margin-bottom: 8px;
+    }
+
+    .person-title {
+        font-size: 18px;
+        color: var(--ec-text-muted);
+        margin-bottom: 16px;
+    }
+
+    .person-meta {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--ec-text-muted);
+    }
+
+    .meta-item strong {
+        color: var(--ec-text);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .person-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .tag {
+        padding: 4px 12px;
+        background: var(--ec-purple-pale);
+        color: var(--ec-purple);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Quick Stats Bar */
+    .person-stats {
+        background: var(--ec-purple);
+        color: white;
+        padding: 20px 24px;
+    }
+
+    .stats-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 32px;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 600;
+        display: block;
+    }
+
+    .stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.9;
+    }
+
+    /* Main Content */
+    .person-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 48px 24px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 48px;
+    }
+
+    .content-main {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+    }
+
+    .content-section {
+        background: var(--ec-bg-white);
+        border: 1px solid var(--ec-border);
+        padding: 32px;
+    }
+
+    .section-header {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ec-purple);
+        margin-bottom: 20px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--ec-purple);
+        display: inline-block;
+    }
+
+    .bio-content {
+        color: var(--ec-text);
+        line-height: 1.8;
+        font-size: 13px;
+    }
+
+    .bio-content p {
+        margin-bottom: 16px;
+    }
+
+    .bio-content p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Credentials List */
+    .credentials-list {
+        list-style: none;
+    }
+
+    .credentials-list li {
+        padding: 12px 0;
+        border-bottom: 1px dotted var(--ec-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .credentials-list li:last-child {
+        border-bottom: none;
+    }
+
+    .credential-name {
+        font-weight: 600;
+        color: var(--ec-text);
+    }
+
+    .credential-detail {
+        font-size: 12px;
+        color: var(--ec-text-muted);
+    }
+
+    /* Publications Grid */
+    .publications-grid {
+        display: grid;
+        gap: 16px;
+    }
+
+    .publication-item {
+        padding: 16px;
+        background: var(--ec-bg-gray);
+        border-left: 3px solid var(--ec-purple);
+    }
+
+    .publication-title {
+        font-weight: 600;
+        color: var(--ec-text);
+        margin-bottom: 4px;
+    }
+
+    .publication-details {
+        font-size: 11px;
+        color: var(--ec-text-muted);
+        margin-bottom: 8px;
+    }
+
+    .publication-link {
+        color: var(--ec-purple);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .publication-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Sidebar */
+    .content-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .sidebar-card {
+        background: var(--ec-bg-white);
+        border: 1px solid var(--ec-border);
+        padding: 24px;
+    }
+
+    .sidebar-card h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ec-purple);
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .contact-list {
+        list-style: none;
+    }
+
+    .contact-list li {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    .contact-icon {
+        width: 16px;
+        color: var(--ec-purple);
+    }
+
+    .contact-list a {
+        color: var(--ec-text);
+        text-decoration: none;
+    }
+
+    .contact-list a:hover {
+        color: var(--ec-purple);
+    }
+
+    /* Philosophy Quote */
+    .philosophy-quote {
+        background: var(--ec-purple-pale);
+        border: 1px solid var(--ec-purple);
+        padding: 24px;
+        margin: 32px 0;
+        position: relative;
+    }
+
+    .philosophy-quote::before {
+        content: '"';
+        font-size: 48px;
+        color: var(--ec-purple);
+        opacity: 0.2;
+        position: absolute;
+        top: -10px;
+        left: 16px;
+    }
+
+    .philosophy-quote p {
+        font-size: 14px;
+        line-height: 1.8;
+        color: var(--ec-purple);
+        font-style: italic;
+    }
+
+    /* Timeline */
+    .timeline {
+        position: relative;
+        padding-left: 24px;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: var(--ec-border);
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 24px;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        background: var(--ec-purple);
+        border-radius: 50%;
+        border: 2px solid var(--ec-bg-white);
+    }
+
+    .timeline-year {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ec-purple);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .timeline-content {
+        font-size: 12px;
+        color: var(--ec-text-muted);
+    }
+
+    /* Speaking Engagements */
+    .speaking-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .speaking-item {
+        padding: 12px;
+        background: var(--ec-bg-gray);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .speaking-event {
+        font-weight: 600;
+        color: var(--ec-text);
+        font-size: 12px;
+    }
+
+    .speaking-date {
+        font-size: 11px;
+        color: var(--ec-text-muted);
+    }
+
+    /* Download Button */
+    .download-section {
+        text-align: center;
+        margin-top: 24px;
+    }
+
+    .btn-primary {
+        background: var(--ec-purple);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        font-size: 12px;
+        font-family: inherit;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary:hover {
+        background: var(--ec-purple-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+        .person-header-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .person-photo {
+            margin: 0 auto;
+        }
+
+        .person-content {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Person Header -->
+<section class="person-header">
+    <div class="person-header-content">
+        <div class="person-photo">
+            {% if person.photo %}
+                <img src="{{ person.photo.url }}" alt="{{ person.name }}">
+            {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="{{ person.name }}">
+            {% endif %}
+        </div>
+        <div class="person-info">
+            <h1>{{ person.name }}</h1>
+            <p class="person-title">{{ person.title }}</p>
+            <div class="person-meta">
+                {% if person.email %}
+                <div class="meta-item">
+                    <strong>Email:</strong>
+                    <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+                </div>
+                {% endif %}
+                {% if person.phone %}
+                <div class="meta-item">
+                    <strong>Direct:</strong>
+                    {{ person.phone }}
+                </div>
+                {% endif %}
+                {% if person.location %}
+                <div class="meta-item">
+                    <strong>Location:</strong>
+                    {{ person.location }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="person-tags">
+                {% for tag in person.tags.all %}
+                    <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Bar -->
+<section class="person-stats">
+    <div class="stats-container">
+        <div class="stat-item">
+            <span class="stat-value">{{ person.years_experience }}+</span>
+            <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">{{ person.clients_served|default:"500+" }}</span>
+            <span class="stat-label">Clients Served</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">{{ person.companies_screened|default:"3,000+" }}</span>
+            <span class="stat-label">Companies Screened</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-value">{{ person.publications_count|default:"15+" }}</span>
+            <span class="stat-label">Publications</span>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="person-content">
+    <div class="content-main">
+        <!-- Biography -->
+        <section class="content-section">
+            <h2 class="section-header">BIOGRAPHY</h2>
+            <div class="bio-content">
+                {{ person.biography|safe|default:"<p>Content to be added...</p>" }}
+            </div>
+            
+            {% if person.philosophy_quote %}
+            <div class="philosophy-quote">
+                <p>{{ person.philosophy_quote }}</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Professional Background -->
+        <section class="content-section">
+            <h2 class="section-header">PROFESSIONAL BACKGROUND</h2>
+            <div class="timeline">
+                {% for position in person.positions.all %}
+                <div class="timeline-item">
+                    <div class="timeline-year">{{ position.start_year }}{% if position.end_year %} - {{ position.end_year }}{% else %} - Present{% endif %}</div>
+                    <div class="timeline-content">
+                        <strong>{{ position.title }}</strong><br>
+                        {{ position.organization }}
+                        {% if position.description %}
+                            <br><small>{{ position.description }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Education & Credentials -->
+        <section class="content-section">
+            <h2 class="section-header">EDUCATION & CREDENTIALS</h2>
+            <ul class="credentials-list">
+                {% for credential in person.credentials.all %}
+                <li>
+                    <span class="credential-name">{{ credential.name }}</span>
+                    <span class="credential-detail">{{ credential.institution }}{% if credential.year %}, {{ credential.year }}{% endif %}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Publications & Media -->
+        {% if person.publications.exists %}
+        <section class="content-section">
+            <h2 class="section-header">SELECTED PUBLICATIONS</h2>
+            <div class="publications-grid">
+                {% for pub in person.publications.all|slice:":5" %}
+                <div class="publication-item">
+                    <div class="publication-title">{{ pub.title }}</div>
+                    <div class="publication-details">{{ pub.publisher }} | {{ pub.date|date:"F Y" }}</div>
+                    {% if pub.link %}
+                    <a href="{{ pub.link }}" class="publication-link" target="_blank">Read More →</a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="content-sidebar">
+        <!-- Contact Card -->
+        <div class="sidebar-card">
+            <h3>Connect</h3>
+            <ul class="contact-list">
+                {% if person.email %}
+                <li>
+                    <span class="contact-icon">✉</span>
+                    <a href="mailto:{{ person.email }}">{{ person.email }}</a>
+                </li>
+                {% endif %}
+                {% if person.linkedin %}
+                <li>
+                    <span class="contact-icon">in</span>
+                    <a href="{{ person.linkedin }}" target="_blank">LinkedIn Profile</a>
+                </li>
+                {% endif %}
+                {% if person.twitter %}
+                <li>
+                    <span class="contact-icon">𝕏</span>
+                    <a href="https://twitter.com/{{ person.twitter }}" target="_blank">@{{ person.twitter }}</a>
+                </li>
+                {% endif %}
+                {% if person.calendar_link %}
+                <li>
+                    <span class="contact-icon">📅</span>
+                    <a href="{{ person.calendar_link }}" target="_blank">Schedule a Meeting</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Areas of Focus -->
+        <div class="sidebar-card">
+            <h3>Areas of Focus</h3>
+            <div class="person-tags">
+                <span class="tag">ETHICAL INVESTING</span>
+                <span class="tag">ESG INTEGRATION</span>
+                <span class="tag">IMPACT MEASUREMENT</span>
+                <span class="tag">PORTFOLIO CONSTRUCTION</span>
+                <span class="tag">CLIENT ADVOCACY</span>
+            </div>
+        </div>
+
+        <!-- Speaking Engagements -->
+        {% if person.speaking_engagements.exists %}
+        <div class="sidebar-card">
+            <h3>Recent Speaking</h3>
+            <div class="speaking-list">
+                {% for event in person.speaking_engagements.all|slice:":5" %}
+                <div class="speaking-item">
+                    <span class="speaking-event">{{ event.name }}</span>
+                    <span class="speaking-date">{{ event.date|date:"M Y" }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Download Bio -->
+        <div class="sidebar-card">
+            <h3>Resources</h3>
+            <div class="download-section">
+                <a href="{% url 'download_bio' person.slug %}" class="btn-primary">Download Full Bio</a>
+            </div>
+        </div>
+    </aside>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add any person-specific JavaScript here
+    document.addEventListener('DOMContentLoaded', function() {
+        // Example: Track bio downloads
+        const downloadBtn = document.querySelector('.btn-primary');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', function(e) {
+                // Track download event
+                console.log('Bio downloaded for: {{ person.name }}');
+            });
+        }
+    });
+</script>
+{% endblock %}

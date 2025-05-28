@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Generation Forms | Ethical Capital</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Form Demo Navigation */
+        .demo-nav {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .demo-nav h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .form-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .form-selector button {
+            padding: 8px 16px;
+            background: var(--ec-bg-gray);
+            border: 1px solid var(--ec-border);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-selector button:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+
+        .form-selector button.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        /* Base Form Styles */
+        .form-container {
+            display: none;
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-header {
+            padding: 24px 24px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--ec-border);
+            margin-bottom: 24px;
+        }
+
+        .form-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .form-body {
+            padding: 0 24px 24px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label.required::after {
+            content: "*";
+            color: var(--ec-negative);
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            color: var(--ec-text);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            color: var(--ec-text);
+            resize: vertical;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            color: var(--ec-text);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        /* Checkbox and Radio */
+        .form-checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-checkbox {
+            margin-top: 2px;
+        }
+
+        .checkbox-label {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            line-height: 1.5;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: normal;
+        }
+
+        .checkbox-label a {
+            color: var(--ec-purple);
+            text-decoration: underline;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .btn-primary:disabled {
+            background: var(--ec-text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Multi-step Form Progress */
+        .form-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            padding: 0 24px;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--ec-border);
+            z-index: 1;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: var(--ec-purple);
+        }
+
+        .progress-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--ec-border);
+            color: var(--ec-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 11px;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step.active .progress-dot {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        .progress-step.completed .progress-dot {
+            background: var(--ec-positive);
+            color: white;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-step.active .progress-label {
+            color: var(--ec-purple);
+            font-weight: 600;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        /* Newsletter Specific */
+        .newsletter-benefits {
+            background: var(--ec-bg-gray);
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--ec-text);
+        }
+
+        .benefit-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .benefit-icon {
+            color: var(--ec-purple);
+            font-weight: 600;
+        }
+
+<!-- TODO: point scheduling logic to tidycal -->
+
+        /* Consultation Booking */
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .time-slot {
+            padding: 8px 12px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .time-slot:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .time-slot.selected {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        .time-slot.unavailable {
+            background: var(--ec-bg-gray);
+            color: var(--ec-text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Resource Download */
+        .resource-preview {
+            background: var(--ec-bg-gray);
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .resource-icon {
+            font-size: 48px;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .resource-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-bottom: 4px;
+        }
+
+        .resource-meta {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Inline Forms */
+        .inline-form {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .inline-form .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .inline-form .btn-primary {
+            width: auto;
+            margin-top: 0;
+            padding: 12px 24px;
+        }
+
+        /* Success States */
+        .form-success {
+            background: var(--ec-positive);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .form-success h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-success p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .inline-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Demo Navigation -->
+        <div class="demo-nav">
+            <h1>Lead Generation Forms</h1>
+            <p style="color: var(--ec-text-muted); margin-bottom: 20px;">
+                High-converting forms designed for the Ethical Capital platform. Click to preview different form types.
+            </p>
+            <div class="form-selector">
+                <button class="active" onclick="showForm('conversation')">Start Conversation</button>
+                <button onclick="showForm('newsletter')">Newsletter Signup</button>
+                <button onclick="showForm('resource')">Resource Download</button>
+                <button onclick="showForm('consultation')">Book Consultation</button>
+                <button onclick="showForm('inline-newsletter')">Inline Newsletter</button>
+            </div>
+        </div>
+
+        <!-- Start a Conversation Form -->
+        <div id="conversation" class="form-container active">
+            <div class="form-header">
+                <h2>Start a Conversation</h2>
+                <p>Ready to align your investments with your values? Tell us about your goals and we'll reach out within 24 hours.</p>
+            </div>
+            
+            <div class="form-progress">
+                <div class="progress-step active">
+                    <div class="progress-dot">1</div>
+                    <div class="progress-label">Your Info</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">2</div>
+                    <div class="progress-label">Goals</div>
+                </div>
+                <div class="progress-step">
+                    <div class="progress-dot">3</div>
+                    <div class="progress-label">Preferences</div>
+                </div>
+            </div>
+
+            <form class="form-body">
+                <!-- Step 1: Basic Info -->
+                <div class="form-step active" data-step="1">
+                    <div class="form-group">
+                        <label class="form-label required">Full Name</label>
+                        <input type="text" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Email Address</label>
+                        <input type="email" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input">
+                    </div>
+                    <button type="button" class="btn-primary" onclick="nextStep(2)">Continue</button>
+                </div>
+
+                <!-- Step 2: Investment Goals -->
+                <div class="form-step" data-step="2">
+                    <div class="form-group">
+                        <label class="form-label required">Investable Assets</label>
+                        <select class="form-select" required>
+                            <option value="">Select range...</option>
+                            <option value="under-10k">Under $10,000</option>
+                            <option value="10k-50k">$10,000 - $50,000</option>
+                            <option value="50k-250k">$50,000 - $250,000</option>
+                            <option value="250k-1m">$250,000 - $1,000,000</option>
+                            <option value="1m-5m">$1,000,000 - $5,000,000</option>
+                            <option value="over-5m">Over $5,000,000</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Primary Investment Goal</label>
+                        <select class="form-select" required>
+                            <option value="">Select goal...</option>
+                            <option value="growth">Long-term growth</option>
+                            <option value="income">Current income</option>
+                            <option value="preservation">Capital preservation</option>
+                            <option value="retirement">Retirement planning</option>
+                            <option value="education">Education funding</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Investment Timeline</label>
+                        <select class="form-select">
+                            <option value="">Select timeline...</option>
+                            <option value="1-3">1-3 years</option>
+                            <option value="3-10">3-10 years</option>
+                            <option value="10+">10+ years</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="nextStep(3)">Continue</button>
+                </div>
+
+                <!-- Step 3: Ethical Preferences -->
+                <div class="form-step" data-step="3">
+                    <div class="form-group">
+                        <label class="form-label">Most Important Ethical Considerations</label>
+                        <div style="margin-top: 8px;">
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="climate" class="form-checkbox">
+                                <label for="climate" class="checkbox-label">Climate change and environmental sustainability</label>
+                            </div>
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="human-rights" class="form-checkbox">
+                                <label for="human-rights" class="checkbox-label">Human rights and labor practices</label>
+                            </div>
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="weapons" class="form-checkbox">
+                                <label for="weapons" class="checkbox-label">Weapons and defense contractors</label>
+                            </div>
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="bds" class="form-checkbox">
+                                <label for="bds" class="checkbox-label">BDS compliance (avoiding companies on UN database)</label>
+                            </div>
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="governance" class="form-checkbox">
+                                <label for="governance" class="checkbox-label">Corporate governance and transparency</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Additional Comments or Questions</label>
+                        <textarea class="form-textarea" placeholder="Tell us more about your specific ethical concerns or investment questions..."></textarea>
+                    </div>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="consent" class="form-checkbox" required>
+                        <label for="consent" class="checkbox-label">I consent to being contacted by Ethical Capital and agree to the <a href="#">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit" class="btn-primary">Start My Conversation</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div id="newsletter" class="form-container">
+            <div class="form-header">
+                <h2>The Ethics & Returns Newsletter</h2>
+                <p>Weekly insights on ethical investing, market analysis, and companies where values meet value creation.</p>
+            </div>
+            
+            <form class="form-body">
+                <div class="newsletter-benefits">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">→</span>
+                        <span>Weekly market commentary with ethical lens</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">→</span>
+                        <span>Deep dives on companies we're researching</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">→</span>
+                        <span>Early access to research reports and analysis</span>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">→</span>
+                        <span>Updates on our screening methodology</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" class="form-input" placeholder="your@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" placeholder="Optional">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Investment Interests</label>
+                    <div style="margin-top: 8px;">
+                        <div class="form-checkbox-group">
+                            <input type="checkbox" id="esg-research" class="form-checkbox">
+                            <label for="esg-research" class="checkbox-label">ESG research and analysis</label>
+                        </div>
+                        <div class="form-checkbox-group">
+                            <input type="checkbox" id="market-updates" class="form-checkbox">
+                            <label for="market-updates" class="checkbox-label">Weekly market commentary</label>
+                        </div>
+                        <div class="form-checkbox-group">
+                            <input type="checkbox" id="company-profiles" class="form-checkbox">
+                            <label for="company-profiles" class="checkbox-label">Company deep-dives and profiles</label>
+                        </div>
+                        <div class="form-checkbox-group">
+                            <input type="checkbox" id="methodology" class="form-checkbox">
+                            <label for="methodology" class="checkbox-label">Screening methodology updates</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="newsletter-consent" class="form-checkbox" required>
+                    <label for="newsletter-consent" class="checkbox-label">I agree to receive newsletters and can unsubscribe at any time</label>
+                </div>
+
+                <button type="submit" class="btn-primary">Subscribe to Newsletter</button>
+            </form>
+        </div>
+
+        <!-- Resource Download -->
+        <div id="resource" class="form-container">
+            <div class="form-header">
+                <h2>Download: Ethical Investing Guide</h2>
+                <p>Get our comprehensive 24-page guide to ethical investing, including our full screening methodology and case studies.</p>
+            </div>
+
+            <form class="form-body">
+                <div class="resource-preview">
+                    <div class="resource-icon">📋</div>
+                    <div class="resource-title">The Complete Guide to Ethical Investing</div>
+                    <div class="resource-meta">24 pages • PDF • Updated Q4 2024</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Full Name</label>
+                    <input type="text" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Company/Organization</label>
+                    <input type="text" class="form-input" placeholder="Optional">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select class="form-select">
+                        <option value="">Select role...</option>
+                        <option value="individual">Individual investor</option>
+                        <option value="advisor">Financial advisor</option>
+                        <option value="institutional">Institutional investor</option>
+                        <option value="nonprofit">Nonprofit/Foundation</option>
+                        <option value="student">Student/Academic</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="download-consent" class="form-checkbox" required>
+                    <label for="download-consent" class="checkbox-label">I agree to receive occasional emails about ethical investing research and can unsubscribe at any time</label>
+                </div>
+
+                <button type="submit" class="btn-primary">Download Guide Now</button>
+            </form>
+        </div>
+
+        <!-- Consultation Booking -->
+        <div id="consultation" class="form-container">
+            <div class="form-header">
+                <h2>Book a Consultation</h2>
+                <p>Schedule a free 30-minute conversation with our team to discuss your ethical investing goals.</p>
+            </div>
+
+            <form class="form-body">
+                <div class="form-group">
+                    <label class="form-label required">Full Name</label>
+                    <input type="text" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Email Address</label>
+                    <input type="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Preferred Date</label>
+                    <input type="date" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Preferred Time</label>
+                    <div class="time-slots">
+                        <div class="time-slot" onclick="selectTime(this)">9:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">10:00 AM</div>
+                        <div class="time-slot unavailable">11:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">1:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">2:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">3:00 PM</div>
+                        <div class="time-slot unavailable">4:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">5:00 PM</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Meeting Format</label>
+                    <select class="form-select">
+                        <option value="video">Video call (Zoom)</option>
+                        <option value="phone">Phone call</option>
+                        <option value="in-person">In-person (San Francisco Bay Area)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">What would you like to discuss?</label>
+                    <textarea class="form-textarea" placeholder="Tell us about your investment goals, ethical concerns, or specific questions..."></textarea>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="booking-consent" class="form-checkbox" required>
+                    <label for="booking-consent" class="checkbox-label">I consent to being contacted to confirm this appointment</label>
+                </div>
+
+                <button type="submit" class="btn-primary">Book Consultation</button>
+            </form>
+        </div>
+
+        <!-- Inline Newsletter Form -->
+        <div id="inline-newsletter" class="form-container">
+            <div class="form-header">
+                <h2>Inline Newsletter Forms</h2>
+                <p>Compact forms for embedding in blog posts, sidebars, or page sections.</p>
+            </div>
+            
+            <div class="form-body">
+                <!-- Option 1: Horizontal Inline -->
+                <h3 style="margin-bottom: 12px; color: var(--ec-purple); font-size: 14px;">Horizontal Layout</h3>
+                <div class="inline-form">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" placeholder="your@email.com">
+                    </div>
+                    <button type="submit" class="btn-primary">Subscribe</button>
+                </div>
+
+                <h3 style="margin: 32px 0 12px; color: var(--ec-purple); font-size: 14px;">Vertical Compact</h3>
+                <div style="background: var(--ec-bg-white); border: 1px solid var(--ec-border); padding: 20px; max-width: 300px;">
+                    <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Stay Updated</h4>
+                    <p style="font-size: 12px; color: var(--ec-text-muted); margin-bottom: 16px;">Weekly insights on ethical investing</p>
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="Email address">
+                    </div>
+                    <button type="submit" class="btn-primary">Subscribe</button>
+                </div>
+
+                <h3 style="margin: 32px 0 12px; color: var(--ec-purple); font-size: 14px;">Minimal CTA</h3>
+                <div style="background: var(--ec-purple); color: white; padding: 16px; text-align: center;">
+                    <p style="margin-bottom: 12px; font-size: 12px;">Get our weekly ethical investing newsletter</p>
+                    <div class="inline-form" style="background: transparent; border: none; padding: 0;">
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Enter your email">
+                        </div>
+                        <button type="submit" style="background: white; color: var(--ec-purple);" class="btn-primary">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Message Example -->
+        <div id="success-example" style="display: none; margin-top: 32px;">
+            <div class="form-success">
+                <h3>Thank you!</h3>
+                <p>We've received your information and will be in touch within 24 hours.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form switching functionality
+        function showForm(formId) {
+            // Hide all forms
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show selected form
+            document.getElementById(formId).classList.add('active');
+            
+            // Update button states
+            document.querySelectorAll('.form-selector button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Multi-step form functionality
+        function nextStep(stepNumber) {
+            // Hide current step
+            document.querySelector('.form-step.active').classList.remove('active');
+            
+            // Show next step
+            document.querySelector(`.form-step[data-step="${stepNumber}"]`).classList.add('active');
+            
+            // Update progress
+            updateProgress(stepNumber);
+        }
+
+        function updateProgress(activeStep) {
+            const steps = document.querySelectorAll('.progress-step');
+            
+            steps.forEach((step, index) => {
+                const stepNum = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNum < activeStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === activeStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        // Time slot selection
+        function selectTime(element) {
+            if (element.classList.contains('unavailable')) return;
+            
+            // Remove previous selection
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('selected');
+            });
+            
+            // Select clicked slot
+            element.classList.add('selected');
+        }
+
+        // Form submission handling
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show success message
+                const successDiv = document.getElementById('success-example');
+                successDiv.style.display = 'block';
+                successDiv.scrollIntoView({ behavior: 'smooth' });
+                
+                // In a real implementation, you would:
+                // 1. Validate form data
+                // 2. Submit to your backend/CRM
+                // 3. Handle errors appropriately
+                // 4. Show appropriate success/error states
+                
+                console.log('Form submitted:', new FormData(this));
+            });
+        });
+
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => {
+            const successDiv = document.getElementById('success-example');
+            if (successDiv.style.display === 'block') {
+                successDiv.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

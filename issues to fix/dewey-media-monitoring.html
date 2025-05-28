@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Media Monitoring Dashboard</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Context Header */
+        .context-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .context-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .context-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .update-status {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--ec-positive);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+        }
+        
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        .metric-subtext {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Company Filter */
+        .company-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .company-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            background: var(--ec-bg-gray);
+        }
+        
+        .company-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .company-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .company-ticker {
+            font-weight: 600;
+            width: 48px;
+        }
+        
+        .company-mentions {
+            margin-left: auto;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Source Types */
+        .source-types {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .source-type {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .source-type:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .source-type.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .source-icon {
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+        
+        .source-count {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Sentiment Filter */
+        .sentiment-filters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        
+        .sentiment-btn {
+            padding: 8px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 11px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .sentiment-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .sentiment-btn.active {
+            color: white;
+        }
+        
+        .sentiment-positive {
+            border-color: var(--ec-positive);
+            color: var(--ec-positive);
+        }
+        
+        .sentiment-positive.active {
+            background: var(--ec-positive);
+        }
+        
+        .sentiment-neutral {
+            border-color: var(--ec-text-muted);
+            color: var(--ec-text-muted);
+        }
+        
+        .sentiment-neutral.active {
+            background: var(--ec-text-muted);
+        }
+        
+        .sentiment-negative {
+            border-color: var(--ec-negative);
+            color: var(--ec-negative);
+        }
+        
+        .sentiment-negative.active {
+            background: var(--ec-negative);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Feed Header */
+        .feed-header {
+            background: var(--ec-bg-white);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feed-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .feed-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .control-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        /* Media Feed */
+        .media-feed {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .feed-item {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .feed-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .feed-source {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .source-badge {
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            background: var(--ec-bg-gray);
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        
+        .source-reddit { background: #FF4500; color: white; }
+        .source-bluesky { background: #00A8E8; color: white; }
+        .source-blog { background: #6B46C1; color: white; }
+        .source-discord { background: #5865F2; color: white; }
+        .source-telegram { background: #0088CC; color: white; }
+        
+        .feed-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .feed-timestamp {
+            white-space: nowrap;
+        }
+        
+        .feed-tickers {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .ticker-tag {
+            padding: 2px 6px;
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .ticker-tag:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .feed-content {
+            margin-bottom: 12px;
+        }
+        
+        .feed-title-text {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .feed-excerpt {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+        }
+        
+        .feed-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .engagement-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .sentiment-indicator {
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 2px;
+        }
+        
+        .sentiment-pos {
+            background: var(--ec-positive);
+            color: white;
+        }
+        
+        .sentiment-neu {
+            background: var(--ec-text-muted);
+            color: white;
+        }
+        
+        .sentiment-neg {
+            background: var(--ec-negative);
+            color: white;
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 320px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* Trending Topics */
+        .trending-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .trending-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .trending-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .trending-topic {
+            font-weight: 500;
+        }
+        
+        .trending-count {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Source Management */
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: var(--ec-bg-gray);
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        
+        .source-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .source-name {
+            font-weight: 500;
+        }
+        
+        .source-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        
+        .status-active {
+            background: var(--ec-positive);
+        }
+        
+        .status-error {
+            background: var(--ec-negative);
+        }
+        
+        /* Alert Settings */
+        .alert-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 12px;
+        }
+        
+        .alert-label {
+            color: var(--ec-text-muted);
+        }
+        
+        .alert-toggle {
+            width: 32px;
+            height: 16px;
+            background: var(--ec-border);
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .alert-toggle.active {
+            background: var(--ec-positive);
+        }
+        
+        .alert-toggle::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+        
+        .alert-toggle.active::after {
+            left: 18px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Action Button */
+        .action-button {
+            width: 100%;
+            padding: 10px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        
+        .action-button:hover {
+            background: var(--ec-purple-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#">Email Center</a>
+            <a href="#" class="active">Media Monitor</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Context Header -->
+    <div class="context-header">
+        <div class="context-top">
+            <div class="context-info">
+                <h1>Media Monitoring Dashboard</h1>
+            </div>
+            <div class="update-status">
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span>Live Updates</span>
+                </div>
+                <div class="live-indicator">
+                    <span style="color: var(--ec-text-muted);">Last sync: 47 seconds ago</span>
+                </div>
+            </div>
+        </div>
+        <div class="metrics-bar">
+            <div class="metric-item">
+                <span class="metric-label">24H Mentions</span>
+                <span class="metric-value">1,847</span>
+                <span class="metric-subtext">↑ 234 (14.5%)</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Active Sources</span>
+                <span class="metric-value">127</span>
+                <span class="metric-subtext">12 custom</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Companies</span>
+                <span class="metric-value">47</span>
+                <span class="metric-subtext">in portfolio</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Sentiment</span>
+                <span class="metric-value">+0.34</span>
+                <span class="metric-subtext" style="color: var(--ec-positive);">↑ 0.12</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Alerts Today</span>
+                <span class="metric-value">23</span>
+                <span class="metric-subtext">6 critical</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Coverage Gap</span>
+                <span class="metric-value">3</span>
+                <span class="metric-subtext">companies</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Portfolio Companies</h3>
+                <div class="company-list">
+                    <div class="company-item active">
+                        <span class="company-ticker">ALL</span>
+                        <span>All Companies</span>
+                        <span class="company-mentions">1.8k</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-ticker">AAPL</span>
+                        <span>Apple Inc.</span>
+                        <span class="company-mentions">342</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-ticker">MSFT</span>
+                        <span>Microsoft</span>
+                        <span class="company-mentions">287</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-ticker">GOOGL</span>
+                        <span>Alphabet</span>
+                        <span class="company-mentions">198</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-ticker">TSLA</span>
+                        <span>Tesla</span>
+                        <span class="company-mentions">456</span>
+                    </div>
+                    <div class="company-item">
+                        <span class="company-ticker">NVDA</span>
+                        <span>NVIDIA</span>
+                        <span class="company-mentions">167</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Source Types</h3>
+                <div class="source-types">
+                    <div class="source-type active">
+                        <span><span class="source-icon">🌐</span>All Sources</span>
+                        <span class="source-count">127</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">📱</span>Reddit</span>
+                        <span class="source-count">r/45</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">🦋</span>Bluesky</span>
+                        <span class="source-count">23</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">💬</span>Discord</span>
+                        <span class="source-count">12</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">✈️</span>Telegram</span>
+                        <span class="source-count">8</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">📝</span>Custom Blogs</span>
+                        <span class="source-count">18</span>
+                    </div>
+                    <div class="source-type">
+                        <span><span class="source-icon">🏭</span>Industry</span>
+                        <span class="source-count">21</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Sentiment Filter</h3>
+                <div class="sentiment-filters">
+                    <button class="sentiment-btn sentiment-positive active">Positive</button>
+                    <button class="sentiment-btn sentiment-neutral active">Neutral</button>
+                    <button class="sentiment-btn sentiment-negative active">Negative</button>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="feed-header">
+                <h3 class="feed-title">Media Feed (1,847 items)</h3>
+                <div class="feed-controls">
+                    <button class="control-btn">Export</button>
+                    <button class="control-btn">Mark All Read</button>
+                    <button class="control-btn">Configure Alerts</button>
+                </div>
+            </div>
+            
+            <div class="media-feed">
+                <!-- Feed Item 1 -->
+                <div class="feed-item">
+                    <div class="feed-item-header">
+                        <div class="feed-source">
+                            <span class="source-badge source-reddit">REDDIT</span>
+                            <span class="feed-meta">
+                                <span>r/wallstreetbets</span>
+                                <span>•</span>
+                                <span class="feed-timestamp">12 minutes ago</span>
+                            </span>
+                        </div>
+                        <div class="feed-tickers">
+                            <span class="ticker-tag">TSLA</span>
+                            <span class="ticker-tag">NVDA</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <div class="feed-title-text">DD: Why TSLA's FSD v12.5 is a game changer - Insider perspective</div>
+                        <div class="feed-excerpt">Just got the update on my Model S and holy shit. The improvement from 12.3 is insane. I work at [REDACTED] and can tell you the amount of compute they're throwing at this...</div>
+                    </div>
+                    <div class="feed-footer">
+                        <div class="engagement-stats">
+                            <span class="stat-item">👍 2.3k</span>
+                            <span class="stat-item">💬 342</span>
+                            <span class="stat-item">🔥 Hot</span>
+                        </div>
+                        <span class="sentiment-indicator sentiment-pos">POSITIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Feed Item 2 -->
+                <div class="feed-item">
+                    <div class="feed-item-header">
+                        <div class="feed-source">
+                            <span class="source-badge source-blog">BLOG</span>
+                            <span class="feed-meta">
+                                <span>Stratechery</span>
+                                <span>•</span>
+                                <span class="feed-timestamp">2 hours ago</span>
+                            </span>
+                        </div>
+                        <div class="feed-tickers">
+                            <span class="ticker-tag">AAPL</span>
+                            <span class="ticker-tag">GOOGL</span>
+                            <span class="ticker-tag">META</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <div class="feed-title-text">The AI Arms Race: Apple's Strategic Patience</div>
+                        <div class="feed-excerpt">While Google and Meta rush to deploy increasingly powerful models, Apple's approach to AI integration reveals a fundamentally different philosophy about product development...</div>
+                    </div>
+                    <div class="feed-footer">
+                        <div class="engagement-stats">
+                            <span class="stat-item">📖 15 min read</span>
+                            <span class="stat-item">🔗 87 shares</span>
+                        </div>
+                        <span class="sentiment-indicator sentiment-neu">NEUTRAL</span>
+                    </div>
+                </div>
+                
+                <!-- Feed Item 3 -->
+                <div class="feed-item">
+                    <div class="feed-item-header">
+                        <div class="feed-source">
+                            <span class="source-badge source-bluesky">BLUESKY</span>
+                            <span class="feed-meta">
+                                <span>@techanalyst.bsky</span>
+                                <span>•</span>
+                                <span class="feed-timestamp">37 minutes ago</span>
+                            </span>
+                        </div>
+                        <div class="feed-tickers">
+                            <span class="ticker-tag">MSFT</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <div class="feed-title-text">Thread: Microsoft's enterprise AI pricing is becoming a real issue</div>
+                        <div class="feed-excerpt">Talking to CTOs at 3 F500s this week and they're all saying the same thing - Copilot pricing is insane. One told me they're looking at $30M/year for their deployment. 🧵👇</div>
+                    </div>
+                    <div class="feed-footer">
+                        <div class="engagement-stats">
+                            <span class="stat-item">🔄 234</span>
+                            <span class="stat-item">❤️ 567</span>
+                            <span class="stat-item">💭 89</span>
+                        </div>
+                        <span class="sentiment-indicator sentiment-neg">NEGATIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Feed Item 4 -->
+                <div class="feed-item">
+                    <div class="feed-item-header">
+                        <div class="feed-source">
+                            <span class="source-badge source-discord">DISCORD</span>
+                            <span class="feed-meta">
+                                <span>TechInvestors Server</span>
+                                <span>•</span>
+                                <span class="feed-timestamp">1 hour ago</span>
+                            </span>
+                        </div>
+                        <div class="feed-tickers">
+                            <span class="ticker-tag">NVDA</span>
+                            <span class="ticker-tag">AMD</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <div class="feed-title-text">Supply chain update from Taiwan</div>
+                        <div class="feed-excerpt">Friend at TSMC says NVIDIA booked even more 3nm capacity for Q2. AMD might be squeezed out. This lines up with what I heard from...</div>
+                    </div>
+                    <div class="feed-footer">
+                        <div class="engagement-stats">
+                            <span class="stat-item">👀 156 views</span>
+                            <span class="stat-item">✅ Verified</span>
+                        </div>
+                        <span class="sentiment-indicator sentiment-pos">POSITIVE</span>
+                    </div>
+                </div>
+                
+                <!-- Feed Item 5 -->
+                <div class="feed-item">
+                    <div class="feed-item-header">
+                        <div class="feed-source">
+                            <span class="source-badge source-telegram">TELEGRAM</span>
+                            <span class="feed-meta">
+                                <span>EV Insider News</span>
+                                <span>•</span>
+                                <span class="feed-timestamp">3 hours ago</span>
+                            </span>
+                        </div>
+                        <div class="feed-tickers">
+                            <span class="ticker-tag">TSLA</span>
+                            <span class="ticker-tag">RIVN</span>
+                        </div>
+                    </div>
+                    <div class="feed-content">
+                        <div class="feed-title-text">⚡ BREAKING: Rivian layoffs coming next week</div>
+                        <div class="feed-excerpt">Multiple sources confirming 15-20% workforce reduction announcement Monday. Engineering teams hit hardest. Stock might tank on open...</div>
+                    </div>
+                    <div class="feed-footer">
+                        <div class="engagement-stats">
+                            <span class="stat-item">📍 12.3k members</span>
+                            <span class="stat-item">🚨 High confidence</span>
+                        </div>
+                        <span class="sentiment-indicator sentiment-neg">NEGATIVE</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">Trending Topics (24H)</h3>
+                <div class="trending-list">
+                    <div class="trending-item">
+                        <span class="trending-topic">"AI pricing bubble"</span>
+                        <span class="trending-count">234 mentions</span>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-topic">"TSLA FSD v12.5"</span>
+                        <span class="trending-count">189 mentions</span>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-topic">"chip shortage 2025"</span>
+                        <span class="trending-count">156 mentions</span>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-topic">"enterprise AI costs"</span>
+                        <span class="trending-count">143 mentions</span>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-topic">"RIVN layoffs"</span>
+                        <span class="trending-count">98 mentions</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Custom Sources</h3>
+                <div class="source-list">
+                    <div class="source-item">
+                        <div class="source-info">
+                            <span class="status-dot status-active"></span>
+                            <span class="source-name">Stratechery</span>
+                        </div>
+                        <span class="source-status">Daily</span>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-info">
+                            <span class="status-dot status-active"></span>
+                            <span class="source-name">The Information</span>
+                        </div>
+                        <span class="source-status">2x daily</span>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-info">
+                            <span class="status-dot status-error"></span>
+                            <span class="source-name">Semiconductor Eng.</span>
+                        </div>
+                        <span class="source-status">Error</span>
+                    </div>
+                    <div class="source-item">
+                        <div class="source-info">
+                            <span class="status-dot status-active"></span>
+                            <span class="source-name">Battery Tech News</span>
+                        </div>
+                        <span class="source-status">Weekly</span>
+                    </div>
+                </div>
+                <button class="action-button" style="margin-top: 12px;">Manage Sources</button>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Alert Settings</h3>
+                <div class="alert-settings">
+                    <div class="alert-item">
+                        <span class="alert-label">Sentiment shifts</span>
+                        <div class="alert-toggle active"></div>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-label">Volume spikes</span>
+                        <div class="alert-toggle active"></div>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-label">New topics</span>
+                        <div class="alert-toggle"></div>
+                    </div>
+                    <div class="alert-item">
+                        <span class="alert-label">Insider mentions</span>
+                        <div class="alert-toggle active"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">S</span>
+                <span>Add Source</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">F</span>
+                <span>Filter</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">M</span>
+                <span>Mark Read</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Quick View</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">J/K</span>
+                <span>Navigate</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Monitoring: 127 sources</span>
+            <span>Next sync: 13s</span>
+            <span>Mode: LIVE</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Company filter
+        document.querySelectorAll('.company-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.company-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                console.log('Filter by company:', this.querySelector('.company-ticker').textContent);
+            });
+        });
+        
+        // Source type filter
+        document.querySelectorAll('.source-type').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.source-type').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Sentiment filters
+        document.querySelectorAll('.sentiment-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+        
+        // Alert toggles
+        document.querySelectorAll('.alert-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+        
+        // Ticker tag clicks
+        document.querySelectorAll('.ticker-tag').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const ticker = this.textContent;
+                // Find and click the corresponding company item
+                document.querySelectorAll('.company-ticker').forEach(item => {
+                    if (item.textContent === ticker) {
+                        item.parentElement.click();
+                    }
+                });
+            });
+        });
+        
+        // Trending topic clicks
+        document.querySelectorAll('.trending-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const topic = this.querySelector('.trending-topic').textContent;
+                console.log('Filter by topic:', topic);
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 's':
+                    e.preventDefault();
+                    console.log('Add new source');
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    console.log('Focus filter');
+                    break;
+                case 'm':
+                    e.preventDefault();
+                    console.log('Mark selected as read');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    console.log('Quick view selected item');
+                    break;
+            }
+        });
+        
+        // Simulate new items arriving
+        function addNewItem() {
+            const feedContainer = document.querySelector('.media-feed');
+            const feedTitle = document.querySelector('.feed-title');
+            
+            // Update count
+            const currentCount = parseInt(feedTitle.textContent.match(/\d+/)[0]);
+            feedTitle.textContent = `Media Feed (${currentCount + 1} items)`;
+            
+            // Flash the live indicator
+            const liveDot = document.querySelector('.live-dot');
+            liveDot.style.background = '#F59E0B';
+            setTimeout(() => {
+                liveDot.style.background = 'var(--ec-positive)';
+            }, 500);
+        }
+        
+        // Simulate periodic updates
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                addNewItem();
+            }
+        }, 15000);
+    </script>
+</body>
+</html>

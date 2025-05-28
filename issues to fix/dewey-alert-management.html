@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Alert Management</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Context Header */
+        .context-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .context-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .context-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            padding: 8px 16px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        /* Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+        }
+        
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        .metric-subtext {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Alert Categories */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            background: var(--ec-bg-gray);
+        }
+        
+        .category-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .category-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .category-icon {
+            width: 16px;
+            text-align: center;
+        }
+        
+        .category-count {
+            margin-left: auto;
+            font-size: 11px;
+            opacity: 0.8;
+        }
+        
+        /* Templates */
+        .template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .template-item {
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .template-item:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .template-tag {
+            font-size: 10px;
+            padding: 2px 6px;
+            background: var(--ec-purple);
+            color: white;
+            border-radius: 2px;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Alert Rules Header */
+        .rules-header {
+            background: var(--ec-bg-white);
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .rules-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .rules-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .control-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        /* Alert Rules Table */
+        .rules-table {
+            flex: 1;
+            background: var(--ec-bg-white);
+            overflow-y: auto;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 40px 200px 1fr 120px 100px 80px 120px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            align-items: center;
+            font-size: 12px;
+            gap: 16px;
+            min-height: 48px;
+        }
+        
+        .table-row.header {
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            background: var(--ec-bg-gray);
+            z-index: 10;
+            border-bottom: 2px solid var(--ec-border);
+            letter-spacing: 0.5px;
+        }
+        
+        .table-row:hover:not(.header) {
+            background: var(--ec-purple-pale);
+            cursor: pointer;
+        }
+        
+        /* Status Toggle */
+        .status-toggle {
+            width: 32px;
+            height: 16px;
+            background: var(--ec-border);
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .status-toggle.active {
+            background: var(--ec-positive);
+        }
+        
+        .status-toggle::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+        
+        .status-toggle.active::after {
+            left: 18px;
+        }
+        
+        /* Rule Name */
+        .rule-name {
+            font-weight: 600;
+        }
+        
+        /* Condition Display */
+        .condition-display {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Channel Icons */
+        .channel-icons {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .channel-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--ec-bg-gray);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        
+        .channel-active {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        /* Priority Badge */
+        .priority-badge {
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        
+        .priority-critical {
+            background: var(--ec-negative);
+            color: white;
+        }
+        
+        .priority-high {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: var(--ec-info);
+            color: white;
+        }
+        
+        .priority-low {
+            background: var(--ec-bg-gray);
+            color: var(--ec-text-muted);
+        }
+        
+        /* Trigger Count */
+        .trigger-count {
+            text-align: center;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Actions */
+        .rule-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        
+        .action-btn {
+            padding: 4px 8px;
+            font-size: 10px;
+            background: white;
+            border: 1px solid var(--ec-border);
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .action-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 360px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* Rule Builder */
+        .rule-builder {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .form-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        .form-input {
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+        
+        .form-select {
+            padding: 8px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+            background: white;
+        }
+        
+        /* Condition Builder */
+        .condition-builder {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            padding: 8px;
+            background: var(--ec-bg-gray);
+        }
+        
+        .condition-select {
+            flex: 1;
+            padding: 6px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            font-family: inherit;
+        }
+        
+        .add-condition-btn {
+            padding: 6px 12px;
+            font-size: 11px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Activity Timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            padding: 8px;
+            background: var(--ec-bg-gray);
+            border-left: 2px solid transparent;
+        }
+        
+        .timeline-time {
+            width: 45px;
+            color: var(--ec-text-muted);
+        }
+        
+        .timeline-text {
+            flex: 1;
+        }
+        
+        .timeline-triggered {
+            border-left-color: var(--ec-info);
+        }
+        
+        .timeline-created {
+            border-left-color: var(--ec-positive);
+        }
+        
+        .timeline-error {
+            border-left-color: var(--ec-negative);
+        }
+        
+        /* Performance Stats */
+        .perf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .perf-card {
+            padding: 12px;
+            background: var(--ec-bg-gray);
+            text-align: center;
+        }
+        
+        .perf-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .perf-label {
+            font-size: 10px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        
+        /* Test Alert */
+        .test-section {
+            padding: 16px;
+            background: var(--ec-bg-gray);
+            margin: 16px 0;
+            border: 1px dashed var(--ec-purple);
+        }
+        
+        .test-btn {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            color: var(--ec-purple);
+            border: 1px solid var(--ec-purple);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#">Operations</a>
+            <a href="#" class="active">Alerts</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Context Header -->
+    <div class="context-header">
+        <div class="context-top">
+            <div class="context-info">
+                <h1>Alert Management</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary">
+                    <span>+</span>
+                    <span>New Alert Rule</span>
+                </button>
+                <button class="btn-primary">
+                    <span>⚡</span>
+                    <span>Quick Setup</span>
+                </button>
+            </div>
+        </div>
+        <div class="metrics-bar">
+            <div class="metric-item">
+                <span class="metric-label">Active Rules</span>
+                <span class="metric-value">127</span>
+                <span class="metric-subtext">23 categories</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">24H Triggers</span>
+                <span class="metric-value">2,847</span>
+                <span class="metric-subtext">↑ 341 (13.6%)</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Response Time</span>
+                <span class="metric-value">0.3s</span>
+                <span class="metric-subtext">avg delivery</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Success Rate</span>
+                <span class="metric-value">99.7%</span>
+                <span class="metric-subtext">3 failures</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Recipients</span>
+                <span class="metric-value">47</span>
+                <span class="metric-subtext">12 teams</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Escalations</span>
+                <span class="metric-value">14</span>
+                <span class="metric-subtext">this week</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Alert Categories</h3>
+                <div class="category-list">
+                    <div class="category-item active">
+                        <span class="category-icon">📊</span>
+                        <span>All Alerts</span>
+                        <span class="category-count">127</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">💹</span>
+                        <span>Price Movements</span>
+                        <span class="category-count">34</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">📰</span>
+                        <span>News & Media</span>
+                        <span class="category-count">28</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">📧</span>
+                        <span>Client Activity</span>
+                        <span class="category-count">19</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">🔬</span>
+                        <span>Research Triggers</span>
+                        <span class="category-count">15</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">⚠️</span>
+                        <span>Risk & Compliance</span>
+                        <span class="category-count">12</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">📈</span>
+                        <span>Performance</span>
+                        <span class="category-count">11</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-icon">🏢</span>
+                        <span>Operations</span>
+                        <span class="category-count">8</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Quick Templates</h3>
+                <div class="template-list">
+                    <div class="template-item">
+                        <span>Price Drop > 5%</span>
+                        <span class="template-tag">Popular</span>
+                    </div>
+                    <div class="template-item">
+                        <span>ESG Controversy</span>
+                        <span class="template-tag">New</span>
+                    </div>
+                    <div class="template-item">
+                        <span>Client Email SLA</span>
+                    </div>
+                    <div class="template-item">
+                        <span>Research Update</span>
+                    </div>
+                    <div class="template-item">
+                        <span>Portfolio Drift</span>
+                    </div>
+                    <div class="template-item">
+                        <span>Regulatory Filing</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Notification Channels</h3>
+                <div class="template-list">
+                    <div class="template-item">
+                        <span>📧 Email</span>
+                        <span style="color: var(--ec-positive);">Active</span>
+                    </div>
+                    <div class="template-item">
+                        <span>💬 SMS</span>
+                        <span style="color: var(--ec-positive);">Active</span>
+                    </div>
+                    <div class="template-item">
+                        <span>🔔 In-App</span>
+                        <span style="color: var(--ec-positive);">Active</span>
+                    </div>
+                    <div class="template-item">
+                        <span>📱 Mobile Push</span>
+                        <span style="color: var(--ec-text-muted);">Setup</span>
+                    </div>
+                    <div class="template-item">
+                        <span>🤖 Slack</span>
+                        <span style="color: var(--ec-positive);">Active</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="rules-header">
+                <h3 class="rules-title">Active Alert Rules</h3>
+                <div class="rules-controls">
+                    <button class="control-btn">Export</button>
+                    <button class="control-btn">Import</button>
+                    <button class="control-btn">Bulk Edit</button>
+                </div>
+            </div>
+            
+            <div class="rules-table">
+                <div class="table-row header">
+                    <div>STATUS</div>
+                    <div>RULE NAME</div>
+                    <div>CONDITIONS</div>
+                    <div>CHANNELS</div>
+                    <div>PRIORITY</div>
+                    <div>24H</div>
+                    <div>ACTIONS</div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Critical Price Movement</div>
+                    <div class="condition-display">Any portfolio stock drops > 10% intraday</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon channel-active">💬</div>
+                        <div class="channel-icon">🔔</div>
+                        <div class="channel-icon channel-active">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-critical">CRITICAL</span></div>
+                    <div class="trigger-count">3</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">ESG Risk Detection</div>
+                    <div class="condition-display">Company mentioned + negative sentiment > 80%</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon channel-active">🔔</div>
+                        <div class="channel-icon">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-high">HIGH</span></div>
+                    <div class="trigger-count">12</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Client Email Response SLA</div>
+                    <div class="condition-display">Client email unanswered > 4 hours</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon channel-active">🔔</div>
+                        <div class="channel-icon channel-active">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-high">HIGH</span></div>
+                    <div class="trigger-count">89</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Portfolio Drift Warning</div>
+                    <div class="condition-display">Any position > 15% of portfolio OR drift > 5%</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon">🔔</div>
+                        <div class="channel-icon">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-medium">MEDIUM</span></div>
+                    <div class="trigger-count">7</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle"></div></div>
+                    <div class="rule-name">Research Report Published</div>
+                    <div class="condition-display">New research on portfolio company available</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon">🔔</div>
+                        <div class="channel-icon">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-low">LOW</span></div>
+                    <div class="trigger-count">234</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Regulatory Filing Alert</div>
+                    <div class="condition-display">New 8-K, 10-Q, or proxy filed for holdings</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon">🔔</div>
+                        <div class="channel-icon channel-active">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-medium">MEDIUM</span></div>
+                    <div class="trigger-count">156</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Media Sentiment Shift</div>
+                    <div class="condition-display">24h sentiment change > 20% on 50+ mentions</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon">📧</div>
+                        <div class="channel-icon">💬</div>
+                        <div class="channel-icon channel-active">🔔</div>
+                        <div class="channel-icon channel-active">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-medium">MEDIUM</span></div>
+                    <div class="trigger-count">23</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+                
+                <div class="table-row">
+                    <div><div class="status-toggle active"></div></div>
+                    <div class="rule-name">Large Trade Execution</div>
+                    <div class="condition-display">Trade > $1M OR > 5% of daily volume</div>
+                    <div class="channel-icons">
+                        <div class="channel-icon channel-active">📧</div>
+                        <div class="channel-icon channel-active">💬</div>
+                        <div class="channel-icon">🔔</div>
+                        <div class="channel-icon">🤖</div>
+                    </div>
+                    <div><span class="priority-badge priority-high">HIGH</span></div>
+                    <div class="trigger-count">41</div>
+                    <div class="rule-actions">
+                        <button class="action-btn">Edit</button>
+                        <button class="action-btn">Test</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">Rule Builder</h3>
+                <div class="rule-builder">
+                    <div class="form-group">
+                        <label class="form-label">Rule Name</label>
+                        <input type="text" class="form-input" placeholder="Enter rule name...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select">
+                            <option>Price Movements</option>
+                            <option>News & Media</option>
+                            <option>Client Activity</option>
+                            <option>Research Triggers</option>
+                            <option>Risk & Compliance</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Conditions</label>
+                        <div class="condition-builder">
+                            <select class="condition-select">
+                                <option>Stock Price</option>
+                                <option>Volume</option>
+                                <option>Sentiment</option>
+                                <option>Time-based</option>
+                            </select>
+                            <select class="condition-select">
+                                <option>Drops by</option>
+                                <option>Rises by</option>
+                                <option>Equals</option>
+                                <option>Greater than</option>
+                            </select>
+                            <input type="text" class="condition-select" placeholder="Value">
+                        </div>
+                        <button class="add-condition-btn">+ Add Condition</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Priority</label>
+                        <select class="form-select">
+                            <option>Critical - Immediate action</option>
+                            <option>High - Within 1 hour</option>
+                            <option>Medium - Within 4 hours</option>
+                            <option>Low - Daily digest</option>
+                        </select>
+                    </div>
+                    
+                    <div class="test-section">
+                        <button class="test-btn">Test Alert Rule</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Recent Activity</h3>
+                <div class="timeline">
+                    <div class="timeline-item timeline-triggered">
+                        <span class="timeline-time">14:32</span>
+                        <span class="timeline-text">AAPL dropped 5.2% - Alert sent to 3 recipients</span>
+                    </div>
+                    <div class="timeline-item timeline-created">
+                        <span class="timeline-time">14:15</span>
+                        <span class="timeline-text">New rule created: "Insider Trading Alert"</span>
+                    </div>
+                    <div class="timeline-item timeline-triggered">
+                        <span class="timeline-time">13:47</span>
+                        <span class="timeline-text">Client SLA breach - Escalation triggered</span>
+                    </div>
+                    <div class="timeline-item timeline-error">
+                        <span class="timeline-time">13:22</span>
+                        <span class="timeline-text">SMS delivery failed - Retrying...</span>
+                    </div>
+                    <div class="timeline-item timeline-triggered">
+                        <span class="timeline-time">12:58</span>
+                        <span class="timeline-text">ESG risk detected for XOM - 12 mentions</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Performance Stats</h3>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <div class="perf-value">2.8K</div>
+                        <div class="perf-label">Alerts Today</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value">0.3s</div>
+                        <div class="perf-label">Avg Latency</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value">99.7%</div>
+                        <div class="perf-label">Delivery Rate</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value">14</div>
+                        <div class="perf-label">Escalations</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">N</span>
+                <span>New Rule</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">E</span>
+                <span>Edit</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">T</span>
+                <span>Test</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Toggle Status</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">F</span>
+                <span>Filter</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Active Rules: 104/127</span>
+            <span>Last Trigger: 2 min ago</span>
+            <span>Mode: MONITORING</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Status toggles
+        document.querySelectorAll('.status-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                updateMetrics();
+            });
+        });
+        
+        // Category selection
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Template clicks
+        document.querySelectorAll('.template-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const templateName = this.querySelector('span').textContent;
+                document.querySelector('.form-input').value = templateName;
+                console.log('Loading template:', templateName);
+            });
+        });
+        
+        // Row selection
+        document.querySelectorAll('.table-row:not(.header)').forEach(row => {
+            row.addEventListener('click', function(e) {
+                if (!e.target.closest('.action-btn') && !e.target.closest('.status-toggle')) {
+                    // Load rule details into builder
+                    const ruleName = this.querySelector('.rule-name').textContent;
+                    document.querySelector('.form-input').value = ruleName;
+                }
+            });
+        });
+        
+        // Test button
+        document.querySelector('.test-btn').addEventListener('click', function() {
+            this.textContent = 'Sending test alert...';
+            setTimeout(() => {
+                this.textContent = 'Test sent successfully!';
+                setTimeout(() => {
+                    this.textContent = 'Test Alert Rule';
+                }, 2000);
+            }, 1000);
+        });
+        
+        // Update metrics
+        function updateMetrics() {
+            const activeCount = document.querySelectorAll('.status-toggle.active').length;
+            const totalCount = document.querySelectorAll('.status-toggle').length;
+            document.querySelector('.status-info span').textContent = `Active Rules: ${activeCount}/${totalCount}`;
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'n':
+                    e.preventDefault();
+                    document.querySelector('.btn-primary').click();
+                    break;
+                case 't':
+                    e.preventDefault();
+                    document.querySelector('.test-btn').click();
+                    break;
+                case 'f':
+                    e.preventDefault();
+                    console.log('Open filter');
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    // Toggle selected row's status
+                    break;
+            }
+        });
+        
+        // Simulate real-time updates
+        function addActivityItem() {
+            const timeline = document.querySelector('.timeline');
+            const types = ['triggered', 'created', 'error'];
+            const messages = [
+                'MSFT volume spike detected - Alert sent',
+                'Portfolio drift: Tech sector at 67%',
+                'Client email SLA approaching limit',
+                'ESG alert: New controversy detected'
+            ];
+            
+            const newItem = document.createElement('div');
+            newItem.className = `timeline-item timeline-${types[Math.floor(Math.random() * types.length)]}`;
+            newItem.innerHTML = `
+                <span class="timeline-time">Now</span>
+                <span class="timeline-text">${messages[Math.floor(Math.random() * messages.length)]}</span>
+            `;
+            
+            timeline.insertBefore(newItem, timeline.firstChild);
+            
+            // Remove old items
+            while (timeline.children.length > 5) {
+                timeline.removeChild(timeline.lastChild);
+            }
+        }
+        
+        // Update activity periodically
+        setInterval(addActivityItem, 15000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Admin Dashboard</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+            padding: 4px 0;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px 6px 32px;
+            font-family: inherit;
+            font-size: 12px;
+            width: 200px;
+            border-radius: 3px;
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+            font-size: 12px;
+        }
+        
+        .admin-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .admin-dropdown:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .admin-avatar {
+            width: 24px;
+            height: 24px;
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            background: var(--ec-text);
+            color: white;
+            padding: 24px;
+            position: relative;
+        }
+        
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--ec-positive);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .metric-delta {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .delta-positive {
+            color: var(--ec-positive);
+        }
+        
+        .delta-negative {
+            color: var(--ec-negative);
+        }
+        
+        .close-welcome {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        
+        .close-welcome:hover {
+            opacity: 1;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        /* Quick Access Grid */
+        .quick-access {
+            margin-bottom: 32px;
+        }
+        
+        .section-header {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        
+        .module-card {
+            background: var(--ec-purple);
+            color: white;
+            padding: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: none;
+            position: relative;
+        }
+        
+        .module-card:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        .module-icon {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .module-name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .module-count {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        
+        /* Activity Feed */
+        .activity-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        
+        .activity-feed {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+        }
+        
+        .feed-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .feed-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .feed-filters {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .filter-btn {
+            padding: 4px 12px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+            border-radius: 3px;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        .filter-btn.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        /* Activity Table */
+        .activity-table {
+            width: 100%;
+        }
+        
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 80px 1fr 100px 100px;
+            padding: 12px 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            background: var(--ec-bg-gray);
+            letter-spacing: 0.5px;
+        }
+        
+        .table-row {
+            display: grid;
+            grid-template-columns: 80px 80px 1fr 100px 100px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--ec-border);
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .table-row:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .time-cell {
+            color: var(--ec-text-muted);
+            font-size: 11px;
+        }
+        
+        .type-badge {
+            padding: 3px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 2px;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+        
+        .type-action {
+            background: var(--ec-info);
+            color: white;
+        }
+        
+        .type-alert {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        .type-email {
+            background: var(--ec-purple);
+            color: white;
+        }
+        
+        .type-report {
+            background: var(--ec-positive);
+            color: white;
+        }
+        
+        .priority-high {
+            color: var(--ec-negative);
+            font-weight: 600;
+        }
+        
+        .priority-medium {
+            color: var(--ec-caution);
+            font-weight: 600;
+        }
+        
+        .priority-low {
+            color: var(--ec-text-muted);
+        }
+        
+        .status-badge {
+            padding: 3px 10px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        
+        .status-progress {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        
+        .status-pending {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+        
+        .status-completed {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+        
+        /* System Status */
+        .system-panel {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+        }
+        
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .system-list {
+            padding: 16px 20px;
+        }
+        
+        .system-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--ec-bg-gray);
+        }
+        
+        .system-item:last-child {
+            border-bottom: none;
+        }
+        
+        .system-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-online {
+            background: var(--ec-positive);
+        }
+        
+        .status-limited {
+            background: var(--ec-caution);
+        }
+        
+        .status-offline {
+            background: var(--ec-negative);
+        }
+        
+        .status-text {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--ec-border);
+            margin: 8px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--ec-positive);
+            transition: width 0.3s;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+        }
+        
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .hotkey-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.8;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: 600;
+            font-size: 10px;
+        }
+        
+        .footer-right {
+            opacity: 0.8;
+        }
+        
+        /* Utility Classes */
+        .text-muted {
+            color: var(--ec-text-muted);
+        }
+        
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+        
+        .mb-6 {
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="header-left">
+            <div class="platform-logo">Dewey</div>
+            <nav class="platform-nav">
+                <a href="#">Action Tracking</a>
+                <a href="#">Alert Management</a>
+                <a href="#">Client Context</a>
+                <a href="#">Email Processing</a>
+                <a href="#">Intelligence Reports</a>
+                <a href="#">Media Monitoring</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search">
+            </div>
+            <div class="hotkey-hint">
+                <span class="key">?</span>
+                <span>HITL Queue</span>
+            </div>
+            <div class="hotkey-hint">
+                <span class="key">⚡</span>
+                <span>Quick Actions</span>
+            </div>
+            <div class="admin-dropdown">
+                <div class="admin-avatar">AO</div>
+                <span>admin</span>
+                <span>▼</span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <button class="close-welcome">×</button>
+        <div class="welcome-header">
+            <h1 class="welcome-title">Welcome back, admin!</h1>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Active Actions</div>
+                <div class="metric-value">24</div>
+                <div class="metric-delta">
+                    <span>↑</span>
+                    <span>↑ 3 today</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Active Alerts</div>
+                <div class="metric-value">8</div>
+                <div class="metric-delta delta-negative">
+                    <span>↓</span>
+                    <span>↓ 2 resolved</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Portfolio Value</div>
+                <div class="metric-value">$124.5M</div>
+                <div class="metric-delta delta-positive">
+                    <span>↑</span>
+                    <span>↑ 2.3%</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Client Satisfaction</div>
+                <div class="metric-value">96.8%</div>
+                <div class="metric-delta delta-positive">
+                    <span>↑</span>
+                    <span>↑ 1.2%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Quick Access -->
+        <section class="quick-access mb-6">
+            <h2 class="section-header">Quick Access</h2>
+            <div class="module-grid">
+                <div class="module-card">
+                    <span class="module-count">24</span>
+                    <div class="module-icon">📋</div>
+                    <div class="module-name">Action Tracking</div>
+                </div>
+                <div class="module-card">
+                    <span class="module-count">8</span>
+                    <div class="module-icon">🔔</div>
+                    <div class="module-name">Alert Management</div>
+                </div>
+                <div class="module-card">
+                    <span class="module-count">47</span>
+                    <div class="module-icon">👥</div>
+                    <div class="module-name">Client Context</div>
+                </div>
+                <div class="module-card">
+                    <span class="module-count">1.2k</span>
+                    <div class="module-icon">📧</div>
+                    <div class="module-name">Email Processing</div>
+                </div>
+                <div class="module-card">
+                    <span class="module-count">31</span>
+                    <div class="module-icon">📊</div>
+                    <div class="module-name">Intelligence Reports</div>
+                </div>
+                <div class="module-card">
+                    <span class="module-count">234</span>
+                    <div class="module-icon">📱</div>
+                    <div class="module-name">Media Monitoring</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Activity Section -->
+        <section class="activity-section">
+            <!-- Recent Activity -->
+            <div class="activity-feed">
+                <div class="feed-header">
+                    <h3 class="feed-title">Recent Activity</h3>
+                    <div class="feed-filters">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Actions</button>
+                        <button class="filter-btn">Alerts</button>
+                        <button class="filter-btn">Reports</button>
+                    </div>
+                </div>
+                <div class="activity-table">
+                    <div class="table-header">
+                        <div>TIME</div>
+                        <div>TYPE</div>
+                        <div>DESCRIPTION</div>
+                        <div>PRIORITY</div>
+                        <div>STATUS</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">2 min ago</div>
+                        <div><span class="type-badge type-action">ACTION</span></div>
+                        <div>Client portfolio review for ACME Corp</div>
+                        <div class="priority-high">High</div>
+                        <div><span class="status-badge status-progress">IN PROGRESS</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">5 min ago</div>
+                        <div><span class="type-badge type-alert">ALERT</span></div>
+                        <div>ESG score threshold exceeded</div>
+                        <div class="priority-medium">Medium</div>
+                        <div><span class="status-badge status-pending">PENDING</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">12 min ago</div>
+                        <div><span class="type-badge type-email">EMAIL</span></div>
+                        <div>Client inquiry processed automatically</div>
+                        <div class="priority-low">Low</div>
+                        <div><span class="status-badge status-completed">COMPLETED</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">18 min ago</div>
+                        <div><span class="type-badge type-report">REPORT</span></div>
+                        <div>Intelligence report generated</div>
+                        <div class="priority-medium">Medium</div>
+                        <div><span class="status-badge status-completed">COMPLETED</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">25 min ago</div>
+                        <div><span class="type-badge type-action">ACTION</span></div>
+                        <div>Portfolio rebalancing initiated</div>
+                        <div class="priority-high">High</div>
+                        <div><span class="status-badge status-progress">IN PROGRESS</span></div>
+                    </div>
+                    <div class="table-row">
+                        <div class="time-cell">32 min ago</div>
+                        <div><span class="type-badge type-alert">ALERT</span></div>
+                        <div>Market volatility spike detected</div>
+                        <div class="priority-medium">Medium</div>
+                        <div><span class="status-badge status-completed">COMPLETED</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Status -->
+            <div class="system-panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">System Status</h3>
+                </div>
+                <div class="system-list">
+                    <div class="system-item">
+                        <span class="system-name">Action Processing</span>
+                        <div class="system-status">
+                            <span class="status-indicator status-online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Alert Engine</span>
+                        <div class="system-status">
+                            <span class="status-indicator status-online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Email Processor</span>
+                        <div class="system-status">
+                            <span class="status-indicator status-limited"></span>
+                            <span class="status-text">Limited</span>
+                        </div>
+                    </div>
+                    <div class="system-item">
+                        <span class="system-name">Media Monitor</span>
+                        <div class="system-status">
+                            <span class="status-indicator status-online"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="system-item" style="margin-top: 20px;">
+                        <span class="system-name">CPU Usage</span>
+                        <span class="status-text">42%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 42%"></div>
+                    </div>
+                    
+                    <div class="system-item">
+                        <span class="system-name">Memory Usage</span>
+                        <span class="status-text">67%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 67%; background: var(--ec-caution)"></div>
+                    </div>
+                    
+                    <div class="system-item">
+                        <span class="system-name">Storage</span>
+                        <span class="status-text">28%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 28%"></div>
+                    </div>
+                </div>
+                <div class="panel-header" style="border-top: 1px solid var(--ec-border); border-bottom: none; padding-bottom: 0;">
+                    <div class="text-muted" style="font-size: 11px;">
+                        ℹ️ Last updated: <strong>just now</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <span>Press</span>
+            <div class="hotkey-hint">
+                <span class="key">Ctrl+/</span>
+                <span>for keyboard shortcuts</span>
+            </div>
+        </div>
+        <div class="footer-right">
+            © 2024 Ethical Capital Investment Collaborative. All rights reserved.
+        </div>
+    </footer>
+    
+    <script>
+        // Module card clicks
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const moduleName = this.querySelector('.module-name').textContent;
+                console.log('Navigating to:', moduleName);
+            });
+        });
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // Close welcome banner
+        document.querySelector('.close-welcome').addEventListener('click', function() {
+            document.querySelector('.welcome-section').style.display = 'none';
+        });
+        
+        // Admin dropdown
+        document.querySelector('.admin-dropdown').addEventListener('click', function() {
+            console.log('Toggle admin menu');
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === '/') {
+                e.preventDefault();
+                console.log('Show keyboard shortcuts');
+            }
+            
+            if (e.key === '?') {
+                e.preventDefault();
+                console.log('Open HITL Queue');
+            }
+            
+            if (e.key === '⚡' || (e.ctrlKey && e.key === 'k')) {
+                e.preventDefault();
+                console.log('Open quick actions');
+            }
+        });
+        
+        // Auto-refresh simulation
+        function updateMetrics() {
+            // Update time stamps
+            document.querySelectorAll('.time-cell').forEach((cell, index) => {
+                const times = ['just now', '2 min ago', '5 min ago', '12 min ago', '18 min ago', '25 min ago'];
+                if (times[index]) {
+                    cell.textContent = times[index];
+                }
+            });
+            
+            // Update system status
+            const cpuUsage = Math.floor(Math.random() * 30) + 30;
+            const memUsage = Math.floor(Math.random() * 20) + 60;
+            
+            document.querySelectorAll('.progress-fill')[0].style.width = cpuUsage + '%';
+            document.querySelectorAll('.system-item')[4].querySelector('.status-text').textContent = cpuUsage + '%';
+            
+            document.querySelectorAll('.progress-fill')[1].style.width = memUsage + '%';
+            document.querySelectorAll('.system-item')[5].querySelector('.status-text').textContent = memUsage + '%';
+        }
+        
+        // Update every 30 seconds
+        setInterval(updateMetrics, 30000);
+        
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                console.log('Search for:', this.value);
+            }
+        });
+    </script>
+</body>
+</html>

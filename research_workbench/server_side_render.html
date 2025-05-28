@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ security.ticker }} - Tick Review</title>
+    
+    <!-- Inline critical CSS for instant render -->
+    <style>
+        body{font-family:'Courier New',monospace;margin:0;padding:10px;background:#f5f5f5;font-size:14px;line-height:1.4}
+        .container{max-width:1400px;margin:0 auto;background:white;border:1px solid #ccc}
+        .header{background:#e0e0e0;padding:10px;border-bottom:1px solid #999;display:flex;justify-content:space-between;align-items:center}
+        .main-layout{display:flex;height:calc(100vh - 100px)}
+        .left-panel{width:300px;border-right:1px solid #ccc;overflow-y:auto;background:#fafafa}
+        .center-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+        .right-panel{width:350px;border-left:1px solid #ccc;overflow-y:auto;background:#fafafa}
+        .tick-input{font-size:24px;font-weight:bold;width:100px;text-align:center;padding:5px;border:2px solid #333}
+        .hotkey{background:#333;color:white;padding:2px 5px;border-radius:3px;font-size:11px;margin-left:5px}
+        .positive{color:green}.negative{color:red}.neutral{color:#666}
+    </style>
+    
+    <!-- Preload next ticker data -->
+    <link rel="prefetch" href="/review/{{ next_ticker }}/">
+    
+    <!-- Non-critical CSS loaded async -->
+    <link rel="preload" href="{% static 'css/tick-review.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{% static 'css/tick-review.css' %}"></noscript>
+</head>
+<body>
+    <div class="container" data-ticker="{{ security.ticker }}">
+        <div class="header">
+            <div>
+                <strong>{{ security.ticker }}</strong> - {{ security.name }}
+                <span class="hotkey">Space</span> to search
+            </div>
+            <div>
+                Tick: <input type="number" class="tick-input" value="{{ security.tick_score|default:0 }}" min="-100" max="100">
+                <span class="hotkey">+/-</span> adjust
+            </div>
+        </div>
+        
+        <div class="main-layout">
+            <!-- Left Panel - Universe (server rendered, no JS needed) -->
+            <div class="left-panel">
+                <div class="section">
+                    <div class="section-header">
+                        Universe ({{ universe|length }}) <span class="hotkey">U</span>
+                    </div>
+                    <div class="section-content">
+                        <ul class="universe-list">
+                            {% for stock in universe %}
+                            <li class="universe-item {% if stock.ticker == security.ticker %}active{% endif %}">
+                                <span class="ticker-symbol">{{ stock.ticker }}</span>
+                                <span>{{ stock.name|truncatechars:20 }}</span>
+    

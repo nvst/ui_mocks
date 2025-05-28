@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should I opt into the sweep program? | Ethical Capital</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+            
+            /* Content Type Variables */
+            --content-max-width: 720px;
+            --content-font-size: 14px;
+            --hero-display: block;
+            --toc-display: none;
+            --sidebar-display: block;
+        }
+
+        /* Content Length Modifiers */
+        .content-quick {
+            --content-max-width: 600px;
+            --content-font-size: 13px;
+            --hero-display: none;
+            --sidebar-display: none;
+        }
+        
+        .content-standard {
+            --content-max-width: 720px;
+            --content-font-size: 14px;
+            --hero-display: block;
+            --toc-display: none;
+        }
+        
+        .content-deep {
+            --content-max-width: 840px;
+            --content-font-size: 15px;
+            --hero-display: block;
+            --toc-display: block;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: var(--ec-bg-white);
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--ec-border);
+            font-size: 12px;
+        }
+
+        .breadcrumb a {
+            color: var(--ec-purple);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            color: var(--ec-text-muted);
+            margin: 0 8px;
+        }
+
+        /* Hero Section (conditional display) */
+        .hero {
+            display: var(--hero-display);
+            background: var(--ec-text);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 48px 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+
+        .hero-content {
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .hero .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Article Header (when no hero) */
+        .article-header {
+            background: var(--ec-bg-white);
+            padding: 32px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .article-header-content {
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .content-type {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--ec-purple);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .article-header h1 {
+            font-size: 28px;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 48px;
+            padding: 48px 24px;
+        }
+
+        /* Table of Contents (conditional) */
+        .toc {
+            display: var(--toc-display);
+            width: 200px;
+            flex-shrink: 0;
+        }
+
+        .toc-sticky {
+            position: sticky;
+            top: 24px;
+        }
+
+        .toc h3 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+
+        .toc-list a {
+            color: var(--ec-text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+            padding: 4px 0;
+            border-left: 2px solid transparent;
+            padding-left: 12px;
+        }
+
+        .toc-list a:hover {
+            color: var(--ec-text);
+            border-left-color: var(--ec-purple);
+        }
+
+        .toc-list a.active {
+            color: var(--ec-purple);
+            font-weight: 600;
+            border-left-color: var(--ec-purple);
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            max-width: var(--content-max-width);
+            font-size: var(--content-font-size);
+        }
+
+        /* TL;DR Box */
+        .tldr-box {
+            background: var(--ec-purple-pale);
+            border: 1px solid var(--ec-purple);
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .tldr-box h3 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-purple);
+            margin-bottom: 8px;
+        }
+
+        .tldr-box p {
+            color: var(--ec-text);
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Content Typography */
+        .content h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ec-purple);
+        }
+
+        .content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .content p {
+            margin-bottom: 16px;
+            line-height: 1.7;
+            color: var(--ec-text);
+        }
+
+        .content ul, .content ol {
+            margin-bottom: 16px;
+            padding-left: 24px;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .content a {
+            color: var(--ec-purple);
+            text-decoration: underline;
+        }
+
+        .content a:hover {
+            color: var(--ec-purple-light);
+        }
+
+        /* Video Embeds */
+        .video-embed {
+            margin: 32px 0;
+            background: var(--ec-bg-gray);
+            border: 1px solid var(--ec-border);
+            padding: 4px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            background: var(--ec-text);
+        }
+
+        .video-wrapper iframe,
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-caption {
+            padding: 12px 16px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            text-align: center;
+        }
+
+        /* Inline Video (smaller) */
+        .video-inline {
+            margin: 24px 0;
+            max-width: 480px;
+        }
+
+        .video-inline .video-wrapper {
+            padding-bottom: 56.25%;
+        }
+
+        /* Special Content Blocks */
+        .info-box {
+            background: var(--ec-info);
+            color: white;
+            padding: 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+        }
+
+        .info-box a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .warning-box {
+            background: var(--ec-caution);
+            color: white;
+            padding: 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+        }
+
+        .success-box {
+            background: var(--ec-positive);
+            color: white;
+            padding: 16px 20px;
+            margin: 24px 0;
+            font-size: 13px;
+        }
+
+        /* Step Lists */
+        .step-list {
+            counter-reset: steps;
+            list-style: none;
+            padding-left: 0;
+            margin: 24px 0;
+        }
+
+        .step-list li {
+            counter-increment: steps;
+            position: relative;
+            padding-left: 48px;
+            margin-bottom: 24px;
+        }
+
+        .step-list li::before {
+            content: counter(steps);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--ec-purple);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Data Tables */
+        .data-table {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--ec-bg-gray);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--ec-border);
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover {
+            background: var(--ec-purple-pale);
+        }
+
+        /* Charts/Visualizations */
+        .chart-container {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .chart-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: var(--ec-bg-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ec-text-muted);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--ec-text);
+            color: white;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin: 32px 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--ec-border);
+            padding: 16px 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 20px;
+            color: var(--ec-purple);
+        }
+
+        .faq-item.open .faq-question::after {
+            content: '−';
+        }
+
+        .faq-answer {
+            display: none;
+            padding-top: 8px;
+            color: var(--ec-text-muted);
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* Sidebar (conditional) */
+        .sidebar {
+            display: var(--sidebar-display);
+            width: 280px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .related-list {
+            list-style: none;
+        }
+
+        .related-list li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dotted var(--ec-border);
+        }
+
+        .related-list li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .related-list a {
+            color: var(--ec-text);
+            text-decoration: none;
+            font-size: 12px;
+            display: block;
+        }
+
+        .related-list a:hover {
+            color: var(--ec-purple);
+        }
+
+        .related-meta {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-top: 4px;
+        }
+
+        /* Next Steps CTA */
+        .next-steps {
+            background: var(--ec-bg-gray);
+            padding: 32px;
+            margin-top: 48px;
+            text-align: center;
+        }
+
+        .next-steps h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .next-steps p {
+            margin-bottom: 24px;
+            color: var(--ec-text-muted);
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 48px 24px 24px;
+            font-size: 11px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .toc {
+                display: none;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platform-nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 24px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body class="content-quick"> <!-- Change class to content-standard or content-deep as needed -->
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item active">INSIGHTS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/insights">Insights</a>
+        <span>/</span>
+        Platform Features
+    </div>
+
+    <!-- Hero Section (hidden for quick content) -->
+    <div class="hero">
+        <img src="/path/to/hero-image.jpg" alt="" class="hero-image">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Cutting interest rates won't change much</h1>
+                <p class="subtitle">Why monetary policy has lost its punch in the modern economy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Header (shown when no hero) -->
+    <div class="article-header">
+        <div class="article-header-content">
+            <div class="article-meta">
+                <div class="meta-item">
+                    <span class="content-type">TUTORIAL</span>
+                </div>
+                <div class="meta-item">
+                    <span>📖</span>
+                    <span>2 min read</span>
+                </div>
+                <div class="meta-item">
+                    <span>📅</span>
+                    <span>Jan 15, 2025</span>
+                </div>
+                <div class="meta-item">
+                    <span>🏷️</span>
+                    <span>Platform, Banking</span>
+                </div>
+            </div>
+            <h1>Should I opt into the sweep program?</h1>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Table of Contents (for deep content) -->
+        <aside class="toc">
+            <div class="toc-sticky">
+                <h3>Contents</h3>
+                <ul class="toc-list">
+                    <li><a href="#what-it-is" class="active">What is the sweep program?</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="#who-needs-it">Who needs it</a></li>
+                    <li><a href="#considerations">Important considerations</a></li>
+                    <li><a href="#next-steps">Next steps</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <article class="content">
+            <!-- TL;DR Box -->
+            <div class="tldr-box">
+                <h3>TL;DR</h3>
+                <p>Yes, opt in if you keep more than $250k in cash. The sweep program provides FDIC insurance on balances over $250k by automatically distributing funds across multiple banks.</p>
+            </div>
+
+            <!-- Article Body -->
+            <h2 id="what-it-is">What is the sweep program?</h2>
+            <p>The sweep program is an automated service that distributes your cash balances across multiple FDIC-insured banks to maximize your deposit insurance coverage.</p>
+            
+            <p>Here's why it matters: standard FDIC insurance only covers up to $250,000 per depositor, per bank. If you have more than that in cash, the excess isn't protected if the bank fails.</p>
+
+            <!-- Video Embed Example -->
+            <div class="video-embed">
+                <div class="video-wrapper">
+                    <iframe src="https://player.vimeo.com/video/123456789" allowfullscreen></iframe>
+                </div>
+                <div class="video-caption">
+                    Watch: How the sweep program protects your cash (3:42)
+                </div>
+            </div>
+
+            <h2 id="how-it-works">How it works</h2>
+            <ol class="step-list">
+                <li>
+                    <strong>Automatic distribution</strong><br>
+                    When your cash balance exceeds $250,000, the sweep program automatically moves the excess to partner banks.
+                </li>
+                <li>
+                    <strong>Multiple bank coverage</strong><br>
+                    Each bank provides another $250,000 in FDIC insurance, so $1 million requires four banks.
+                </li>
+                <li>
+                    <strong>Seamless access</strong><br>
+                    You still see one balance and have full access to your funds—the distribution happens behind the scenes.
+                </li>
+            </ol>
+
+            <!-- Inline Video Example -->
+            <div class="video-inline">
+                <div class="video-wrapper">
+                    <video controls>
+                        <source src="/videos/sweep-demo.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-caption">
+                    Quick demo: Enabling sweep in your account
+                </div>
+            </div>
+
+            <h2 id="who-needs-it">Who needs it?</h2>
+            <p>You should opt into the sweep program if you:</p>
+            <ul>
+                <li>Regularly maintain cash balances over $250,000</li>
+                <li>Receive large deposits (property sales, business income, inheritance)</li>
+                <li>Want maximum protection without managing multiple bank relationships</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Note:</strong> The sweep program is free for all Ethical Capital clients. There are no fees or minimum balance requirements.
+            </div>
+
+            <h2 id="considerations">Important considerations</h2>
+            
+            <!-- Data Table Example -->
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>With Sweep</th>
+                            <th>Without Sweep</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>FDIC Coverage</td>
+                            <td>Up to $50M</td>
+                            <td>$250k only</td>
+                        </tr>
+                        <tr>
+                            <td>Interest Rate</td>
+                            <td>Same</td>
+                            <td>Same</td>
+                        </tr>
+                        <tr>
+                            <td>Access to Funds</td>
+                            <td>Immediate</td>
+                            <td>Immediate</td>
+                        </tr>
+                        <tr>
+                            <td>Account Statements</td>
+                            <td>Consolidated</td>
+                            <td>Single</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Things to know</h3>
+            <ul>
+                <li><strong>Interest rates:</strong> You'll earn the same rate across all swept funds</li>
+                <li><strong>Tax reporting:</strong> You'll receive one consolidated 1099-INT</li>
+                <li><strong>No delays:</strong> Transfers and withdrawals work exactly the same</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Important:</strong> The sweep program only covers cash holdings. Your invested assets are protected by SIPC insurance up to $500,000, which is separate from FDIC coverage.
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h3>Common Questions</h3>
+                <div class="faq-item">
+                    <div class="faq-question">Does the sweep program affect my returns?</div>
+                    <div class="faq-answer">
+                        No. You earn the same interest rate whether your cash is swept or not. The only difference is the additional FDIC insurance coverage.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I see which banks hold my money?</div>
+                    <div class="faq-answer">
+                        Yes. Your account dashboard shows a breakdown of which banks hold your swept funds and how much is at each institution.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What if I need to withdraw more than $250k?</div>
+                    <div class="faq-answer">
+                        No problem. The system automatically aggregates funds from multiple banks when you make a withdrawal. There's no difference in how you access your money.
+                    </div>
+                </div>
+            </div>
+
+            <h2 id="next-steps">Next steps</h2>
+            <p>Enabling the sweep program takes less than a minute:</p>
+            
+            <ol>
+                <li>Log into your account</li>
+                <li>Go to Settings → Banking</li>
+                <li>Toggle "Enable Sweep Program" to ON</li>
+                <li>Review and accept the terms</li>
+            </ol>
+
+            <div class="success-box">
+                <strong>That's it!</strong> The sweep program activates immediately and will automatically manage any cash balance over $250,000.
+            </div>
+
+            <!-- Chart Example -->
+            <div class="chart-container">
+                <h3 class="chart-title">How sweep scales your FDIC coverage</h3>
+                <div class="chart-placeholder">
+                    [Chart showing FDIC coverage scaling from $250k to $50M based on number of banks]
+                </div>
+            </div>
+
+            <!-- Next Steps CTA -->
+            <div class="next-steps">
+                <h3>Ready to protect your cash?</h3>
+                <p>Enable the sweep program in your account settings or contact us for help.</p>
+                <a href="/account/settings" class="btn-primary">Go to Settings</a>
+            </div>
+        </article>
+
+        <!-- Sidebar (for standard/deep content) -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Related Articles</h3>
+                <ul class="related-list">
+                    <li>
+                        <a href="#">Understanding FDIC vs SIPC insurance</a>
+                        <div class="related-meta">Platform • 5 min read</div>
+                    </li>
+                    <li>
+                        <a href="#">Cash management strategies for high balances</a>
+                        <div class="related-meta">Strategy • 8 min read</div>
+                    </li>
+                    <li>
+                        <a href="#">Tax implications of sweep programs</a>
+                        <div class="related-meta">Tax Planning • 4 min read</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Quick Links</h3>
+                <ul class="related-list">
+                    <li><a href="/account/settings">Account Settings</a></li>
+                    <li><a href="/support">Contact Support</a></li>
+                    <li><a href="/docs/sweep-terms">Sweep Program Terms</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section" style="background: var(--ec-purple); color: white;">
+                <h3 style="color: white;">Need Help?</h3>
+                <p style="font-size: 12px; margin-bottom: 16px;">Our team is here to answer your questions about the sweep program.</p>
+                <a href="/contact" class="btn-primary" style="background: white; color: var(--ec-purple); width: 100%; text-align: center;">Contact Us</a>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Insights</h4>
+                <ul class="footer-links">
+                    <li><a href="/insights?type=tutorial">Tutorials</a></li>
+                    <li><a href="/insights?type=analysis">Analysis</a></li>
+                    <li><a href="/insights?type=news">News</a></li>
+                    <li><a href="/insights?type=reference">Reference</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul class="footer-links">
+                    <li><a href="/features">Features</a></li>
+                    <li><a href="/security">Security</a></li>
+                    <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/api">API</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/process">Process</a></li>
+                    <li><a href="/team">Team</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="/docs">Documentation</a></li>
+                    <li><a href="/glossary">Glossary</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor
+            </div>
+            <div style="display: flex; gap: 24px;">
+                <a href="/privacy" style="color: white; opacity: 0.8;">Privacy</a>
+                <a href="/terms" style="color: white; opacity: 0.8;">Terms</a>
+                <a href="/disclosures" style="color: white; opacity: 0.8;">Disclosures</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                question.parentElement.classList.toggle('open');
+            });
+        });
+
+        // TOC Active State (for deep content)
+        if (document.querySelector('.toc')) {
+            const sections = document.querySelectorAll('h2[id], h3[id]');
+            const tocLinks = document.querySelectorAll('.toc-list a');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top <= 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Dynamic content length detection (for CMS integration)
+        function detectContentLength() {
+            const wordCount = document.querySelector('.content').innerText.split(' ').length;
+            const readTime = Math.ceil(wordCount / 200); // 200 words per minute
+            
+            if (readTime <= 3) {
+                document.body.className = 'content-quick';
+            } else if (readTime <= 10) {
+                document.body.className = 'content-standard';
+            } else {
+                document.body.className = 'content-deep';
+            }
+        }
+        
+        // Call on load (in production, this would be set server-side)
+        // detectContentLength();
+    </script>
+</body>
+</html>

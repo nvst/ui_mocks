@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical Capital | We're not like other firms. Good.</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--ec-bg-white);
+            padding: 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .hero .tagline {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+            margin-bottom: 32px;
+        }
+
+        /* Key Metrics */
+        .metrics-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 32px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ec-purple);
+            display: inline-block;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--ec-bg-white);
+            padding: 24px;
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+        }
+
+        .feature-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+        }
+
+        .feature-card p {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Data List */
+        .data-list {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+            padding: 0;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 24px;
+            border-bottom: 1px dotted var(--ec-border);
+        }
+
+        .data-row:last-child {
+            border-bottom: none;
+        }
+
+        .data-label {
+            color: var(--ec-text);
+        }
+
+        .data-value {
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+
+        .data-disclaimer {
+            font-size: 10px;
+            color: var(--ec-text-muted);
+            margin-top: 8px;
+            text-align: right;
+            padding: 0 24px;
+        }
+
+        /* Notification Box */
+        .notification-box {
+            background: var(--ec-purple);
+            color: white;
+            padding: 16px 24px;
+            margin: 32px 0;
+            border-radius: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--ec-bg-gray);
+            padding: 48px 24px;
+            text-align: center;
+            border-top: 1px solid var(--ec-border);
+        }
+
+        .cta-title {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            color: var(--ec-text-muted);
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .cta-disclaimer {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-top: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .metrics-row {
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>We're not like other firms. Good.</h1>
+        <p class="tagline">Turning ethics into peace of mind through disciplined investment research</p>
+        
+        <div class="metrics-row">
+            <div class="metric">
+                <div class="metric-value">BARRON'S</div>
+                <div class="metric-label">"Radically Transparent"</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">BLOOMBERG</div>
+                <div class="metric-label">"Democratizing Access"</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">FT</div>
+                <div class="metric-label">"Genuine Innovation"</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">SINCE 2021</div>
+                <div class="metric-label">Serving Clients</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- What Makes Us Different -->
+        <section class="section">
+            <h2 class="section-header">WHAT MAKES US DIFFERENT</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>PROPRIETARY RESEARCH</h3>
+                    <p>We hand-screen thousands of companies, identifying ethical concerns that third-party ESG ratings often miss. Our proprietary exclusions reflect deep, original analysis designed to enhance portfolio quality.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>COMPREHENSIVE VALUES ALIGNMENT</h3>
+                    <p>BDS-compliant. Fossil fuel free. Tobacco free. Weapons free. We maintain one of the industry's most comprehensive ethical screening frameworks. To date, we've been prepared for every client concern about holdings.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>RADICAL TRANSPARENCY</h3>
+                    <p>We "show the garage" - providing access to our exclusion lists, scoring methodologies, and research processes. You'll know exactly what you own and why.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>CLIENT PARTNERSHIP</h3>
+                    <p>Your ethical concerns can drive portfolio-wide reviews. Every client becomes a research partner, contributing to collective intelligence that seeks to improve outcomes for all.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>ETHICS AS QUALITY CONTROL</h3>
+                    <p>Our ethical screening process functions as an additional quality filter. We believe companies with significant ethical issues may face additional business risks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>SECURE & OPEN</h3>
+                    <p>Built on open-source technology with institutional-grade security. Your data stays protected while our methodologies remain transparent and auditable.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Numbers -->
+        <section class="section">
+            <h2 class="section-header">THE NUMBERS THAT MATTER</h2>
+            <div class="data-list">
+                <div class="data-row">
+                    <span class="data-label">Companies in Screening Universe</span>
+                    <span class="data-value">3,000+</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">S&P 500 Companies Excluded*</span>
+                    <span class="data-value">68%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Portfolio Concentration Target</span>
+                    <span class="data-value">~2%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Proprietary Exclusions Beyond ESG Ratings*</span>
+                    <span class="data-value">40%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Years of Investment Experience</span>
+                    <span class="data-value">15+</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Minimum Investment</span>
+                    <span class="data-value">$1</span>
+                </div>
+            </div>
+            <p class="data-disclaimer">
+                *As of TK. Screening criteria and exclusions subject to ongoing review.
+            </p>
+        </section>
+
+        <!-- Notification -->
+        <div class="notification-box">
+            <strong>FIDUCIARY STANDARD:</strong> As a Registered Investment Advisor, we're legally bound to act in your best interest. See our Form ADV for important disclosures about our services and fees.
+        </div>
+
+        <!-- Our Approach -->
+        <section class="section">
+            <h2 class="section-header">OUR APPROACH</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>CUMULATIVE RESEARCH ENGINE</h3>
+                    <p>Combining hand-screening, quantitative analysis, and continuous learning. Our research process seeks to identify both ethical concerns and business risks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>THE GARDENING APPROACH</h3>
+                    <p>We seek "weird little flowers" - companies we believe generate positive impact through their core business model, not as a side effect.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>OPEN SOURCE COMMITMENT</h3>
+                    <p>Our exclusion policies are public. Our methodologies are documented. Built on open-source infrastructure for enhanced security and transparency.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">Ready to find value in your values?</h2>
+        <p class="cta-subtitle">Join sophisticated investors aligning their portfolios with their principles.</p>
+        <a href="#" class="btn-primary">START A CONVERSATION</a>
+        <p class="cta-disclaimer">
+            Investment strategies involve risk. Past performance and screening methodologies do not guarantee future results.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                Investment advisory services offered through Ethical Capital Investment Collaborative, 
+                a Registered Investment Advisor. © 2025 All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="#">Form ADV</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Disclosures</a>
+                <a href="#">Security</a>
+                <a href="#">Open Source</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

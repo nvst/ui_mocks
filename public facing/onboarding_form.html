@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Onboarding | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Form Header */
+        .form-header {
+            background: var(--ec-bg-white);
+            padding: 32px 24px;
+            border: 1px solid var(--ec-border);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .form-header .tagline {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border: 1px solid var(--ec-border);
+            margin-bottom: 24px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--ec-border);
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--ec-purple);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            border-bottom: 2px solid var(--ec-purple);
+            background: var(--ec-bg-gray);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-description {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+
+        .section-content {
+            padding: 24px;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--ec-negative);
+            font-weight: 600;
+        }
+
+        .form-subtext {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        /* Form Inputs */
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            color: var(--ec-text);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input.short {
+            max-width: 200px;
+        }
+
+        .form-input.date {
+            max-width: 160px;
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+        }
+
+        .radio-option:hover {
+            background: var(--ec-purple-pale);
+        }
+
+        .radio-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .radio-option.selected {
+            background: var(--ec-purple-pale);
+            border-left: 3px solid var(--ec-purple);
+            padding-left: 9px;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+        }
+
+        .checkbox-option:hover {
+            background: var(--ec-purple-pale);
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .checkbox-option.checked {
+            background: var(--ec-purple-pale);
+            border-left: 3px solid var(--ec-purple);
+            padding-left: 9px;
+        }
+
+        /* Other Input */
+        .other-input {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+        .other-input input {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            padding: 24px;
+            background: var(--ec-bg-gray);
+            border-top: 1px solid var(--ec-border);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--ec-purple);
+            padding: 12px 24px;
+            border: 2px solid var(--ec-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .btn-secondary:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .btn-primary:disabled {
+            background: var(--ec-text-muted);
+            cursor: not-allowed;
+        }
+
+        /* Grid Layout for Related Fields */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Special Sections */
+        .welcome-message {
+            background: var(--ec-purple);
+            color: white;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .welcome-message h2 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .completion-message {
+            background: var(--ec-positive);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .completion-message h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        /* Security Notice */
+        .security-notice {
+            background: var(--ec-info);
+            color: white;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        /* Conditional Fields */
+        .conditional-field {
+            display: none;
+            margin-top: 16px;
+            padding-left: 16px;
+            border-left: 2px solid var(--ec-border);
+        }
+
+        .conditional-field.show {
+            display: block;
+        }
+
+        /* Error States */
+        .form-input.error,
+        .form-textarea.error,
+        .form-select.error {
+            border-color: var(--ec-negative);
+        }
+
+        .error-message {
+            color: var(--ec-negative);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item active">START</a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <!-- Form Header -->
+        <div class="form-header">
+            <h1>Welcome to Your Financial Future</h1>
+            <p class="tagline">Please answer these questions honestly and in your own voice—we want to know the real you, not just the data points.</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentSection">1</span> of <span id="totalSections">6</span> sections completed
+            </div>
+        </div>
+
+        <form id="onboardingForm">
+            <!-- Section 1: About You -->
+            <div class="form-section active" id="section1">
+                <div class="section-header">
+                    <h2 class="section-title">01 / About You</h2>
+                    <p class="section-description">Basic information needed to open your account</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label required" for="email">What's the best email to reach you at?</label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="legal_name">What's your legal name?</label>
+                        <input type="text" id="legal_name" name="legal_name" class="form-input" required>
+                        <p class="form-subtext">We need this to open your account.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Would you prefer we call you by any other name?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="preferred_name_option" value="nope">
+                                Nope
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="preferred_name_option" value="other">
+                                Other:
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="preferred_name_other">
+                            <input type="text" name="preferred_name" class="form-input" placeholder="What should we call you?">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">What are your pronouns?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="pronouns" value="he/him">
+                                he/him
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="pronouns" value="she/her">
+                                she/her
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="pronouns" value="they/them">
+                                they/them
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="pronouns" value="other">
+                                Other:
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="pronouns_other">
+                            <input type="text" name="pronouns_custom" class="form-input" placeholder="Your pronouns">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required" for="birthdate">What's your birthdate?</label>
+                            <input type="date" id="birthdate" name="birthdate" class="form-input date" required>
+                            <p class="form-subtext">We need this to open your account and confirm your identity.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required" for="phone">What's the best phone number to reach you at?</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="address">What's your mailing address?</label>
+                        <textarea id="address" name="address" class="form-textarea" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="ssn">What's your Social Security Number?</label>
+                        <input type="text" id="ssn" name="ssn" class="form-input short" required>
+                        <div class="security-notice">
+                            We need this to open your account and confirm your identity. We take the security of your data very seriously and use bank-grade encryption to protect your information.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Are you a US citizen?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="us_citizen" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="us_citizen" value="no" required>
+                                No
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="citizenship_country">
+                            <label class="form-label" for="country_citizenship">What's your country of citizenship?</label>
+                            <input type="text" id="country_citizenship" name="country_citizenship" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">What's your marital status?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="marital_status" value="single" required>
+                                    Single
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="marital_status" value="married" required>
+                                    Married
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="marital_status" value="divorced" required>
+                                    Divorced
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="marital_status" value="widowed" required>
+                                    Widowed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="marital_status" value="partnership" required>
+                                    Civil Partnership / Domestic Partnership
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">What's your employment status?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="employed" required>
+                                    Employed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="self_employed" required>
+                                    Self-Employed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="unemployed" required>
+                                    Unemployed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="retired" required>
+                                    Retired
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="student" required>
+                                    Student
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="employment_status" value="other" required>
+                                    Other:
+                                </label>
+                            </div>
+                            <div class="conditional-field" id="employment_other">
+                                <input type="text" name="employment_other" class="form-input" placeholder="Please specify">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <div></div>
+                    <button type="button" class="btn-primary" onclick="nextSection()">Next Section</button>
+                </div>
+            </div>
+
+            <!-- Section 2: About Your Household -->
+            <div class="form-section" id="section2">
+                <div class="section-header">
+                    <h2 class="section-title">02 / About Your Household</h2>
+                    <p class="section-description">Understanding your household situation holistically</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label required">Will anyone else be on this account with you?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="joint_account" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="joint_account" value="no" required>
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="conditional-field" id="joint_account_details">
+                        <div class="form-group">
+                            <label class="form-label" for="joint_relationship">If yes, what is their relationship to you?</label>
+                            <input type="text" id="joint_relationship" name="joint_relationship" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="joint_legal_name">What's their legal name?</label>
+                            <input type="text" id="joint_legal_name" name="joint_legal_name" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="joint_email">What's the best email to reach them at?</label>
+                            <input type="email" id="joint_email" name="joint_email" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Would you prefer we call them by any other name?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_preferred_name_option" value="nope">
+                                    Nope
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_preferred_name_option" value="other">
+                                    Other:
+                                </label>
+                            </div>
+                            <div class="conditional-field" id="joint_preferred_name_other">
+                                <input type="text" name="joint_preferred_name" class="form-input" placeholder="What should we call them?">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">What are their pronouns?</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="joint_pronouns" value="he/him">
+                                    he/him
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="joint_pronouns" value="she/her">
+                                    she/her
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="joint_pronouns" value="they/them">
+                                    they/them
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" name="joint_pronouns" value="other">
+                                    Other:
+                                </label>
+                            </div>
+                            <div class="conditional-field" id="joint_pronouns_other">
+                                <input type="text" name="joint_pronouns_custom" class="form-input" placeholder="Their pronouns">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="joint_birthdate">What's their birthdate?</label>
+                                <input type="date" id="joint_birthdate" name="joint_birthdate" class="form-input date">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="joint_ssn">What's their Social Security Number?</label>
+                                <input type="text" id="joint_ssn" name="joint_ssn" class="form-input short">
+                                <div class="security-notice">
+                                    Bank-grade encryption protects all sensitive information.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Are they a US citizen?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_us_citizen" value="yes">
+                                    Yes
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_us_citizen" value="no">
+                                    No
+                                </label>
+                            </div>
+                            <div class="conditional-field" id="joint_citizenship_country">
+                                <label class="form-label" for="joint_country_citizenship">What's their country of citizenship?</label>
+                                <input type="text" id="joint_country_citizenship" name="joint_country_citizenship" class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">What's their employment status?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="employed">
+                                    Employed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="self_employed">
+                                    Self-Employed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="unemployed">
+                                    Unemployed
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="retired">
+                                    Retired
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="student">
+                                    Student
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="joint_employment_status" value="other">
+                                    Other:
+                                </label>
+                            </div>
+                            <div class="conditional-field" id="joint_employment_other">
+                                <input type="text" name="joint_employment_other" class="form-input" placeholder="Please specify">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you have any dependents? (e.g. children, family members you care for, etc.)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="dependents" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="dependents" value="no" required>
+                                No
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="dependents_details">
+                            <label class="form-label" for="dependents_info">Please tell us a bit about them (names, ages, relationship to you).</label>
+                            <textarea id="dependents_info" name="dependents_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Do you have any pets?</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="pets" value="yes">
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="pets" value="no">
+                                No
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="pets_details">
+                            <label class="form-label" for="pets_info">If yes, we'd love to know their names and what kind of animal they are!</label>
+                            <textarea id="pets_info" name="pets_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" onclick="prevSection()">Previous</button>
+                    <button type="button" class="btn-primary" onclick="nextSection()">Next Section</button>
+                </div>
+            </div>
+
+            <!-- Section 3: Your Financial Life -->
+            <div class="form-section" id="section3">
+                <div class="section-header">
+                    <h2 class="section-title">03 / Your Financial Life</h2>
+                    <p class="section-description">Understanding your current financial situation for making recommendations</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">What is your approximate annual household income?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="0-49999" required>
+                                    $0 - $49,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="50000-99999" required>
+                                    $50,000 - $99,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="100000-149999" required>
+                                    $100,000 - $149,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="150000-199999" required>
+                                    $150,000 - $199,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="200000-249999" required>
+                                    $200,000 - $249,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="household_income" value="250000+" required>
+                                    $250,000 +
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">What is your approximate household net worth? (assets minus liabilities)</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="negative" required>
+                                    Less than $0 (yes, this is possible!)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="0-99999" required>
+                                    $0 - $99,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="100000-249999" required>
+                                    $100,000 - $249,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="250000-499999" required>
+                                    $250,000 - $499,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="500000-999999" required>
+                                    $500,000 - $999,999
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="net_worth" value="1000000+" required>
+                                    $1,000,000 +
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you expect any major changes to your income or net worth in the next 5 years? (e.g. inheritance, sale of a business, career change, etc.)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="major_changes" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="major_changes" value="no" required>
+                                No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="major_changes" value="maybe" required>
+                                Maybe / Unsure
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="major_changes_details">
+                            <label class="form-label" for="major_changes_info">If yes or maybe, please tell us a bit more.</label>
+                            <textarea id="major_changes_info" name="major_changes_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="financial_goals">What are your top 1-3 financial goals right now? (e.g. retire early, buy a house, pay off debt, etc.)</label>
+                        <textarea id="financial_goals" name="financial_goals" class="form-textarea" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="financial_concerns">What are your top 1-3 financial concerns right now? (e.g. market volatility, job security, unexpected expenses, etc.)</label>
+                        <textarea id="financial_concerns" name="financial_concerns" class="form-textarea" required></textarea>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">How would you describe your investment experience?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="investment_experience" value="none" required>
+                                    None
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="investment_experience" value="beginner" required>
+                                    Beginner (I know a little, but not much)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="investment_experience" value="intermediate" required>
+                                    Intermediate (I'm comfortable with the basics)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="investment_experience" value="advanced" required>
+                                    Advanced (I'm very knowledgeable)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">How comfortable are you with taking risks with your investments?</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="risk_tolerance" value="very_risk_averse" required>
+                                    Very risk-averse (I prefer to keep my money as safe as possible, even if it means lower returns)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="risk_tolerance" value="somewhat_risk_averse" required>
+                                    Somewhat risk-averse (I'm willing to take small risks for potentially higher returns)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="risk_tolerance" value="moderate" required>
+                                    Moderate (I'm comfortable with a balanced approach to risk and return)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="risk_tolerance" value="somewhat_risk_tolerant" required>
+                                    Somewhat risk-tolerant (I'm willing to take on more risk for higher potential returns)
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="risk_tolerance" value="very_risk_tolerant" required>
+                                    Very risk-tolerant (I'm comfortable with high risks for the highest possible returns)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you have any existing investment, retirement, or bank accounts you'd like us to know about? (e.g. 401k with a former employer, an old checking account you want to close, etc.)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="existing_accounts" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="existing_accounts" value="no" required>
+                                No
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="existing_accounts_details">
+                            <label class="form-label" for="existing_accounts_info">Please list the institution and type of account for each. (e.g. Fidelity - Roth IRA, Vanguard - 401k, Wells Fargo - Checking, etc.)</label>
+                            <textarea id="existing_accounts_info" name="existing_accounts_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you have any debt? (e.g. student loans, credit cards, mortgage, etc.)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="debt" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="debt" value="no" required>
+                                No
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="debt_details">
+                            <label class="form-label" for="debt_info">Please tell us a bit about your debt (type, interest rate, remaining balance).</label>
+                            <textarea id="debt_info" name="debt_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you have an emergency fund? (i.e. 3-6 months of living expenses saved in an easily accessible account)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="emergency_fund" value="yes_full" required>
+                                Yes, I have 3-6 months or more saved
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="emergency_fund" value="yes_partial" required>
+                                Yes, but I have less than 3 months saved
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="emergency_fund" value="working_on_it" required>
+                                No, but I'm working on it
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="emergency_fund" value="not_sure" required>
+                                No, and I'm not sure where to start
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Do you have any insurance policies? (e.g. life, disability, long-term care, etc.)</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="insurance" value="yes" required>
+                                Yes
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="insurance" value="no" required>
+                                No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="insurance" value="not_sure" required>
+                                I'm not sure
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="insurance_details">
+                            <label class="form-label" for="insurance_info">Please tell us a bit about your insurance coverage.</label>
+                            <textarea id="insurance_info" name="insurance_info" class="form-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" onclick="prevSection()">Previous</button>
+                    <button type="button" class="btn-primary" onclick="nextSection()">Next Section</button>
+                </div>
+            </div>
+
+            <!-- Section 4: Values & Preferences -->
+            <div class="form-section" id="section4">
+                <div class="section-header">
+                    <h2 class="section-title">04 / Values & Preferences</h2>
+                    <p class="section-description">Understanding what matters most to you for aligning money with values</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label required" for="top_values">What are your top 1-3 values when it comes to your money and investments? (e.g. environmental sustainability, social justice, animal welfare, etc.)</label>
+                        <textarea id="top_values" name="top_values" class="form-textarea" required placeholder="Tell us what matters most to you..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required" for="avoid_investments">Are there any specific industries, companies, or types of investments you'd like to avoid or divest from? (e.g. fossil fuels, private prisons, weapons manufacturers, etc.)</label>
+                        <textarea id="avoid_investments" name="avoid_investments" class="form-textarea" required placeholder="Tell us what you want to avoid..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" onclick="prevSection()">Previous</button>
+                    <button type="button" class="btn-primary" onclick="nextSection()">Next Section</button>
+                </div>
+            </div>
+
+            <!-- Section 5: Collaboration -->
+            <div class="form-section" id="section5">
+                <div class="section-header">
+                    <h2 class="section-title">05 / Collaboration</h2>
+                    <p class="section-description">Identifying other professionals you work with for coordinated support</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="form-group">
+                        <label class="form-label" for="coordinate_with">Is there someone (accountant, attorney, etc) you'd like us to coordinate with? If so, please drop their name and contact info below.</label>
+                        <textarea id="coordinate_with" name="coordinate_with" class="form-textarea" placeholder="Name, role, and contact information..."></textarea>
+                        <p class="form-subtext">Please also feel free to bring them along to your onboarding call or any future meetings.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Would you like us to refer you to a values-aligned professional with one or more of these characteristics?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="accountant">
+                                Accountant
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="attorney">
+                                Attorney
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="bookkeeper">
+                                Bookkeeper
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="financial_planner">
+                                Financial planner
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="insurance_agent">
+                                Insurance agent
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="money_coach">
+                                Money Coach
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="therapist">
+                                Therapist
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="referral_needs" value="other">
+                                Other:
+                            </label>
+                        </div>
+                        <div class="conditional-field" id="referral_other">
+                            <input type="text" name="referral_other" class="form-input" placeholder="What type of professional?">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="anything_else">Is there anything else going on in your life you'd like to tell us about?</label>
+                        <textarea id="anything_else" name="anything_else" class="form-textarea" placeholder="Anything that might affect your financial goals or investment preferences..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" onclick="prevSection()">Previous</button>
+                    <button type="button" class="btn-primary" onclick="nextSection()">Review & Submit</button>
+                </div>
+            </div>
+
+            <!-- Section 6: Review & Submit -->
+            <div class="form-section" id="section6">
+                <div class="section-header">
+                    <h2 class="section-title">06 / Review & Submit</h2>
+                    <p class="section-description">Almost there! Review your information and submit when ready</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="welcome-message">
+                        <h2>That's it for now!</h2>
+                        <p>Thank you for taking the time to share your story with us. We'll be in touch shortly to schedule your onboarding call, where we can dive deeper into your goals and answer any questions you might have.</p>
+                        <p>Remember: this is the beginning of a lifelong partnership. We're here to support you every step of the way as your financial situation and values evolve.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="agree_terms" value="yes" required>
+                            I understand that Ethical Capital will use this information to provide personalized investment advice as a Registered Investment Advisor operating under a fiduciary standard.
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-option">
+                            <input type="checkbox" name="agree_privacy" value="yes" required>
+                            I have read and agree to the <a href="#" style="color: var(--ec-purple); text-decoration: underline;">Privacy Policy</a> and understand how my personal information will be protected and used.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" onclick="prevSection()">Previous</button>
+                    <button type="submit" class="btn-primary" id="submitBtn">Submit Application</button>
+                </div>
+            </div>
+
+            <!-- Completion Message -->
+            <div class="completion-message" id="completionMessage" style="display: none;">
+                <h2>Welcome to Ethical Capital!</h2>
+                <p>Your onboarding form has been submitted successfully. We'll review your information and be in touch within 24 hours to schedule your personal onboarding call.</p>
+                <p>In the meantime, feel free to explore our <a href="#" style="color: white; text-decoration: underline;">research process</a> or <a href="#" style="color: white; text-decoration: underline;">current holdings</a>.</p>
+                <p><strong>Next steps:</strong> Watch for an email with a link to schedule your onboarding call. We're excited to start this journey with you!</p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor<br>
+            All information is encrypted and protected with bank-grade security.
+        </div>
+    </footer>
+
+    <script>
+        let currentSectionIndex = 1;
+        const totalSections = 6;
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            initializeConditionalFields();
+        });
+
+        // Section navigation
+        function nextSection() {
+            if (validateCurrentSection()) {
+                currentSectionIndex++;
+                showSection(currentSectionIndex);
+                updateProgress();
+            }
+        }
+
+        function prevSection() {
+            if (currentSectionIndex > 1) {
+                currentSectionIndex--;
+                showSection(currentSectionIndex);
+                updateProgress();
+            }
+        }
+
+        function showSection(sectionIndex) {
+            // Hide all sections
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show current section
+            document.getElementById(`section${sectionIndex}`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const progressPercent = ((currentSectionIndex - 1) / (totalSections - 1)) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+            document.getElementById('currentSection').textContent = currentSectionIndex - 1;
+            document.getElementById('totalSections').textContent = totalSections - 1;
+        }
+
+        // Form validation
+        function validateCurrentSection() {
+            const currentSection = document.getElementById(`section${currentSectionIndex}`);
+            const requiredFields = currentSection.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                field.classList.remove('error');
+                const errorMsg = field.parentNode.querySelector('.error-message');
+                if (errorMsg) errorMsg.remove();
+
+                if (field.type === 'radio') {
+                    const radioGroup = currentSection.querySelectorAll(`[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (!isChecked) {
+                        isValid = false;
+                        field.closest('.form-group').insertAdjacentHTML('beforeend', '<div class="error-message">This field is required.</div>');
+                    }
+                } else if (field.type === 'checkbox') {
+                    const checkboxGroup = currentSection.querySelectorAll(`[name="${field.name}"]`);
+                    const isChecked = Array.from(checkboxGroup).some(checkbox => checkbox.checked);
+                    if (!isChecked) {
+                        isValid = false;
+                        field.closest('.form-group').insertAdjacentHTML('beforeend', '<div class="error-message">Please select at least one option.</div>');
+                    }
+                } else if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('error');
+                    field.parentNode.insertAdjacentHTML('beforeend', '<div class="error-message">This field is required.</div>');
+                }
+            });
+
+            return isValid;
+        }
+
+        // Initialize conditional field logic
+        function initializeConditionalFields() {
+            // Preferred name
+            document.querySelectorAll('[name="preferred_name_option"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const otherField = document.getElementById('preferred_name_other');
+                    if (this.value === 'other') {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Pronouns other
+            document.querySelectorAll('[name="pronouns"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const otherField = document.getElementById('pronouns_other');
+                    const otherCheckbox = document.querySelector('[name="pronouns"][value="other"]');
+                    if (otherCheckbox.checked) {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // US Citizenship
+            document.querySelectorAll('[name="us_citizen"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const countryField = document.getElementById('citizenship_country');
+                    if (this.value === 'no') {
+                        countryField.classList.add('show');
+                    } else {
+                        countryField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Employment status other
+            document.querySelectorAll('[name="employment_status"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const otherField = document.getElementById('employment_other');
+                    if (this.value === 'other') {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Joint account
+            document.querySelectorAll('[name="joint_account"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('joint_account_details');
+                    if (this.value === 'yes') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Joint preferred name
+            document.querySelectorAll('[name="joint_preferred_name_option"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const otherField = document.getElementById('joint_preferred_name_other');
+                    if (this.value === 'other') {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Joint pronouns other
+            document.querySelectorAll('[name="joint_pronouns"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const otherField = document.getElementById('joint_pronouns_other');
+                    const otherCheckbox = document.querySelector('[name="joint_pronouns"][value="other"]');
+                    if (otherCheckbox.checked) {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Joint US citizenship
+            document.querySelectorAll('[name="joint_us_citizen"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const countryField = document.getElementById('joint_citizenship_country');
+                    if (this.value === 'no') {
+                        countryField.classList.add('show');
+                    } else {
+                        countryField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Joint employment other
+            document.querySelectorAll('[name="joint_employment_status"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const otherField = document.getElementById('joint_employment_other');
+                    if (this.value === 'other') {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Dependents
+            document.querySelectorAll('[name="dependents"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('dependents_details');
+                    if (this.value === 'yes') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Pets
+            document.querySelectorAll('[name="pets"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('pets_details');
+                    if (this.value === 'yes') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Major changes
+            document.querySelectorAll('[name="major_changes"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('major_changes_details');
+                    if (this.value === 'yes' || this.value === 'maybe') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Existing accounts
+            document.querySelectorAll('[name="existing_accounts"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('existing_accounts_details');
+                    if (this.value === 'yes') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Debt
+            document.querySelectorAll('[name="debt"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('debt_details');
+                    if (this.value === 'yes') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Insurance
+            document.querySelectorAll('[name="insurance"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const detailsField = document.getElementById('insurance_details');
+                    if (this.value === 'yes' || this.value === 'not_sure') {
+                        detailsField.classList.add('show');
+                    } else {
+                        detailsField.classList.remove('show');
+                    }
+                });
+            });
+
+            // Referral other
+            document.querySelectorAll('[name="referral_needs"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const otherField = document.getElementById('referral_other');
+                    const otherCheckbox = document.querySelector('[name="referral_needs"][value="other"]');
+                    if (otherCheckbox.checked) {
+                        otherField.classList.add('show');
+                    } else {
+                        otherField.classList.remove('show');
+                    }
+                });
+            });
+        }
+
+        // Visual feedback for radio and checkbox selections
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                // Remove selected class from all radio options in the same group
+                document.querySelectorAll(`[name="${e.target.name}"]`).forEach(radio => {
+                    radio.closest('.radio-option').classList.remove('selected');
+                });
+                // Add selected class to the clicked option
+                e.target.closest('.radio-option').classList.add('selected');
+            }
+            
+            if (e.target.type === 'checkbox') {
+                // Toggle checked class
+                const option = e.target.closest('.checkbox-option');
+                if (e.target.checked) {
+                    option.classList.add('checked');
+                } else {
+                    option.classList.remove('checked');
+                }
+            }
+        });
+
+        // Form submission
+        document.getElementById('onboardingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (validateCurrentSection()) {
+                // Show loading state
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+                document.querySelector('.form-container').classList.add('loading');
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    // Hide form sections
+                    document.querySelectorAll('.form-section').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show completion message
+                    document.getElementById('completionMessage').style.display = 'block';
+                    
+                    // Reset progress bar
+                    document.getElementById('progressFill').style.width = '100%';
+                    document.getElementById('currentSection').textContent = totalSections - 1;
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

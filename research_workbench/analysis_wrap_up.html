@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Wrap-up - ROP</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .wrap-up-modal {
+            background: white;
+            border: 3px solid #333;
+            max-width: 800px;
+            width: 90%;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .header {
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        
+        .session-summary {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .tick-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 20px;
+            margin-top: 15px;
+        }
+        
+        .tick-change {
+            background: #e8f4e8;
+            padding: 5px 15px;
+            border: 1px solid #4CAF50;
+        }
+        
+        .tick-change.negative {
+            background: #ffeee8;
+            border-color: #ff6b6b;
+        }
+        
+        .questions-section {
+            margin: 30px 0;
+        }
+        
+        .question-prompt {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .questions-textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            border: 2px solid #333;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        
+        .example-questions {
+            color: #666;
+            font-size: 13px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .research-triggers {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .trigger-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .trigger-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .notes-summary {
+            background: #fffef0;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 30px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .note-count {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 25px;
+            border: 2px solid #333;
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: #333;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .hotkey {
+            background: #666;
+            color: white;
+            padding: 2px 5px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap-up-modal">
+        <div class="header">
+            <h1>Analysis Complete: ROP - Roper Technologies</h1>
+            <div class="session-summary">
+                Session Duration: 34 minutes | Slides Reviewed: 28 of 34 | Notes: 7
+            </div>
+            <div class="tick-summary">
+                <span>Tick Score:</span>
+                <span style="font-size: 24px; font-weight: bold;">75</span>
+                <span class="tick-change positive">+10 from 65</span>
+            </div>
+        </div>
+        
+        <div class="questions-section">
+            <div class="question-prompt">
+                What open questions do you have about this company?
+            </div>
+            <textarea class="questions-textarea" placeholder="Type your questions or press 'D' to dictate...">
+1. How sustainable is the 95%+ retention rate if we enter a recession? Need to understand contract terms and switching costs better.
+
+2. Integration timeline for the 15 different ERP systems - this could be a major hidden cost/distraction.
+
+3. What's their AI strategy? Every software company needs one but didn't see it mentioned in the deck.
+
+4. Customer concentration risk - do any single customers represent >5% of revenue in any vertical?
+
+5. Organic growth vs acquired growth breakdown - need to parse out the real underlying growth rate.
+            </textarea>
+            <div class="example-questions">
+                Examples: Market risks? Competitive threats? Financial concerns? Management issues? Valuation questions?
+            </div>
+        </div>
+        
+        <div class="research-triggers">
+            <h3>Trigger Additional Research?</h3>
+            <div class="trigger-item">
+                <input type="checkbox" id="deep-dive" checked>
+                <label for="deep-dive">Deep dive research (10-K analysis, peer comparison, etc.)</label>
+            </div>
+            <div class="trigger-item">
+                <input type="checkbox" id="monitor-risks">
+                <label for="monitor-risks">Monitor specific risks (Integration costs, customer concentration)</label>
+            </div>
+            <div class="trigger-item">
+                <input type="checkbox" id="peer-comp">
+                <label for="peer-comp">Detailed peer comparison (vs. CSU, TYL, ENSG)</label>
+            </div>
+            <div class="trigger-item">
+                <input type="checkbox" id="follow-up">
+                <label for="follow-up">Schedule follow-up review in 30 days</label>
+            </div>
+        </div>
+        
+        <div class="notes-summary">
+            <div class="note-count">7 Notes Captured:</div>
+            <div style="font-size: 13px; color: #666;">
+                • Slide 3: Strong Q1 performance analysis<br>
+                • Slide 5: Acquisition strategy assessment<br>
+                • Slide 7: Capital allocation framework<br>
+                • Slide 8: Software portfolio deep dive<br>
+                • Slide 12: Margin expansion drivers<br>
+                • Slide 19: Competitive positioning<br>
+                • Slide 26: 2025 guidance thoughts
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn">
+                Back to Edit <span class="hotkey">B</span>
+            </button>
+            <div>
+                <button class="btn">
+                    Save Draft <span class="hotkey">S</span>
+                </button>
+                <button class="btn btn-success">
+                    Complete & Next <span class="hotkey">Enter</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

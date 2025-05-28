@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Security Review</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Security Header */
+        .security-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .security-info {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+        }
+        
+        .ticker-symbol {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .company-name {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+        }
+        
+        .tick-control {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .tick-input {
+            font-size: 20px;
+            font-weight: 600;
+            width: 80px;
+            text-align: center;
+            padding: 8px;
+            border: 2px solid var(--ec-purple);
+            background: transparent;
+            color: var(--ec-purple);
+            font-family: inherit;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Universe List */
+        .universe-list {
+            list-style: none;
+            margin: 0 -20px;
+        }
+        
+        .universe-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.1s;
+        }
+        
+        .universe-item:hover {
+            background: var(--ec-bg-gray);
+        }
+        
+        .universe-item.active {
+            background: var(--ec-purple-pale);
+            border-left: 3px solid var(--ec-purple);
+            padding-left: 17px;
+        }
+        
+        .ticker {
+            font-weight: 600;
+            width: 48px;
+        }
+        
+        .company-name-short {
+            flex: 1;
+            color: var(--ec-text-muted);
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .tick-score {
+            font-weight: 600;
+            width: 40px;
+            text-align: right;
+        }
+        
+        .positive { color: var(--ec-positive); }
+        .negative { color: var(--ec-negative); }
+        .neutral { color: var(--ec-text-muted); }
+        
+        /* Lists */
+        .list-counts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+        }
+        
+        .list-item:hover {
+            background: var(--ec-border);
+        }
+        
+        /* Notifications Box */
+        .notifications-box {
+            background: var(--ec-caution);
+            color: white;
+            padding: 12px;
+            margin-top: auto;
+        }
+        
+        .notification-count {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .notification-text {
+            font-size: 11px;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Chart Container - Larger for complex charts */
+        .chart-container {
+            height: 60%;
+            background: var(--ec-bg-white);
+            border-bottom: 1px solid var(--ec-border);
+            position: relative;
+            padding: 16px;
+        }
+        
+        .chart-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ec-text-muted);
+            border: 1px dashed var(--ec-border);
+        }
+        
+        /* Notes Area */
+        .notes-area {
+            flex: 1;
+            display: flex;
+            gap: 24px;
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .notes-section {
+            flex: 1;
+        }
+        
+        .note-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1px solid var(--ec-border);
+            resize: vertical;
+            background: var(--ec-bg-white);
+        }
+        
+        .note-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+        
+        .note-history {
+            margin-top: 16px;
+        }
+        
+        .note-item {
+            padding: 12px;
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            margin-bottom: 8px;
+        }
+        
+        .note-date {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-bottom: 4px;
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 320px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* AI Insights */
+        .insight-box {
+            padding: 12px;
+            background: var(--ec-bg-gray);
+            border-left: 3px solid var(--ec-purple);
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        /* Progress */
+        .progress-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--ec-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--ec-purple);
+            transition: width 0.3s;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Action Button */
+        .action-button {
+            width: 100%;
+            padding: 12px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        
+        .action-button:hover {
+            background: var(--ec-purple-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#" class="active">Research</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Security Header -->
+    <div class="security-header">
+        <div class="security-info">
+            <span class="ticker-symbol">ROP</span>
+            <span class="company-name">Roper Technologies, Inc.</span>
+        </div>
+        <div class="tick-control">
+            <label>Tick Score:</label>
+            <input type="number" class="tick-input" value="75" min="-100" max="100">
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Universe (847)</h3>
+                <ul class="universe-list">
+                    <li class="universe-item">
+                        <span class="ticker">AAPL</span>
+                        <span class="company-name-short">Apple Inc.</span>
+                        <span class="tick-score positive">85</span>
+                    </li>
+                    <li class="universe-item active">
+                        <span class="ticker">ROP</span>
+                        <span class="company-name-short">Roper Tech</span>
+                        <span class="tick-score positive">75</span>
+                    </li>
+                    <li class="universe-item">
+                        <span class="ticker">MSFT</span>
+                        <span class="company-name-short">Microsoft</span>
+                        <span class="tick-score positive">80</span>
+                    </li>
+                    <li class="universe-item">
+                        <span class="ticker">BRK.B</span>
+                        <span class="company-name-short">Berkshire</span>
+                        <span class="tick-score positive">90</span>
+                    </li>
+                    <li class="universe-item">
+                        <span class="ticker">V</span>
+                        <span class="company-name-short">Visa Inc.</span>
+                        <span class="tick-score positive">70</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Lists</h3>
+                <div class="list-counts">
+                    <div class="list-item">
+                        <span>📋 Observe</span>
+                        <span>23</span>
+                    </div>
+                    <div class="list-item">
+                        <span>🚫 Exclude</span>
+                        <span>156</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="notifications-box">
+                <div class="notification-count">3 New Alerts</div>
+                <div class="notification-text">Risk changes, earnings updates</div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    [Your Multi-Panel Chart: Price, Margins, P/B, P/S, P/TBV, P/E, Shareholder Yield, FCF/MCap]
+                </div>
+            </div>
+            
+            <div class="notes-area">
+                <section class="notes-section">
+                    <h3 class="section-title">Analysis Notes</h3>
+                    <textarea class="note-input" placeholder="Add your analysis notes here...">Software rollup strategy continues to execute well. Recent Vertafore acquisition strengthens insurance vertical. Watch integration costs in Q3.</textarea>
+                    
+                    <div class="note-history">
+                        <h4 style="font-size: 12px; margin-bottom: 8px; color: var(--ec-text-muted);">Previous Notes</h4>
+                        <div class="note-item">
+                            <div class="note-date">2024-03-15</div>
+                            <div>Q4 earnings beat on margins. Management confident in 2024 guidance.</div>
+                        </div>
+                        <div class="note-item">
+                            <div class="note-date">2024-02-28</div>
+                            <div>Divested underperforming industrial unit. Good capital allocation.</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">AI Insights</h3>
+                <div class="insight-box">
+                    <div class="insight-title">Risk Change Detected</div>
+                    <div>New cybersecurity risks disclosed in latest 10-K filing</div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">Peer Comparison</div>
+                    <div>FCF conversion exceeds DHR and ITW by 7-17 percentage points</div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">Ethics Check</div>
+                    <div>✓ No significant ESG concerns identified</div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Research Progress</h3>
+                <div class="progress-item">
+                    <span style="width: 120px;">Business Model</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <span>100%</span>
+                </div>
+                <div class="progress-item">
+                    <span style="width: 120px;">Competitive Pos.</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <span>100%</span>
+                </div>
+                <div class="progress-item">
+                    <span style="width: 120px;">Financial Health</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                    <span>60%</span>
+                </div>
+                <div class="progress-item">
+                    <span style="width: 120px;">Management</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span>0%</span>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <button class="action-button">Start Deep Analysis</button>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">I</span>
+                <span>Deep Analysis</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">N</span>
+                <span>Add Note</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Search</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">J/K</span>
+                <span>Navigate</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">+/-</span>
+                <span>Adjust Tick</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Last Update: 2 hours ago</span>
+            <span>Mode: REVIEW</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'i':
+                    e.preventDefault();
+                    document.querySelector('.action-button').click();
+                    break;
+                case 'n':
+                    e.preventDefault();
+                    document.querySelector('.note-input').focus();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    console.log('Search would open');
+                    break;
+                case 'j':
+                    e.preventDefault();
+                    // Navigate down
+                    break;
+                case 'k':
+                    e.preventDefault();
+                    // Navigate up
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>

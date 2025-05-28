@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - HITL Review Queue</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Context Header */
+        .context-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .context-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .context-stats {
+            display: flex;
+            gap: 24px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Queue Items */
+        .queue-list {
+            list-style: none;
+            margin: 0 -20px;
+        }
+        
+        .queue-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--ec-border);
+            transition: background 0.1s;
+        }
+        
+        .queue-item:hover {
+            background: var(--ec-bg-gray);
+        }
+        
+        .queue-item.active {
+            background: var(--ec-purple-pale);
+            border-left: 3px solid var(--ec-purple);
+            padding-left: 17px;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        
+        .item-type {
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background: var(--ec-bg-gray);
+            color: var(--ec-text-muted);
+        }
+        
+        .item-type.email {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        
+        .item-priority {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+        
+        .priority-critical {
+            background: var(--ec-negative);
+            color: white;
+        }
+        
+        .priority-high {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: var(--ec-bg-gray);
+            color: var(--ec-text-muted);
+        }
+        
+        .priority-low {
+            background: var(--ec-border);
+            color: var(--ec-text-muted);
+        }
+        
+        .item-title {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-meta {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 12px;
+            background: var(--ec-bg-gray);
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .filter-item:hover {
+            background: var(--ec-border);
+        }
+        
+        .filter-item.active {
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Review Panel */
+        .review-panel {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--ec-bg-white);
+        }
+        
+        .review-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .review-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-text);
+        }
+        
+        .email-metadata {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 12px;
+        }
+        
+        .meta-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .meta-from, .meta-priority, .meta-sla {
+            font-weight: 500;
+            color: var(--ec-text);
+        }
+        
+        .meta-time, .meta-confidence, .meta-history {
+            color: var(--ec-text-muted);
+        }
+        
+        /* Email Content Display */
+        .email-content-section {
+            margin-bottom: 24px;
+        }
+        
+        .email-full {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            border-radius: 4px;
+            padding: 20px;
+        }
+        
+        .email-body {
+            font-size: 13px;
+            line-height: 1.3;
+            color: var(--ec-text);
+        }
+        
+        /* Feedback Section */
+        .feedback-section {
+            background: var(--ec-bg-white);
+            padding: 20px;
+            border-top: 2px solid var(--ec-purple);
+        }
+        
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .feedback-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .feedback-progress {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Rating Controls */
+        .rating-section {
+            margin-bottom: 16px;
+        }
+        
+        .rating-label {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .rating-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .rating-btn {
+            width: 40px;
+            height: 32px;
+            border: 2px solid var(--ec-border);
+            background: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        
+        .rating-btn:hover {
+            border-color: var(--ec-purple);
+        }
+        
+        .rating-btn.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        .rating-description {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Comments */
+        .comments-section {
+            margin-bottom: 16px;
+        }
+        
+        .comments-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: 1px solid var(--ec-border);
+            resize: vertical;
+            background: white;
+        }
+        
+        .comments-textarea:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+        
+        /* Information Flags */
+        .info-flags-section {
+            margin-bottom: 16px;
+        }
+        
+        .flag-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            border-left: 3px solid var(--ec-border);
+        }
+        
+        .flag-input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--ec-purple);
+        }
+        
+        .flag-label {
+            color: var(--ec-text);
+        }
+        
+        .flag-checkbox:hover {
+            background: var(--ec-purple-pale);
+            border-left-color: var(--ec-purple);
+        }
+        
+        .flag-checkbox:hover .flag-label {
+            color: var(--ec-purple);
+        }
+        
+        /* Action Section */
+        .action-section {
+            margin-top: 16px;
+        }
+        
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .audio-controls-compact {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .audio-btn-compact {
+            width: 36px;
+            height: 32px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.1s;
+            font-family: inherit;
+        }
+        
+        .audio-btn-compact:hover {
+            background: var(--ec-purple-pale);
+            border-color: var(--ec-purple);
+        }
+        
+        .audio-btn-compact.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        .audio-status {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-align: center;
+            padding: 4px 0;
+        }
+        
+        /* Mobile Audio-First Design */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                max-height: 200px;
+                order: 3;
+            }
+            
+            .panel {
+                width: 100%;
+                order: 2;
+                max-height: 150px;
+            }
+            
+            .content {
+                order: 1;
+            }
+            
+            .action-section {
+                background: var(--ec-purple);
+                color: white;
+                padding: 16px;
+                margin: 0 -20px -20px;
+                position: sticky;
+                bottom: 0;
+                z-index: 10;
+            }
+            
+            .audio-btn-compact {
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+                font-size: 14px;
+                width: 40px;
+                height: 36px;
+            }
+            
+            .audio-btn-compact:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+            
+            .audio-status {
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 12px;
+            }
+            
+            .btn-primary {
+                background: white;
+                color: var(--ec-purple);
+            }
+            
+            .btn-secondary {
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            .review-panel {
+                padding: 16px;
+            }
+            
+            .feedback-section {
+                padding: 16px;
+            }
+            
+            /* Hide complex elements on mobile, focus on audio */
+            .panel-section:not(:first-child) {
+                display: none;
+            }
+            
+            .email-metadata .meta-line {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+            
+            .email-body {
+                font-size: 12px;
+                line-height: 1.2;
+            }
+            
+            .email-full {
+                padding: 16px;
+            }
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--ec-text-muted);
+            padding: 10px 20px;
+            border: 1px solid var(--ec-border);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 320px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* AI Insights */
+        .insight-box {
+            padding: 12px;
+            background: var(--ec-bg-gray);
+            border-left: 3px solid var(--ec-purple);
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .insight-confidence {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            margin-top: 4px;
+        }
+        
+        /* Rule Suggestions */
+        .rule-suggestion {
+            padding: 10px;
+            background: #FFF8E1;
+            border-left: 3px solid var(--ec-caution);
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+        
+        .rule-text {
+            margin-bottom: 4px;
+        }
+        
+        .rule-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .rule-btn {
+            font-size: 10px;
+            padding: 2px 6px;
+            border: 1px solid var(--ec-caution);
+            background: white;
+            color: var(--ec-caution);
+            cursor: pointer;
+        }
+        
+        .rule-btn:hover {
+            background: var(--ec-caution);
+            color: white;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--ec-text-muted);
+            font-size: 14px;
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#" class="active">Review Queue</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Context Header -->
+    <div class="context-header">
+        <div class="context-info">
+            <h1>Human-in-the-Loop Review Queue</h1>
+        </div>
+        <div class="context-stats">
+            <div class="stat-item">
+                <span>Pending:</span>
+                <span class="stat-value">23</span>
+            </div>
+            <div class="stat-item">
+                <span>Avg Review Time:</span>
+                <span class="stat-value">2.3min</span>
+            </div>
+            <div class="stat-item">
+                <span>Queue SLA:</span>
+                <span class="stat-value">95.2%</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Queue Filters</h3>
+                <div class="filter-controls">
+                    <div class="filter-item active">
+                        <span>All Items</span>
+                        <span>23</span>
+                    </div>
+                    <div class="filter-item">
+                        <span>Critical</span>
+                        <span>3</span>
+                    </div>
+                    <div class="filter-item">
+                        <span>High Priority</span>
+                        <span>8</span>
+                    </div>
+                    <div class="filter-item">
+                        <span>Email Reviews</span>
+                        <span>15</span>
+                    </div>
+                    <div class="filter-item">
+                        <span>Low Confidence</span>
+                        <span>7</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section" style="flex: 1;">
+                <h3 class="section-title">Pending Items (23)</h3>
+                <ul class="queue-list">
+                    <li class="queue-item active">
+                        <div class="item-header">
+                            <span class="item-type email">EMAIL</span>
+                            <span class="item-priority priority-critical">CRITICAL</span>
+                        </div>
+                        <div class="item-title">Re: Q4 Portfolio Review - Urgent Client Concerns</div>
+                        <div class="item-meta">
+                            <span>j.martinez@ethicalcapital.com</span>
+                            <span>2h ago</span>
+                        </div>
+                    </li>
+                    <li class="queue-item">
+                        <div class="item-header">
+                            <span class="item-type email">EMAIL</span>
+                            <span class="item-priority priority-high">HIGH</span>
+                        </div>
+                        <div class="item-title">ESG Risk Assessment - Climate Data Concerns</div>
+                        <div class="item-meta">
+                            <span>sustainability@client.org</span>
+                            <span>4h ago</span>
+                        </div>
+                    </li>
+                    <li class="queue-item">
+                        <div class="item-header">
+                            <span class="item-type email">EMAIL</span>
+                            <span class="item-priority priority-high">HIGH</span>
+                        </div>
+                        <div class="item-title">Investment Committee Meeting - Action Items</div>
+                        <div class="item-meta">
+                            <span>committee@ethicalcapital.com</span>
+                            <span>6h ago</span>
+                        </div>
+                    </li>
+                    <li class="queue-item">
+                        <div class="item-header">
+                            <span class="item-type email">EMAIL</span>
+                            <span class="item-priority priority-medium">MEDIUM</span>
+                        </div>
+                        <div class="item-title">Monthly Performance Report Distribution</div>
+                        <div class="item-meta">
+                            <span>reports@ethicalcapital.com</span>
+                            <span>1d ago</span>
+                        </div>
+                    </li>
+                    <li class="queue-item">
+                        <div class="item-header">
+                            <span class="item-type email">EMAIL</span>
+                            <span class="item-priority priority-medium">MEDIUM</span>
+                        </div>
+                        <div class="item-title">New Client Onboarding - Documentation Review</div>
+                        <div class="item-meta">
+                            <span>onboarding@ethicalcapital.com</span>
+                            <span>1d ago</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="review-panel">
+                <div class="review-header">
+                    <h2 class="review-title">Re: Q4 Portfolio Review - Urgent Client Concerns</h2>
+                    <div class="email-metadata">
+                        <div class="meta-line">
+                            <span class="meta-from">From: j.martinez@ethicalcapital.com</span>
+                            <span class="meta-time">2 hours ago</span>
+                        </div>
+                        <div class="meta-line">
+                            <span class="meta-priority">Priority: CRITICAL (Score: 95.2)</span>
+                            <span class="meta-confidence">Confidence: 72.4%</span>
+                        </div>
+                        <div class="meta-line">
+                            <span class="meta-sla" style="color: var(--ec-positive);">SLA: Within Target</span>
+                            <span class="meta-history">Contact: 47 emails, 3 meetings</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-content-section">
+                    <!-- 
+                    NOTE: Server-side code needed here to properly format email content:
+                    - Parse email headers and metadata from raw email data
+                    - Handle different email formats (HTML, plain text, multipart)
+                    - Sanitize content for XSS protection
+                    - Format line breaks and spacing consistently
+                    - Extract and display attachments if present
+                    - Handle email threading and reply chains
+                    -->
+                    <div class="email-full">
+                        <div class="email-body">
+                            Hi Team,<br>
+                            Following our call yesterday, I'm still concerned about the ESG exposure in our tech holdings. The client specifically mentioned their board's concerns about data privacy practices at three of our major positions.<br>
+                            They're requesting:<br>
+                            1. Immediate review of privacy policies for MSFT, GOOGL, META positions<br>
+                            2. Assessment of potential regulatory impact<br>
+                            3. Alternative investment options that align better with their privacy-focused mandate<br>
+                            This is time-sensitive as they have a board meeting Thursday. Can we schedule a priority review session?<br>
+                            Best,<br>
+                            Julia Martinez<br>
+                            Senior Portfolio Manager<br>
+                            Ethical Capital Management
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feedback-section">
+                <div class="feedback-header">
+                    <h3 class="feedback-title">Review & Feedback</h3>
+                    <span class="feedback-progress">Item 1 of 23</span>
+                </div>
+                
+
+                
+                <div class="rating-section">
+                    <label class="rating-label">Priority Rating (Current: CRITICAL)</label>
+                    <div class="rating-controls">
+                        <button class="rating-btn" data-rating="1">1</button>
+                        <button class="rating-btn" data-rating="2">2</button>
+                        <button class="rating-btn" data-rating="3">3</button>
+                        <button class="rating-btn" data-rating="4">4</button>
+                        <button class="rating-btn active" data-rating="5">5</button>
+                    </div>
+                    <div class="rating-description">
+                        1=Low, 2=Medium, 3=Medium-High, 4=High, 5=Critical
+                    </div>
+                </div>
+                
+                <div class="info-flags-section">
+                    <label class="flag-checkbox">
+                        <input type="checkbox" class="flag-input">
+                        <span class="flag-label">📰 Add to News & Intelligence System</span>
+                    </label>
+                </div>
+                
+                <div class="comments-section">
+                    <label class="rating-label">Comments & Notes</label>
+                    <textarea class="comments-textarea" placeholder="Add your review comments, decision rationale, or feedback for the AI system...">Correctly identified as critical - client board meeting creates time pressure. ESG concerns about tech holdings align with their mandate. Suggests good pattern recognition for client-specific priorities.</textarea>
+                </div>
+                
+                <div class="action-section">
+                    <div class="action-row">
+                        <div class="audio-controls-compact">
+                            <button class="audio-btn-compact" id="playBtn" title="Play/Pause Content">🔊</button>
+                            <button class="audio-btn-compact" id="voiceBtn" title="Voice Input">🎤</button>
+                            <button class="audio-btn-compact" id="speedBtn" title="Playback Speed">1.0x</button>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-primary">Submit Review</button>
+                            <button class="btn-secondary">Skip Item</button>
+                            <button class="btn-secondary">Flag for Team</button>
+                        </div>
+                    </div>
+                    <div class="audio-status">
+                        <span id="audioStatus">Ready for audio review</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">AI Insights</h3>
+                <div class="insight-box">
+                    <div class="insight-title">Priority Reasoning</div>
+                    <div>Client board meeting Thursday creates urgency. ESG concerns match client's privacy-focused mandate.</div>
+                    <div class="insight-confidence">Confidence: 72.4%</div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">Sender Analysis</div>
+                    <div>Julia Martinez: Senior PM, high-priority client contact. Historical average response time: 4.2 hours.</div>
+                    <div class="insight-confidence">Pattern Match: 94.1%</div>
+                </div>
+                <div class="insight-box">
+                    <div class="insight-title">Content Classification</div>
+                    <div>✓ Time-sensitive (Thursday deadline)<br>✓ Client escalation keywords<br>✓ ESG-related concerns</div>
+                    <div class="insight-confidence">Classification Score: 0.89</div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Rule Suggestions</h3>
+                <div class="rule-suggestion">
+                    <div class="rule-text">Increase priority for emails from Julia Martinez mentioning "board meeting"</div>
+                    <div class="rule-actions">
+                        <button class="rule-btn">Apply</button>
+                        <button class="rule-btn">Dismiss</button>
+                    </div>
+                </div>
+                <div class="rule-suggestion">
+                    <div class="rule-text">Auto-escalate emails with "urgent" + client name combination</div>
+                    <div class="rule-actions">
+                        <button class="rule-btn">Apply</button>
+                        <button class="rule-btn">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Processing Stats</h3>
+                <div style="font-size: 12px; line-height: 1.6; color: var(--ec-text-muted);">
+                    <div style="margin-bottom: 8px;">
+                        <strong>Queue Health:</strong> 95.2% within SLA
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Your Reviews:</strong> 156 this month
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <strong>Accuracy:</strong> 94.3% agreement with AI
+                    </div>
+                    <div>
+                        <strong>Rules Learned:</strong> 23 active patterns
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">1-5</span>
+                <span>Rate Priority</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">P</span>
+                <span>Play/Pause</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">V</span>
+                <span>Voice Input</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Enter</span>
+                <span>Submit Review</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">S</span>
+                <span>Skip Item</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">J/K</span>
+                <span>Navigate Items</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Queue Updated: 2 min ago</span>
+            <span>Mode: REVIEW</span>
+            <span>Session: 24 reviews</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Audio Interface Variables
+        let isPlaying = false;
+        let currentSpeed = 1.0;
+        let isRecording = false;
+        let speechSynthesis = window.speechSynthesis;
+        let speechRecognition = null;
+        
+        // Initialize Speech Recognition if available
+        if ('webkitSpeechRecognition' in window) {
+            speechRecognition = new webkitSpeechRecognition();
+            speechRecognition.continuous = false;
+            speechRecognition.interimResults = false;
+            speechRecognition.lang = 'en-US';
+        }
+        
+        // Audio Controls
+        document.getElementById('playBtn').addEventListener('click', function() {
+            if (isPlaying) {
+                speechSynthesis.cancel();
+                this.textContent = '🔊';
+                this.classList.remove('active');
+                document.getElementById('audioStatus').textContent = 'Playback stopped';
+                isPlaying = false;
+            } else {
+                playCurrentContent();
+            }
+        });
+        
+        document.getElementById('voiceBtn').addEventListener('click', function() {
+            if (!speechRecognition) {
+                alert('Voice recognition not supported in this browser');
+                return;
+            }
+            
+            if (isRecording) {
+                speechRecognition.stop();
+                this.textContent = '🎤';
+                this.classList.remove('active');
+                document.getElementById('audioStatus').textContent = 'Voice input stopped';
+                isRecording = false;
+            } else {
+                startVoiceInput();
+            }
+        });
+        
+        document.getElementById('speedBtn').addEventListener('click', function() {
+            currentSpeed = currentSpeed === 1.0 ? 1.25 : currentSpeed === 1.25 ? 1.5 : 1.0;
+            this.textContent = `${currentSpeed}x`;
+            document.getElementById('audioStatus').textContent = `Playback speed: ${currentSpeed}x`;
+        });
+        
+        function playCurrentContent() {
+            const title = document.querySelector('.review-title').textContent;
+            const emailBody = document.querySelector('.email-body');
+            const content = emailBody.textContent || emailBody.innerText;
+            
+            // Create a readable version of the email
+            const textToRead = `Reviewing email: ${title}. Email content: ${content}`;
+            
+            const utterance = new SpeechSynthesisUtterance(textToRead);
+            utterance.rate = currentSpeed;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            utterance.onstart = function() {
+                document.getElementById('playBtn').textContent = '⏸️';
+                document.getElementById('playBtn').classList.add('active');
+                document.getElementById('audioStatus').textContent = 'Playing content...';
+                isPlaying = true;
+            };
+            
+            utterance.onend = function() {
+                document.getElementById('playBtn').textContent = '🔊';
+                document.getElementById('playBtn').classList.remove('active');
+                document.getElementById('audioStatus').textContent = 'Playback complete. Ready for voice rating.';
+                isPlaying = false;
+                
+                // Auto-prompt for voice rating on mobile
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        promptVoiceRating();
+                    }, 1000);
+                }
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+        
+        function startVoiceInput() {
+            document.getElementById('voiceBtn').textContent = '🔴';
+            document.getElementById('voiceBtn').classList.add('active');
+            document.getElementById('audioStatus').textContent = 'Listening... Say "rate 1-5" or your comments';
+            isRecording = true;
+            
+            speechRecognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript.toLowerCase();
+                document.getElementById('audioStatus').textContent = `Heard: "${transcript}"`;
+                
+                // Parse voice commands
+                if (transcript.includes('rate')) {
+                    const ratingMatch = transcript.match(/rate (\d)/);
+                    if (ratingMatch) {
+                        const rating = ratingMatch[1];
+                        document.querySelector(`.rating-btn[data-rating="${rating}"]`).click();
+                        document.getElementById('audioStatus').textContent = `Set priority to ${rating}`;
+                    }
+                } else if (transcript.includes('submit') || transcript.includes('send')) {
+                    document.querySelector('.btn-primary').click();
+                } else if (transcript.includes('skip')) {
+                    document.querySelector('.btn-secondary').click();
+                } else {
+                    // Add as comment
+                    const textarea = document.querySelector('.comments-textarea');
+                    textarea.value += (textarea.value ? ' ' : '') + transcript;
+                    document.getElementById('audioStatus').textContent = 'Added to comments';
+                }
+            };
+            
+            speechRecognition.onerror = function(event) {
+                document.getElementById('audioStatus').textContent = 'Voice input error. Try again.';
+                document.getElementById('voiceBtn').textContent = '🎤';
+                document.getElementById('voiceBtn').classList.remove('active');
+                isRecording = false;
+            };
+            
+            speechRecognition.onend = function() {
+                document.getElementById('voiceBtn').textContent = '🎤';
+                document.getElementById('voiceBtn').classList.remove('active');
+                isRecording = false;
+            };
+            
+            speechRecognition.start();
+        }
+        
+        function promptVoiceRating() {
+            const utterance = new SpeechSynthesisUtterance('Please provide your priority rating from 1 to 5, or say your comments.');
+            utterance.rate = 1.0;
+            utterance.onend = function() {
+                // Auto-start voice input
+                if (speechRecognition) {
+                    document.getElementById('voiceBtn').click();
+                }
+            };
+            speechSynthesis.speak(utterance);
+        }
+        
+        // Auto-start audio on mobile
+        window.addEventListener('load', function() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('audioStatus').textContent = 'Mobile audio mode active. Tap 🔊 to begin.';
+                
+                // Add prominent audio prompt
+                const actionSection = document.querySelector('.action-section');
+                actionSection.style.animation = 'pulse 2s infinite';
+            }
+        });
+        
+        // Add pulse animation for mobile audio prompt
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(85, 60, 154, 0.7); }
+                70% { box-shadow: 0 0 0 10px rgba(85, 60, 154, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(85, 60, 154, 0); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Rating button interactions
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Audio feedback
+                if (speechSynthesis) {
+                    const utterance = new SpeechSynthesisUtterance(`Priority set to ${this.dataset.rating}`);
+                    utterance.rate = 1.2;
+                    utterance.volume = 0.5;
+                    speechSynthesis.speak(utterance);
+                }
+            });
+        });
+        
+        // Queue item selection
+        document.querySelectorAll('.queue-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.queue-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Here you would load the item content
+                console.log('Loading item:', this.querySelector('.item-title').textContent);
+                
+                // Stop any current audio
+                speechSynthesis.cancel();
+                document.getElementById('playBtn').textContent = '🔊';
+                document.getElementById('playBtn').classList.remove('active');
+                isPlaying = false;
+                
+                // Auto-play on mobile
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        document.getElementById('playBtn').click();
+                    }, 500);
+                }
+            });
+        });
+        
+        // Filter controls
+        document.querySelectorAll('.filter-item').forEach(filter => {
+            filter.addEventListener('click', function() {
+                // Remove active class from all filters
+                document.querySelectorAll('.filter-item').forEach(f => f.classList.remove('active'));
+                // Add active class to clicked filter
+                this.classList.add('active');
+                
+                // Here you would filter the queue
+                console.log('Filtering by:', this.textContent.trim());
+            });
+        });
+        
+        // Rule suggestion buttons
+        document.querySelectorAll('.rule-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.textContent;
+                const rule = this.closest('.rule-suggestion');
+                const ruleText = rule.querySelector('.rule-text').textContent;
+                
+                console.log(`${action} rule:`, ruleText);
+                
+                if (action === 'Apply') {
+                    rule.style.background = '#E8F5E8';
+                    rule.style.borderLeftColor = 'var(--ec-positive)';
+                    this.textContent = 'Applied';
+                    this.style.background = 'var(--ec-positive)';
+                    this.style.color = 'white';
+                } else if (action === 'Dismiss') {
+                    rule.remove();
+                }
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Don't trigger shortcuts when typing in inputs
+            if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+            
+            switch(e.key) {
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                    e.preventDefault();
+                    document.querySelector(`.rating-btn[data-rating="${e.key}"]`).click();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    document.querySelector('.btn-primary').click();
+                    break;
+                case 's':
+                case 'S':
+                    e.preventDefault();
+                    document.querySelector('.btn-secondary').click();
+                    break;
+                case 'c':
+                case 'C':
+                    e.preventDefault();
+                    document.querySelector('.comments-textarea').focus();
+                    break;
+                case 'p':
+                case 'P':
+                    e.preventDefault();
+                    document.getElementById('playBtn').click();
+                    break;
+                case 'v':
+                case 'V':
+                    e.preventDefault();
+                    document.getElementById('voiceBtn').click();
+                    break;
+                case 'j':
+                case 'J':
+                    e.preventDefault();
+                    // Navigate to next item
+                    console.log('Navigate down');
+                    break;
+                case 'k':
+                case 'K':
+                    e.preventDefault();
+                    // Navigate to previous item
+                    console.log('Navigate up');
+                    break;
+            }
+        });
+        
+        // Submit review function
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            const rating = document.querySelector('.rating-btn.active')?.dataset.rating;
+            const comments = document.querySelector('.comments-textarea').value;
+            
+            // Get information flag
+            const newsFlag = document.querySelector('.flag-input').checked;
+            
+            console.log('Submitting review:', { rating, comments, addToNews: newsFlag });
+            
+            // Audio feedback
+            if (speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance('Review submitted. Loading next item.');
+                utterance.rate = 1.2;
+                speechSynthesis.speak(utterance);
+            }
+            
+            // Simulate moving to next item
+            const currentItem = document.querySelector('.queue-item.active');
+            const nextItem = currentItem.nextElementSibling;
+            
+            if (nextItem) {
+                currentItem.classList.remove('active');
+                nextItem.classList.add('active');
+                
+                // Update progress
+                const progress = document.querySelector('.feedback-progress');
+                const currentNum = parseInt(progress.textContent.match(/\d+/)[0]) + 1;
+                progress.textContent = `Item ${currentNum} of 23`;
+                
+                // Clear form
+                document.querySelector('.comments-textarea').value = '';
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.rating-btn[data-rating="3"]').classList.add('active');
+                document.querySelector('.flag-input').checked = false;
+                
+                // Auto-play next item on mobile
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        document.getElementById('playBtn').click();
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

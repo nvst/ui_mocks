@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research & Intelligence | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--ec-bg-white);
+            padding: 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--ec-border);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .hero .tagline {
+            font-size: 18px;
+            color: var(--ec-text-muted);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Search Section */
+        .search-section {
+            background: var(--ec-purple);
+            color: white;
+            padding: 32px 24px;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 14px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 4px;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-tag {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .filter-tag:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .filter-tag.active {
+            background: white;
+            color: var(--ec-purple);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Featured Research */
+        .featured-section {
+            margin-bottom: 64px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+
+        .view-all-link {
+            color: var(--ec-purple);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .featured-main {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .featured-main:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 240px;
+            background: var(--ec-text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+        }
+
+        .featured-type {
+            display: inline-block;
+            padding: 4px 8px;
+            background: var(--ec-purple);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .featured-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .featured-excerpt {
+            font-size: 13px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .featured-meta {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .featured-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-item {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 20px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .sidebar-type {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-purple);
+            margin-bottom: 8px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .sidebar-meta {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Research Categories */
+        .categories-section {
+            margin-bottom: 64px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .category-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .category-card:hover {
+            border-color: var(--ec-purple);
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px dotted var(--ec-border);
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .category-count {
+            font-weight: 600;
+        }
+
+        /* Recent Research */
+        .recent-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .research-item {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 20px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .research-item:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .research-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .research-type {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            border-radius: 2px;
+        }
+
+        .type-analysis {
+            background: var(--ec-info);
+            color: white;
+        }
+
+        .type-tutorial {
+            background: var(--ec-positive);
+            color: white;
+        }
+
+        .type-reference {
+            background: var(--ec-caution);
+            color: white;
+        }
+
+        .type-news {
+            background: var(--ec-negative);
+            color: white;
+        }
+
+        .research-date {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .research-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .research-excerpt {
+            color: var(--ec-text-muted);
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .research-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .read-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .research-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tag {
+            padding: 2px 6px;
+            background: var(--ec-bg-gray);
+            font-size: 10px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Newsletter Signup */
+        .newsletter-section {
+            background: var(--ec-purple);
+            color: white;
+            padding: 48px 24px;
+            text-align: center;
+            margin: 64px 0;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-section h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .newsletter-section p {
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--ec-purple);
+            padding: 12px 24px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-bg-gray);
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .skeleton {
+            background: var(--ec-bg-gray);
+            border-radius: 4px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 48px 24px 24px;
+            font-size: 11px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .recent-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .quick-filters {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platform-nav {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item active">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Research That Drives Decisions</h1>
+            <p class="tagline">Deep analysis, ethical insights, and actionable intelligence from our cumulative research engine. Where rigorous methodology meets human judgment.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-value">3,000+</span>
+                    <span class="stat-label">Companies Analyzed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">147</span>
+                    <span class="stat-label">Research Reports</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">23</span>
+                    <span class="stat-label">Active Topics</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">Weekly</span>
+                    <span class="stat-label">New Intelligence</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search research, companies, topics..." id="searchInput">
+            <div class="quick-filters">
+                <button class="filter-tag active" data-filter="all">All</button>
+                <button class="filter-tag" data-filter="analysis">Analysis</button>
+                <button class="filter-tag" data-filter="tutorial">Tutorials</button>
+                <button class="filter-tag" data-filter="reference">Reference</button>
+                <button class="filter-tag" data-filter="news">News</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Featured Research -->
+        <section class="featured-section">
+            <div class="section-header">
+                <h2 class="section-title">Featured Intelligence</h2>
+                <a href="/insights?featured=true" class="view-all-link">View All Featured</a>
+            </div>
+            
+            <div class="featured-grid">
+                <article class="featured-main" onclick="window.location.href='/insights/semiconductor-supply-chain-risks-2025'">
+                    <div class="featured-image">
+                        <div class="featured-overlay">
+                            <span class="featured-type">Deep Analysis</span>
+                            <h3 class="featured-title">Semiconductor Supply Chain Vulnerabilities: A Critical Assessment</h3>
+                            <p class="featured-excerpt">Our analysis reveals increasing concentration risk in advanced node production, with 92% of sub-7nm capacity concentrated in Taiwan. Three critical chokepoints identified...</p>
+                        </div>
+                    </div>
+                    <div class="featured-meta">
+                        <div>
+                            <span>📊 Analysis</span>
+                            <span>• 12 min read</span>
+                            <span>• Jan 15, 2025</span>
+                        </div>
+                        <div>
+                            <span>🏷️ TSMC, NVDA, Geopolitics</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <div class="featured-sidebar">
+                    <article class="sidebar-item" onclick="window.location.href='/insights/ai-infrastructure-bubble-warning'">
+                        <div class="sidebar-type">Analysis</div>
+                        <h4 class="sidebar-title">AI Infrastructure Investment Bubble: Warning Signals</h4>
+                        <div class="sidebar-meta">8 min read • Jan 12, 2025</div>
+                    </article>
+                    
+                    <article class="sidebar-item" onclick="window.location.href='/insights/esg-momentum-energy-sector'">
+                        <div class="sidebar-type">Research</div>
+                        <h4 class="sidebar-title">ESG Momentum Shift: Energy Sector Transformation</h4>
+                        <div class="sidebar-meta">15 min read • Jan 10, 2025</div>
+                    </article>
+                    
+                    <article class="sidebar-item" onclick="window.location.href='/tutorials/sweep-program-guide'">
+                        <div class="sidebar-type">Tutorial</div>
+                        <h4 class="sidebar-title">Understanding Our Sweep Program</h4>
+                        <div class="sidebar-meta">3 min read • Jan 8, 2025</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Categories -->
+        <section class="categories-section">
+            <div class="section-header">
+                <h2 class="section-title">Explore by Topic</h2>
+                <a href="/insights/categories" class="view-all-link">All Categories</a>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterByCategory('market-analysis')">
+                    <div class="category-icon">📈</div>
+                    <h3 class="category-title">Market Analysis</h3>
+                    <p class="category-description">Deep dives into market trends, sector analysis, and macroeconomic factors affecting ethical investments.</p>
+                    <div class="category-stats">
+                        <span class="category-count">34 articles</span>
+                        <span>Updated weekly</span>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('esg-research')">
+                    <div class="category-icon">🌱</div>
+                    <h3 class="category-title">ESG Research</h3>
+                    <p class="category-description">Environmental, social, and governance analysis that goes beyond traditional ratings.</p>
+                    <div class="category-stats">
+                        <span class="category-count">28 articles</span>
+                        <span>Updated bi-weekly</span>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('company-deep-dives')">
+                    <div class="category-icon">🔍</div>
+                    <h3 class="category-title">Company Deep Dives</h3>
+                    <p class="category-description">Comprehensive analysis of individual companies, their business models, and ethical implications.</p>
+                    <div class="category-stats">
+                        <span class="category-count">45 articles</span>
+                        <span>Updated monthly</span>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('platform-guides')">
+                    <div class="category-icon">⚙️</div>
+                    <h3 class="category-title">Platform Guides</h3>
+                    <p class="category-description">Tutorials and reference materials for using our investment platform effectively.</p>
+                    <div class="category-stats">
+                        <span class="category-count">19 articles</span>
+                        <span>Updated regularly</span>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('risk-assessment')">
+                    <div class="category-icon">⚠️</div>
+                    <h3 class="category-title">Risk Assessment</h3>
+                    <p class="category-description">Analysis of investment risks, from geopolitical to regulatory to operational factors.</p>
+                    <div class="category-stats">
+                        <span class="category-count">21 articles</span>
+                        <span>Updated as needed</span>
+                    </div>
+                </div>
+                
+                <div class="category-card" onclick="filterByCategory('thought-leadership')">
+                    <div class="category-icon">💡</div>
+                    <h3 class="category-title">Thought Leadership</h3>
+                    <p class="category-description">Original thinking on the future of ethical investing and sustainable finance.</p>
+                    <div class="category-stats">
+                        <span class="category-count">16 articles</span>
+                        <span>Updated monthly</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Research -->
+        <section class="recent-section">
+            <div class="section-header">
+                <h2 class="section-title">Latest Research</h2>
+                <a href="/insights?sort=recent" class="view-all-link">View All Recent</a>
+            </div>
+            
+            <div class="recent-grid" id="recentGrid">
+                <article class="research-item" onclick="window.location.href='/insights/microsoft-copilot-pricing-analysis'">
+                    <div class="research-header">
+                        <span class="research-type type-analysis">Analysis</span>
+                        <span class="research-date">2 hours ago</span>
+                    </div>
+                    <h3 class="research-title">Microsoft's Enterprise AI Pricing: A Competitive Moat or Customer Alienation?</h3>
+                    <p class="research-excerpt">CTOs at Fortune 500 companies are expressing concern over Copilot pricing structures. We analyze the long-term implications for Microsoft's enterprise relationships.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>6 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">MSFT</span>
+                            <span class="tag">AI</span>
+                            <span class="tag">Enterprise</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="research-item" onclick="window.location.href='/insights/tesla-fsd-v12-breakthrough'">
+                    <div class="research-header">
+                        <span class="research-type type-analysis">Analysis</span>
+                        <span class="research-date">6 hours ago</span>
+                    </div>
+                    <h3 class="research-title">Tesla FSD v12.5: Incremental Improvement or Paradigm Shift?</h3>
+                    <p class="research-excerpt">User reports suggest significant improvements in Tesla's Full Self-Driving capabilities. We examine the technical advances and competitive implications.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>8 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">TSLA</span>
+                            <span class="tag">Autonomous</span>
+                            <span class="tag">Tech</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="research-item" onclick="window.location.href='/tutorials/portfolio-rebalancing-explained'">
+                    <div class="research-header">
+                        <span class="research-type type-tutorial">Tutorial</span>
+                        <span class="research-date">1 day ago</span>
+                    </div>
+                    <h3 class="research-title">Portfolio Rebalancing: Why We Do It Monthly on the New Moon</h3>
+                    <p class="research-excerpt">Understanding our rebalancing methodology, timing decisions, and how lunar cycles fit into our disciplined investment approach.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>4 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">Process</span>
+                            <span class="tag">Philosophy</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="research-item" onclick="window.location.href='/insights/renewable-energy-transition-metrics'">
+                    <div class="research-header">
+                        <span class="research-type type-reference">Reference</span>
+                        <span class="research-date">2 days ago</span>
+                    </div>
+                    <h3 class="research-title">Key Metrics for Tracking the Global Energy Transition</h3>
+                    <p class="research-excerpt">A comprehensive reference guide to the data points we monitor when evaluating energy sector investments and transition progress.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>12 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">Energy</span>
+                            <span class="tag">ESG</span>
+                            <span class="tag">Data</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="research-item" onclick="window.location.href='/news/regulatory-update-esg-disclosure'">
+                    <div class="research-header">
+                        <span class="research-type type-news">News</span>
+                        <span class="research-date">3 days ago</span>
+                    </div>
+                    <h3 class="research-title">SEC Updates ESG Disclosure Requirements: Impact on Our Process</h3>
+                    <p class="research-excerpt">Analysis of new regulatory requirements and how they align with our existing transparency and disclosure practices.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>5 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">Regulation</span>
+                            <span class="tag">ESG</span>
+                            <span class="tag">Compliance</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="research-item" onclick="window.location.href='/insights/bds-compliance-framework'">
+                    <div class="research-header">
+                        <span class="research-type type-reference">Reference</span>
+                        <span class="research-date">1 week ago</span>
+                    </div>
+                    <h3 class="research-title">Our BDS Compliance Framework: Methodology and Implementation</h3>
+                    <p class="research-excerpt">Detailed explanation of how we identify and exclude companies involved in human rights violations in Palestinian territories.</p>
+                    <div class="research-footer">
+                        <div class="read-time">
+                            <span>📖</span>
+                            <span>10 min read</span>
+                        </div>
+                        <div class="research-tags">
+                            <span class="tag">BDS</span>
+                            <span class="tag">Ethics</span>
+                            <span class="tag">Process</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Newsletter Signup -->
+        <section class="newsletter-section">
+            <div class="newsletter-content">
+                <h2>Stay Informed</h2>
+                <p>Get our latest research and market intelligence delivered to your inbox. No spam, just actionable insights.</p>
+                <form class="newsletter-form" id="newsletterForm">
+                    <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn-primary">Subscribe</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Research</h4>
+                <ul class="footer-links">
+                    <li><a href="/insights?type=analysis">Market Analysis</a></li>
+                    <li><a href="/insights?type=tutorial">Platform Guides</a></li>
+                    <li><a href="/insights?category=esg">ESG Research</a></li>
+                    <li><a href="/insights?category=risk">Risk Assessment</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="/methodology">Research Methodology</a></li>
+                    <li><a href="/exclusions">Exclusion Lists</a></li>
+                    <li><a href="/glossary">Investment Glossary</a></li>
+                    <li><a href="/api/research">Research API</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/process">Our Process</a></li>
+                    <li><a href="/team">Research Team</a></li>
+                    <li><a href="/careers">Join Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="/newsletter">Newsletter</a></li>
+                    <li><a href="/webinars">Research Webinars</a></li>
+                    <li><a href="/rss">RSS Feed</a></li>
+                    <li><a href="/contact">Contact Research Team</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor
+            </div>
+            <div style="display: flex; gap: 24px;">
+                <a href="/privacy" style="color: white; opacity: 0.8;">Privacy</a>
+                <a href="/terms" style="color: white; opacity: 0.8;">Terms</a>
+                <a href="/disclosures" style="color: white; opacity: 0.8;">Research Disclosures</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const filterTags = document.querySelectorAll('.filter-tag');
+        const recentGrid = document.getElementById('recentGrid');
+
+        searchInput.addEventListener('input', handleSearch);
+        
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                filterTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                handleFilter(tag.dataset.filter);
+            });
+        });
+
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase();
+            const articles = document.querySelectorAll('.research-item');
+            
+            articles.forEach(article => {
+                const title = article.querySelector('.research-title').textContent.toLowerCase();
+                const excerpt = article.querySelector('.research-excerpt').textContent.toLowerCase();
+                const tags = article.querySelector('.research-tags').textContent.toLowerCase();
+                
+                if (title.includes(query) || excerpt.includes(query) || tags.includes(query)) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        }
+
+        function handleFilter(type) {
+            const articles = document.querySelectorAll('.research-item');
+            
+            articles.forEach(article => {
+                const articleType = article.querySelector('.research-type').textContent.toLowerCase();
+                
+                if (type === 'all' || articleType.includes(type)) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        }
+
+        function filterByCategory(category) {
+            // Redirect to filtered view
+            window.location.href = `/insights?category=${category}`;
+        }
+
+        // Newsletter form submission
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            
+            // Show loading state
+            const button = this.querySelector('button');
+            const originalText = button.textContent;
+            button.textContent = 'Subscribing...';
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('Thank you for subscribing to our research updates!');
+                this.reset();
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 1000);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Progressive loading simulation
+        function loadMoreContent() {
+            const grid = document.getElementById('recentGrid');
+            const loadingItems = [];
+            
+            // Create skeleton loading items
+            for (let i = 0; i < 3; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'research-item skeleton';
+                skeleton.style.height = '200px';
+                skeleton.innerHTML = '<div style="height: 100%; background: var(--ec-bg-gray);"></div>';
+                loadingItems.push(skeleton);
+                grid.appendChild(skeleton);
+            }
+            
+            // Remove skeletons after "loading"
+            setTimeout(() => {
+                loadingItems.forEach(item => item.remove());
+            }, 2000);
+        }
+
+        // Intersection Observer for infinite scroll (optional)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Load more content when near bottom
+                    // loadMoreContent();
+                }
+            });
+        });
+
+        // Observe the footer for infinite scroll trigger
+        observer.observe(document.querySelector('.footer'));
+    </script>
+</body>
+</html>

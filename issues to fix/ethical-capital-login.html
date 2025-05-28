@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .tagline {
+            font-size: 11px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        /* Login Card */
+        .login-container {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            background: var(--ec-bg-gray);
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--ec-border);
+            text-align: center;
+        }
+
+        .login-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-subtitle {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .login-body {
+            padding: 32px 24px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 2px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--ec-purple);
+        }
+
+        .form-input::placeholder {
+            color: var(--ec-text-muted);
+            opacity: 0.7;
+        }
+
+        /* Remember Me */
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .form-checkbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .form-checkbox label {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Submit Button */
+        .btn-primary {
+            width: 100%;
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Security Info */
+        .security-info {
+            background: var(--ec-bg-gray);
+            padding: 20px 24px;
+            margin-top: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .security-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ec-text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-icon {
+            color: var(--ec-positive);
+        }
+
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+
+        .check-icon {
+            color: var(--ec-positive);
+            font-size: 14px;
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #FEF2F2;
+            color: var(--ec-negative);
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            border-left: 3px solid var(--ec-negative);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 16px 24px;
+            font-size: 11px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 24px 16px;
+            }
+            
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div>
+            <div class="platform-logo">ETHICAL CAPITAL</div>
+            <div class="tagline">We're not like other firms. Good.</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div>
+            <div class="login-container">
+                <div class="login-header">
+                    <h2>Client Portal Access</h2>
+                    <p class="login-subtitle">Secure login to your investment dashboard</p>
+                </div>
+                
+                <div class="login-body">
+                    <!-- Error message (hidden by default, shown via JS when needed) -->
+                    <div class="error-message" style="display: none;" id="error-message">
+                        Invalid username or password. Please try again.
+                    </div>
+                    
+                    <form id="login-form" method="post">
+                        <div class="form-group">
+                            <label for="username" class="form-label">Username</label>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username" 
+                                class="form-input" 
+                                placeholder="Enter your username"
+                                required 
+                                autofocus
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                class="form-input" 
+                                placeholder="Enter your password"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me on this device</label>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="submit-btn">
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Security Info -->
+            <div class="security-info">
+                <div class="security-header">
+                    <span class="security-icon">🛡️</span>
+                    <span>Your Security is Our Priority</span>
+                </div>
+                <div class="security-grid">
+                    <div class="security-item">
+                        <span class="check-icon">✓</span>
+                        <span>256-bit encryption</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="check-icon">✓</span>
+                        <span>Multi-factor authentication</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="check-icon">✓</span>
+                        <span>Continuous monitoring</span>
+                    </div>
+                    <div class="security-item">
+                        <span class="check-icon">✓</span>
+                        <span>Defense in depth</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>© 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor</div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Security</a>
+            <a href="#">Contact Support</a>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handling
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Signing In<span class="spinner"></span>';
+            
+            // Simulate authentication (replace with actual authentication logic)
+            setTimeout(() => {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                
+                // In a real implementation, you would:
+                // 1. Send credentials to server
+                // 2. Handle response
+                // 3. Redirect on success or show error
+                
+                // For demo purposes, we'll just show an error
+                // document.getElementById('error-message').style.display = 'block';
+                
+                // In production, on success:
+                // window.location.href = '/dashboard';
+            }, 1500);
+        });
+        
+        // Auto-focus username field
+        window.addEventListener('load', function() {
+            document.getElementById('username').focus();
+        });
+        
+        // Handle Enter key in username field
+        document.getElementById('username').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('password').focus();
+            }
+        });
+    </script>
+</body>
+</html>

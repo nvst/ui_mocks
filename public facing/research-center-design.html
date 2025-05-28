@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Center | Ethical Capital</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-purple-dark: #44337A;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Research Hero */
+        .research-hero {
+            background: linear-gradient(135deg, var(--ec-purple-dark) 0%, var(--ec-purple) 100%);
+            color: white;
+            padding: 80px 24px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .research-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .research-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .research-hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .research-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Featured Report Section */
+        .featured-report {
+            background: var(--ec-bg-white);
+            padding: 80px 24px;
+            position: relative;
+        }
+
+        .featured-report-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .report-info {
+            padding-right: 40px;
+        }
+
+        .report-badge {
+            display: inline-block;
+            background: var(--ec-purple);
+            color: white;
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+        }
+
+        .report-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--ec-text);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .report-description {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .report-highlights {
+            background: var(--ec-bg-gray);
+            padding: 24px;
+            margin-bottom: 32px;
+            border-left: 4px solid var(--ec-purple);
+        }
+
+        .report-highlights h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .report-highlights ul {
+            list-style: none;
+        }
+
+        .report-highlights li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .report-highlights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--ec-purple);
+            font-weight: 600;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 14px 32px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(85, 60, 154, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--ec-purple);
+            padding: 14px 32px;
+            border: 2px solid var(--ec-purple);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--ec-purple-pale);
+            transform: translateY(-2px);
+        }
+
+        .report-meta {
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Report Preview */
+        .report-preview {
+            background: var(--ec-bg-gray);
+            border: 1px solid var(--ec-border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .report-preview:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .report-cover {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--ec-purple) 0%, var(--ec-purple-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .report-cover-content {
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+        }
+
+        .report-cover-content h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        .report-cover-content p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Resources Section */
+        .resources-section {
+            background: var(--ec-bg-gray);
+            padding: 80px 24px;
+        }
+
+        .resources-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .resource-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 40px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resource-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--ec-purple);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .resource-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .resource-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+        }
+
+        .resource-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-text);
+        }
+
+        .resource-description {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .resource-link {
+            color: var(--ec-purple);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        /* About Research Section */
+        .about-research {
+            background: var(--ec-bg-white);
+            padding: 80px 24px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--ec-text);
+            margin-bottom: 24px;
+        }
+
+        .about-description {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            background: var(--ec-purple);
+            color: white;
+            padding: 64px 24px;
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .newsletter-submit {
+            background: white;
+            color: var(--ec-purple);
+            border: none;
+            padding: 12px 32px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .newsletter-submit:hover {
+            background: var(--ec-purple-pale);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 48px 24px 24px;
+            font-size: 11px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h4 {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .featured-report-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            
+            .report-info {
+                padding-right: 0;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .platform-nav {
+                display: none;
+            }
+            
+            .research-hero h1 {
+                font-size: 32px;
+            }
+            
+            .report-title {
+                font-size: 28px;
+            }
+            
+            .report-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item active">RESEARCH</a>
+            <a href="#" class="nav-item">INSIGHTS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Research Hero -->
+    <section class="research-hero">
+        <div class="research-hero-content">
+            <h1>Research Center</h1>
+            <p>Evidence-based insights on sustainable investing, market analysis, and portfolio strategy from our team of experts.</p>
+        </div>
+    </section>
+
+    <!-- Featured Report Section -->
+    <section class="featured-report">
+        <div class="featured-report-content">
+            <div class="report-info">
+                <span class="report-badge">2025 Annual Report</span>
+                <h2 class="report-title">The Hidden Costs of Greenwashing: A Quantitative Analysis of ESG Fund Performance</h2>
+                <p class="report-description">
+                    Our comprehensive study of 500+ ESG funds reveals surprising patterns in performance, fees, and actual environmental impact. This groundbreaking research challenges conventional wisdom about sustainable investing and provides a framework for identifying authentic impact opportunities.
+                </p>
+                
+                <div class="report-highlights">
+                    <h3>Key Findings</h3>
+                    <ul>
+                        <li>73% of "sustainable" funds hold fossil fuel investments</li>
+                        <li>Average ESG fund fees are 0.42% higher than traditional funds</li>
+                        <li>Only 18% of ESG funds outperformed benchmarks over 5 years</li>
+                        <li>New framework for evaluating true impact potential</li>
+                    </ul>
+                </div>
+                
+                <div class="report-actions">
+                    <a href="#" class="btn-primary">Download Report</a>
+                    <a href="#" class="btn-secondary">View Summary</a>
+                </div>
+                
+                <div class="report-meta">
+                    <p>Published May 2025 • 68 pages • By Sloane Ortel, CIO</p>
+                </div>
+            </div>
+            
+            <div class="report-preview">
+                <div class="report-cover">
+                    <div class="report-cover-content">
+                        <h2>The Hidden Costs of Greenwashing</h2>
+                        <p>2025 Annual Research Report</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="resources-section">
+        <div class="resources-content">
+            <div class="section-header">
+                <h2 class="section-title">Research Resources</h2>
+                <p class="section-subtitle">Explore our expanding collection of insights and tools</p>
+            </div>
+            
+            <div class="resources-grid">
+                <a href="#" class="resource-card">
+                    <div class="resource-icon">📚</div>
+                    <h3 class="resource-title">Research Library</h3>
+                    <p class="resource-description">Browse our growing collection of articles, analysis, and thought leadership on sustainable investing</p>
+                    <span class="resource-link">Explore Library →</span>
+                </a>
+                
+                <a href="#" class="resource-card">
+                    <div class="resource-icon">🎥</div>
+                    <h3 class="resource-title">Webinar Series</h3>
+                    <p class="resource-description">Join live discussions with our experts on trending topics in sustainable finance and impact investing</p>
+                    <span class="resource-link">View Schedule →</span>
+                </a>
+                
+                <a href="#" class="resource-card">
+                    <div class="resource-icon">🛠️</div>
+                    <h3 class="resource-title">Tools & Calculators</h3>
+                    <p class="resource-description">Interactive tools for carbon footprint analysis, impact measurement, and portfolio optimization</p>
+                    <span class="resource-link">Access Tools →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Research -->
+    <section class="about-research">
+        <div class="about-content">
+            <h2 class="about-title">Our Research Philosophy</h2>
+            <p class="about-description">
+                At Ethical Capital, we believe that rigorous research is the foundation of responsible investing. Our team combines decades of financial expertise with cutting-edge sustainability analysis to deliver insights that matter. We're committed to transparency, intellectual honesty, and advancing the field of sustainable finance through evidence-based research.
+            </p>
+            <a href="#" class="btn-primary">Learn About Our Process</a>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2 class="newsletter-title">Stay Informed</h2>
+            <p class="newsletter-subtitle">Get our latest research delivered to your inbox</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Enter your email">
+                <button type="submit" class="newsletter-submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Research</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Featured Report</a></li>
+                    <li><a href="#">Research Library</a></li>
+                    <li><a href="#">Webinar Series</a></li>
+                    <li><a href="#">Tools</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Methodology</a></li>
+                    <li><a href="#">Data Sources</a></li>
+                    <li><a href="#">Glossary</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Process</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Newsletter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">RSS Feed</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Newsletter form
+        document.querySelector('.newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input').value;
+            console.log('Newsletter signup:', email);
+            // Show success message
+            alert('Thank you for subscribing to our research updates!');
+            this.querySelector('input').value = '';
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Download report tracking
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            if (button.textContent === 'Download Report') {
+                button.addEventListener('click', function(e) {
+                    console.log('Report download initiated');
+                    // Track download analytics
+                });
+            }
+        });
+    </script>
+</body>
+</html>

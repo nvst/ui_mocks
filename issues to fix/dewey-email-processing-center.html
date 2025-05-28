@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dewey - Email Processing Center</title>
+    <style>
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-purple-light);
+        }
+        
+        .platform-logo {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+        
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .platform-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.9;
+            font-size: 13px;
+        }
+        
+        .platform-nav a:hover {
+            opacity: 1;
+        }
+        
+        .platform-nav a.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+            padding-bottom: 2px;
+        }
+        
+        /* Context Header */
+        .context-header {
+            background: var(--ec-bg-white);
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .context-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .context-info h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+        
+        .sync-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--ec-positive);
+            border-radius: 50%;
+        }
+        
+        /* Metrics Bar */
+        .metrics-bar {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .metric-label {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        .metric-delta {
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .delta-positive {
+            color: var(--ec-positive);
+        }
+        
+        .delta-negative {
+            color: var(--ec-negative);
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--ec-bg-white);
+            border-right: 1px solid var(--ec-border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--ec-purple);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Workflow Status */
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .workflow-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+        }
+        
+        .workflow-name {
+            font-weight: 500;
+        }
+        
+        .workflow-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        
+        .status-active {
+            background: var(--ec-positive);
+        }
+        
+        .status-paused {
+            background: var(--ec-caution);
+        }
+        
+        .status-error {
+            background: var(--ec-negative);
+        }
+        
+        /* Category Distribution */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .category-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        
+        .category-bar {
+            flex: 1;
+            height: 20px;
+            background: var(--ec-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-fill {
+            height: 100%;
+            background: var(--ec-purple);
+            transition: width 0.3s;
+        }
+        
+        .category-label {
+            width: 80px;
+            font-weight: 500;
+        }
+        
+        .category-count {
+            width: 40px;
+            text-align: right;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Rules Engine */
+        .rules-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .rule-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 4px 0;
+        }
+        
+        .rule-label {
+            color: var(--ec-text-muted);
+        }
+        
+        .rule-value {
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--ec-bg);
+        }
+        
+        /* Processing Stream */
+        .processing-stream {
+            height: 40%;
+            background: var(--ec-bg-white);
+            border-bottom: 1px solid var(--ec-border);
+            overflow-y: auto;
+            padding: 16px;
+        }
+        
+        .stream-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        .stream-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .stream-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-btn {
+            padding: 4px 8px;
+            font-size: 11px;
+            border: 1px solid var(--ec-border);
+            background: white;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        .control-btn:hover {
+            border-color: var(--ec-purple);
+            color: var(--ec-purple);
+        }
+        
+        .control-btn.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+        
+        /* Email Items */
+        .email-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .email-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            border: 1px solid var(--ec-border);
+            background: var(--ec-bg-white);
+            font-size: 12px;
+        }
+        
+        .email-time {
+            width: 60px;
+            color: var(--ec-text-muted);
+            font-size: 11px;
+        }
+        
+        .email-from {
+            width: 180px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .email-subject {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .email-category {
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        
+        .cat-client {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+        
+        .cat-research {
+            background: #F3E5F5;
+            color: #7B1FA2;
+        }
+        
+        .cat-internal {
+            background: #E8F5E9;
+            color: #388E3C;
+        }
+        
+        .cat-alert {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+        
+        .cat-routine {
+            background: var(--ec-bg-gray);
+            color: var(--ec-text-muted);
+        }
+        
+        .email-confidence {
+            width: 50px;
+            text-align: right;
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        .email-action {
+            width: 80px;
+            font-size: 11px;
+            color: var(--ec-info);
+        }
+        
+        /* Queue Overview */
+        .queue-overview {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .queue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        
+        .queue-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 16px;
+        }
+        
+        .queue-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .queue-card-title {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .queue-card-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .queue-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 8px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+        }
+        
+        .queue-item:hover {
+            background: var(--ec-purple-pale);
+            cursor: pointer;
+        }
+        
+        /* Right Panel */
+        .panel {
+            width: 320px;
+            background: var(--ec-bg-white);
+            border-left: 1px solid var(--ec-border);
+            overflow-y: auto;
+        }
+        
+        .panel-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+        
+        /* Activity Log */
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .activity-item {
+            display: flex;
+            gap: 8px;
+            font-size: 11px;
+            padding: 8px;
+            background: var(--ec-bg-gray);
+            border-left: 2px solid transparent;
+        }
+        
+        .activity-time {
+            color: var(--ec-text-muted);
+            width: 45px;
+        }
+        
+        .activity-type {
+            width: 16px;
+            text-align: center;
+        }
+        
+        .activity-text {
+            flex: 1;
+            color: var(--ec-text);
+        }
+        
+        .activity-automation {
+            border-left-color: var(--ec-info);
+        }
+        
+        .activity-rule {
+            border-left-color: var(--ec-purple);
+        }
+        
+        .activity-error {
+            border-left-color: var(--ec-negative);
+        }
+        
+        /* Research Links */
+        .research-links {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .research-link {
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .research-link:hover {
+            background: var(--ec-purple-pale);
+        }
+        
+        .link-count {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+        }
+        
+        /* Performance Metrics */
+        .perf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .perf-metric {
+            padding: 8px;
+            background: var(--ec-bg-gray);
+            text-align: center;
+        }
+        
+        .perf-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+        
+        .perf-label {
+            font-size: 10px;
+            color: var(--ec-text-muted);
+            text-transform: uppercase;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--ec-text);
+            color: white;
+            padding: 8px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .hotkey-list {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .hotkey {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .key {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 11px;
+        }
+        
+        .status-info {
+            display: flex;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Action Button */
+        .action-button {
+            width: 100%;
+            padding: 10px;
+            background: var(--ec-purple);
+            color: white;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: inherit;
+        }
+        
+        .action-button:hover {
+            background: var(--ec-purple-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">DEWEY</div>
+        <nav class="platform-nav">
+            <a href="#">Portfolio</a>
+            <a href="#">Research</a>
+            <a href="#" class="active">Email Center</a>
+            <a href="#">Reports</a>
+            <a href="#">Settings</a>
+        </nav>
+    </header>
+    
+    <!-- Context Header -->
+    <div class="context-header">
+        <div class="context-top">
+            <div class="context-info">
+                <h1>Email Processing Center</h1>
+            </div>
+            <div class="sync-status">
+                <span class="sync-indicator"></span>
+                <span>Live Sync Active</span>
+                <span style="color: var(--ec-text-muted);">• Last: 12 seconds ago</span>
+            </div>
+        </div>
+        <div class="metrics-bar">
+            <div class="metric-item">
+                <span class="metric-label">24H Volume</span>
+                <span class="metric-value">3,847</span>
+                <span class="metric-delta delta-positive">+12.3%</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Processing Rate</span>
+                <span class="metric-value">98.2%</span>
+                <span class="metric-delta delta-positive">+2.1%</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Avg Time</span>
+                <span class="metric-value">0.73s</span>
+                <span class="metric-delta delta-positive">-0.12s</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Accuracy</span>
+                <span class="metric-value">94.7%</span>
+                <span class="metric-delta delta-negative">-0.3%</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">In Queue</span>
+                <span class="metric-value">127</span>
+                <span class="metric-delta" style="color: var(--ec-text-muted);">steady</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="section-title">Active Workflows</h3>
+                <div class="workflow-list">
+                    <div class="workflow-item">
+                        <span class="workflow-name">Client Prioritization</span>
+                        <span class="workflow-status">
+                            <span class="status-indicator status-active"></span>
+                            <span style="font-size: 11px;">847/h</span>
+                        </span>
+                    </div>
+                    <div class="workflow-item">
+                        <span class="workflow-name">Research Extraction</span>
+                        <span class="workflow-status">
+                            <span class="status-indicator status-active"></span>
+                            <span style="font-size: 11px;">234/h</span>
+                        </span>
+                    </div>
+                    <div class="workflow-item">
+                        <span class="workflow-name">Alert Detection</span>
+                        <span class="workflow-status">
+                            <span class="status-indicator status-active"></span>
+                            <span style="font-size: 11px;">1.2k/h</span>
+                        </span>
+                    </div>
+                    <div class="workflow-item">
+                        <span class="workflow-name">HITL Review</span>
+                        <span class="workflow-status">
+                            <span class="status-indicator status-active"></span>
+                            <span style="font-size: 11px;">23 pending</span>
+                        </span>
+                    </div>
+                    <div class="workflow-item">
+                        <span class="workflow-name">Auto-Response</span>
+                        <span class="workflow-status">
+                            <span class="status-indicator status-paused"></span>
+                            <span style="font-size: 11px;">paused</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Category Distribution</h3>
+                <div class="category-list">
+                    <div class="category-item">
+                        <span class="category-label">Client</span>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: 65%; background: #1976D2;"></div>
+                        </div>
+                        <span class="category-count">2,505</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-label">Research</span>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: 20%; background: #7B1FA2;"></div>
+                        </div>
+                        <span class="category-count">770</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-label">Internal</span>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: 10%; background: #388E3C;"></div>
+                        </div>
+                        <span class="category-count">385</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-label">Alerts</span>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: 3%; background: #F57C00;"></div>
+                        </div>
+                        <span class="category-count">116</span>
+                    </div>
+                    <div class="category-item">
+                        <span class="category-label">Routine</span>
+                        <div class="category-bar">
+                            <div class="category-fill" style="width: 2%; background: var(--ec-text-muted);"></div>
+                        </div>
+                        <span class="category-count">71</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="section-title">Rules Engine</h3>
+                <div class="rules-summary">
+                    <div class="rule-stat">
+                        <span class="rule-label">Active Rules</span>
+                        <span class="rule-value">147</span>
+                    </div>
+                    <div class="rule-stat">
+                        <span class="rule-label">Learned Today</span>
+                        <span class="rule-value">+3</span>
+                    </div>
+                    <div class="rule-stat">
+                        <span class="rule-label">Pattern Matches</span>
+                        <span class="rule-value">89.2%</span>
+                    </div>
+                    <div class="rule-stat">
+                        <span class="rule-label">Custom Filters</span>
+                        <span class="rule-value">23</span>
+                    </div>
+                </div>
+                <button class="action-button" style="margin-top: 12px;">Manage Rules</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Processing Stream -->
+            <div class="processing-stream">
+                <div class="stream-header">
+                    <h3 class="stream-title">Live Processing Stream</h3>
+                    <div class="stream-controls">
+                        <button class="control-btn active">Live</button>
+                        <button class="control-btn">Paused</button>
+                        <button class="control-btn">Filtered</button>
+                    </div>
+                </div>
+                <div class="email-list">
+                    <div class="email-item">
+                        <span class="email-time">14:32:18</span>
+                        <span class="email-from">j.martinez@ethicalcap...</span>
+                        <span class="email-subject">Re: Q4 Portfolio Review - Urgent Client Concerns</span>
+                        <span class="email-category cat-client">CLIENT</span>
+                        <span class="email-confidence">95.2%</span>
+                        <span class="email-action">→ HITL Queue</span>
+                    </div>
+                    <div class="email-item">
+                        <span class="email-time">14:32:15</span>
+                        <span class="email-from">research@moodys.com</span>
+                        <span class="email-subject">Credit Rating Update: Technology Sector Outlook</span>
+                        <span class="email-category cat-research">RESEARCH</span>
+                        <span class="email-confidence">98.7%</span>
+                        <span class="email-action">→ Extract</span>
+                    </div>
+                    <div class="email-item">
+                        <span class="email-time">14:32:11</span>
+                        <span class="email-from">alerts@bloomberg.net</span>
+                        <span class="email-subject">ALERT: MSFT Announces Major Acquisition</span>
+                        <span class="email-category cat-alert">ALERT</span>
+                        <span class="email-confidence">99.1%</span>
+                        <span class="email-action">→ Broadcast</span>
+                    </div>
+                    <div class="email-item">
+                        <span class="email-time">14:32:09</span>
+                        <span class="email-from">compliance@ethical...</span>
+                        <span class="email-subject">Weekly Compliance Report - Review Required</span>
+                        <span class="email-category cat-internal">INTERNAL</span>
+                        <span class="email-confidence">92.4%</span>
+                        <span class="email-action">→ Team Queue</span>
+                    </div>
+                    <div class="email-item">
+                        <span class="email-time">14:32:07</span>
+                        <span class="email-from">noreply@linkedin.com</span>
+                        <span class="email-subject">Your network update</span>
+                        <span class="email-category cat-routine">ROUTINE</span>
+                        <span class="email-confidence">99.8%</span>
+                        <span class="email-action">→ Archive</span>
+                    </div>
+                    <div class="email-item">
+                        <span class="email-time">14:32:04</span>
+                        <span class="email-from">sustainability@client...</span>
+                        <span class="email-subject">ESG Risk Assessment - Climate Data Request</span>
+                        <span class="email-category cat-client">CLIENT</span>
+                        <span class="email-confidence">88.3%</span>
+                        <span class="email-action">→ Assign PM</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Queue Overview -->
+            <div class="queue-overview">
+                <div class="queue-grid">
+                    <div class="queue-card">
+                        <div class="queue-card-header">
+                            <h4 class="queue-card-title">Client Response Queue</h4>
+                            <span class="queue-card-count">47</span>
+                        </div>
+                        <div class="queue-items">
+                            <div class="queue-item">
+                                <span>High Priority - Board Meeting Requests</span>
+                                <span style="color: var(--ec-negative); font-weight: 600;">3</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Portfolio Questions</span>
+                                <span>18</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Performance Inquiries</span>
+                                <span>12</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Document Requests</span>
+                                <span>14</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue-card">
+                        <div class="queue-card-header">
+                            <h4 class="queue-card-title">Research Integration</h4>
+                            <span class="queue-card-count">234</span>
+                        </div>
+                        <div class="queue-items">
+                            <div class="queue-item">
+                                <span>Earnings Reports</span>
+                                <span>67</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Market Analysis</span>
+                                <span>89</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>ESG Updates</span>
+                                <span>45</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Regulatory Filings</span>
+                                <span>33</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue-card">
+                        <div class="queue-card-header">
+                            <h4 class="queue-card-title">Alert Processing</h4>
+                            <span class="queue-card-count">31</span>
+                        </div>
+                        <div class="queue-items">
+                            <div class="queue-item">
+                                <span>Price Alerts</span>
+                                <span style="color: var(--ec-negative); font-weight: 600;">8</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>News Alerts</span>
+                                <span>15</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Risk Alerts</span>
+                                <span>5</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Compliance Alerts</span>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="queue-card">
+                        <div class="queue-card-header">
+                            <h4 class="queue-card-title">HITL Review</h4>
+                            <span class="queue-card-count">23</span>
+                        </div>
+                        <div class="queue-items">
+                            <div class="queue-item">
+                                <span>Low Confidence (&lt;75%)</span>
+                                <span>11</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Complex Requests</span>
+                                <span>7</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Edge Cases</span>
+                                <span>3</span>
+                            </div>
+                            <div class="queue-item">
+                                <span>Manual Override</span>
+                                <span>2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Right Panel -->
+        <aside class="panel">
+            <div class="panel-section">
+                <h3 class="section-title">Recent Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item activity-automation">
+                        <span class="activity-time">14:31</span>
+                        <span class="activity-type">🤖</span>
+                        <span class="activity-text">Auto-categorized 47 emails with 97.3% confidence</span>
+                    </div>
+                    <div class="activity-item activity-rule">
+                        <span class="activity-time">14:28</span>
+                        <span class="activity-type">📋</span>
+                        <span class="activity-text">New rule: Prioritize emails from Julia Martinez</span>
+                    </div>
+                    <div class="activity-item activity-error">
+                        <span class="activity-time">14:24</span>
+                        <span class="activity-type">⚠️</span>
+                        <span class="activity-text">Failed to parse attachment in email #3847</span>
+                    </div>
+                    <div class="activity-item activity-automation">
+                        <span class="activity-time">14:22</span>
+                        <span class="activity-type">🔄</span>
+                        <span class="activity-text">Research workflow extracted 23 data points</span>
+                    </div>
+                    <div class="activity-item activity-rule">
+                        <span class="activity-time">14:19</span>
+                        <span class="activity-type">✅</span>
+                        <span class="activity-text">HITL approved 8 categorizations</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Research Integration</h3>
+                <div class="research-links">
+                    <div class="research-link">
+                        <span>Securities Mentioned</span>
+                        <span class="link-count">147</span>
+                    </div>
+                    <div class="research-link">
+                        <span>Risk Factors Identified</span>
+                        <span class="link-count">23</span>
+                    </div>
+                    <div class="research-link">
+                        <span>Client Holdings Affected</span>
+                        <span class="link-count">38</span>
+                    </div>
+                    <div class="research-link">
+                        <span>Action Items Generated</span>
+                        <span class="link-count">12</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section">
+                <h3 class="section-title">Performance</h3>
+                <div class="perf-grid">
+                    <div class="perf-metric">
+                        <div class="perf-value">0.73s</div>
+                        <div class="perf-label">Avg Process</div>
+                    </div>
+                    <div class="perf-metric">
+                        <div class="perf-value">94.7%</div>
+                        <div class="perf-label">Accuracy</div>
+                    </div>
+                    <div class="perf-metric">
+                        <div class="perf-value">3.2k</div>
+                        <div class="perf-label">Automated</div>
+                    </div>
+                    <div class="perf-metric">
+                        <div class="perf-value">127</div>
+                        <div class="perf-label">In Queue</div>
+                    </div>
+                </div>
+                <button class="action-button" style="margin-top: 12px;">View Full Analytics</button>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="hotkey-list">
+            <div class="hotkey">
+                <span class="key">Q</span>
+                <span>Queue View</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">R</span>
+                <span>Rules</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">F</span>
+                <span>Filter</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">Space</span>
+                <span>Pause Stream</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">H</span>
+                <span>HITL Queue</span>
+            </div>
+            <div class="hotkey">
+                <span class="key">?</span>
+                <span>Help</span>
+            </div>
+        </div>
+        <div class="status-info">
+            <span>Processing: 3,847 today</span>
+            <span>Queue Health: 98.2%</span>
+            <span>Mode: LIVE</span>
+        </div>
+    </footer>
+    
+    <script>
+        // Live stream simulation
+        const emailTemplates = [
+            { from: 'client@wealth.com', subject: 'Portfolio rebalancing question', category: 'CLIENT', confidence: '91.3', action: '→ Assign PM' },
+            { from: 'research@sp.com', subject: 'S&P 500 Outlook Update - Q1 2025', category: 'RESEARCH', confidence: '98.9', action: '→ Extract' },
+            { from: 'compliance@sec.gov', subject: 'New ESG Reporting Requirements', category: 'ALERT', confidence: '99.5', action: '→ Broadcast' },
+            { from: 'team@ethical...', subject: 'Investment Committee Minutes', category: 'INTERNAL', confidence: '94.2', action: '→ Team Queue' },
+            { from: 'news@reuters.com', subject: 'Breaking: Fed Rate Decision', category: 'ALERT', confidence: '99.7', action: '→ Broadcast' },
+            { from: 'sustainability@...', subject: 'Carbon footprint analysis request', category: 'CLIENT', confidence: '87.6', action: '→ HITL Queue' }
+        ];
+        
+        function addNewEmail() {
+            const emailList = document.querySelector('.email-list');
+            const template = emailTemplates[Math.floor(Math.random() * emailTemplates.length)];
+            
+            const newEmail = document.createElement('div');
+            newEmail.className = 'email-item';
+            newEmail.style.opacity = '0';
+            
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            
+            newEmail.innerHTML = `
+                <span class="email-time">${timeStr}</span>
+                <span class="email-from">${template.from}</span>
+                <span class="email-subject">${template.subject}</span>
+                <span class="email-category cat-${template.category.toLowerCase()}">${template.category}</span>
+                <span class="email-confidence">${template.confidence}%</span>
+                <span class="email-action">${template.action}</span>
+            `;
+            
+            emailList.insertBefore(newEmail, emailList.firstChild);
+            
+            // Animate in
+            setTimeout(() => {
+                newEmail.style.opacity = '1';
+            }, 10);
+            
+            // Remove old emails
+            while (emailList.children.length > 10) {
+                emailList.removeChild(emailList.lastChild);
+            }
+            
+            // Update metrics
+            updateMetrics();
+        }
+        
+        function updateMetrics() {
+            const volumeEl = document.querySelector('.metric-value');
+            const currentVolume = parseInt(volumeEl.textContent.replace(',', ''));
+            volumeEl.textContent = (currentVolume + 1).toLocaleString();
+        }
+        
+        // Simulate live stream when "Live" is active
+        let streamInterval = setInterval(addNewEmail, Math.random() * 3000 + 2000);
+        
+        // Control buttons
+        document.querySelectorAll('.control-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.control-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                if (this.textContent === 'Live') {
+                    streamInterval = setInterval(addNewEmail, Math.random() * 3000 + 2000);
+                } else {
+                    clearInterval(streamInterval);
+                }
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch(e.key.toLowerCase()) {
+                case ' ':
+                    e.preventDefault();
+                    const pauseBtn = Array.from(document.querySelectorAll('.control-btn')).find(b => b.textContent === 'Paused');
+                    pauseBtn.click();
+                    break;
+                case 'q':
+                    console.log('Switch to queue view');
+                    break;
+                case 'r':
+                    console.log('Open rules management');
+                    break;
+                case 'h':
+                    console.log('Switch to HITL queue');
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
