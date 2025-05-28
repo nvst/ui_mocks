@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Archive | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Archive Header */
+        .archive-header {
+            background: var(--ec-bg-white);
+            padding: 32px 24px;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .archive-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .archive-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .archive-stats {
+            display: flex;
+            gap: 32px;
+            font-size: 14px;
+            color: var(--ec-text-muted);
+        }
+
+        .stat-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--ec-text);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: var(--ec-purple);
+            color: white;
+            padding: 16px 24px;
+        }
+
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.9;
+        }
+
+        .filter-select {
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            background: white;
+            color: var(--ec-text);
+            border: none;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: 2px solid var(--ec-purple-light);
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            border: none;
+            background: white;
+            color: var(--ec-text);
+        }
+
+        .search-input:focus {
+            outline: 2px solid var(--ec-purple-light);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+        }
+
+        /* Categories Sidebar */
+        .categories-sidebar {
+            position: sticky;
+            top: 24px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--ec-text);
+            border: 1px solid transparent;
+        }
+
+        .category-item:hover {
+            background: var(--ec-purple-pale);
+            border-color: var(--ec-purple);
+        }
+
+        .category-item.active {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        .category-count {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Year Archive */
+        .year-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .year-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--ec-text);
+        }
+
+        .year-item:hover {
+            background: var(--ec-purple-pale);
+            color: var(--ec-purple);
+        }
+
+        /* Content Area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Category Section */
+        .category-section {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: var(--ec-bg-gray);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--ec-border);
+        }
+
+        .category-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+        }
+
+        .category-meta {
+            font-size: 12px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Post List */
+        .post-list {
+            padding: 0;
+        }
+
+        .post-item {
+            display: grid;
+            grid-template-columns: 1fr 120px 100px 80px;
+            padding: 16px 24px;
+            border-bottom: 1px dotted var(--ec-border);
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: var(--ec-text);
+        }
+
+        .post-item:hover {
+            background: var(--ec-purple-pale);
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ec-text);
+        }
+
+        .post-date {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-align: center;
+        }
+
+        .post-readtime {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-align: center;
+        }
+
+        .post-views {
+            font-size: 11px;
+            color: var(--ec-text-muted);
+            text-align: right;
+        }
+
+        /* View All Link */
+        .view-all {
+            display: block;
+            padding: 12px 24px;
+            background: var(--ec-bg-gray);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .view-all:hover {
+            background: var(--ec-purple);
+            color: white;
+        }
+
+        /* Tags Cloud */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: var(--ec-bg-gray);
+            font-size: 11px;
+            text-decoration: none;
+            color: var(--ec-text);
+            border: 1px solid var(--ec-border);
+        }
+
+        .tag:hover {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        .tag-count {
+            opacity: 0.7;
+            margin-left: 4px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 48px;
+        }
+
+        .page-link {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid var(--ec-border);
+            text-decoration: none;
+            color: var(--ec-text);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .page-link:hover {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        .page-link.active {
+            background: var(--ec-purple);
+            color: white;
+            border-color: var(--ec-purple);
+        }
+
+        .page-link.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 48px;
+            text-align: center;
+            color: var(--ec-text-muted);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+            margin-top: 64px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .categories-sidebar {
+                position: static;
+            }
+            
+            .filter-container {
+                flex-wrap: wrap;
+            }
+            
+            .post-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .post-date,
+            .post-readtime,
+            .post-views {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .archive-stats {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item active">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Archive Header -->
+    <div class="archive-header">
+        <div class="archive-container">
+            <h1 class="archive-title">Research Archive</h1>
+            <div class="archive-stats">
+                <div class="stat-item">
+                    <span class="stat-value">247</span>
+                    <span>Total Articles</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">7</span>
+                    <span>Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">52</span>
+                    <span>Authors</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">Since</span>
+                    <span class="stat-value">2015</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-container">
+            <div class="filter-group">
+                <label class="filter-label">Sort By:</label>
+                <select class="filter-select">
+                    <option>Latest First</option>
+                    <option>Oldest First</option>
+                    <option>Most Viewed</option>
+                    <option>Most Shared</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Year:</label>
+                <select class="filter-select">
+                    <option>All Years</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                    <option>2021</option>
+                    <option>2020</option>
+                </select>
+            </div>
+            <input type="search" class="search-input" placeholder="Search archive...">
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Categories Sidebar -->
+        <aside class="categories-sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">CATEGORIES</h3>
+                <nav class="category-list">
+                    <a href="#" class="category-item active">
+                        <span>All Categories</span>
+                        <span class="category-count">247</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Portfolio Updates</span>
+                        <span class="category-count">42</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>ESG Deep Dives</span>
+                        <span class="category-count">38</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Market Analysis</span>
+                        <span class="category-count">56</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Company Profiles</span>
+                        <span class="category-count">47</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Thematic Research</span>
+                        <span class="category-count">29</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Client Education</span>
+                        <span class="category-count">23</span>
+                    </a>
+                    <a href="#" class="category-item">
+                        <span>Methodology</span>
+                        <span class="category-count">12</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">ARCHIVE BY YEAR</h3>
+                <nav class="year-list">
+                    <a href="#" class="year-item">
+                        <span>2024</span>
+                        <span class="category-count">67</span>
+                    </a>
+                    <a href="#" class="year-item">
+                        <span>2023</span>
+                        <span class="category-count">54</span>
+                    </a>
+                    <a href="#" class="year-item">
+                        <span>2022</span>
+                        <span class="category-count">48</span>
+                    </a>
+                    <a href="#" class="year-item">
+                        <span>2021</span>
+                        <span class="category-count">36</span>
+                    </a>
+                    <a href="#" class="year-item">
+                        <span>2020</span>
+                        <span class="category-count">29</span>
+                    </a>
+                    <a href="#" class="year-item">
+                        <span>2019</span>
+                        <span class="category-count">13</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">POPULAR TAGS</h3>
+                <div class="tag-cloud">
+                    <a href="#" class="tag">Climate Risk <span class="tag-count">(34)</span></a>
+                    <a href="#" class="tag">BDS <span class="tag-count">(28)</span></a>
+                    <a href="#" class="tag">Infrastructure <span class="tag-count">(23)</span></a>
+                    <a href="#" class="tag">AI Ethics <span class="tag-count">(19)</span></a>
+                    <a href="#" class="tag">Small Cap <span class="tag-count">(17)</span></a>
+                    <a href="#" class="tag">Healthcare <span class="tag-count">(21)</span></a>
+                    <a href="#" class="tag">Energy Transition <span class="tag-count">(31)</span></a>
+                    <a href="#" class="tag">Supply Chain <span class="tag-count">(15)</span></a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- ESG Deep Dives Category -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-name">ESG Deep Dives</h2>
+                    <span class="category-meta">38 articles • Most recent: Dec 18, 2024</span>
+                </div>
+                <div class="post-list">
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">The Hidden 40%: How Our Proprietary Screening Catches What ESG Ratings Miss</h3>
+                        <span class="post-date">Dec 18, 2024</span>
+                        <span class="post-readtime">15 min read</span>
+                        <span class="post-views">423 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">Greenwashing in 2024: The New Tactics and How We Spot Them</h3>
+                        <span class="post-date">Nov 30, 2024</span>
+                        <span class="post-readtime">12 min read</span>
+                        <span class="post-views">312 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">Supply Chain Transparency: Why We Exclude Companies That Can't Trace Their Impact</h3>
+                        <span class="post-date">Nov 15, 2024</span>
+                        <span class="post-readtime">18 min read</span>
+                        <span class="post-views">267 views</span>
+                    </a>
+                </div>
+                <a href="#" class="view-all">View All ESG Deep Dives →</a>
+            </section>
+
+            <!-- Market Analysis Category -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-name">Market Analysis</h2>
+                    <span class="category-meta">56 articles • Most recent: Dec 15, 2024</span>
+                </div>
+                <div class="post-list">
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">Q4 2024 Market Wrap: Ethics Outperformed Again</h3>
+                        <span class="post-date">Dec 15, 2024</span>
+                        <span class="post-readtime">10 min read</span>
+                        <span class="post-views">534 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">The Infrastructure Boom: Finding Ethical Players in a Growing Sector</h3>
+                        <span class="post-date">Dec 8, 2024</span>
+                        <span class="post-readtime">14 min read</span>
+                        <span class="post-views">298 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">Small Cap Gems: Three Companies Building Tomorrow's Solutions</h3>
+                        <span class="post-date">Nov 22, 2024</span>
+                        <span class="post-readtime">16 min read</span>
+                        <span class="post-views">412 views</span>
+                    </a>
+                </div>
+                <a href="#" class="view-all">View All Market Analysis →</a>
+            </section>
+
+            <!-- Portfolio Updates Category -->
+            <section class="category-section">
+                <div class="category-header">
+                    <h2 class="category-name">Portfolio Updates</h2>
+                    <span class="category-meta">42 articles • Most recent: Dec 12, 2024</span>
+                </div>
+                <div class="post-list">
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">December Rebalancing: New Moon, New Positions</h3>
+                        <span class="post-date">Dec 12, 2024</span>
+                        <span class="post-readtime">8 min read</span>
+                        <span class="post-views">892 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">Why We Exited Our Position in Major Tech Co: A Lesson in Surveillance Capitalism</h3>
+                        <span class="post-date">Dec 1, 2024</span>
+                        <span class="post-readtime">11 min read</span>
+                        <span class="post-views">765 views</span>
+                    </a>
+                    <a href="#" class="post-item">
+                        <h3 class="post-title">New Addition: Duolingo - Democratizing Language Education</h3>
+                        <span class="post-date">Nov 18, 2024</span>
+                        <span class="post-readtime">13 min read</span>
+                        <span class="post-views">543 views</span>
+                    </a>
+                </div>
+                <a href="#" class="view-all">View All Portfolio Updates →</a>
+            </section>
+
+            <!-- Pagination -->
+            <nav class="pagination">
+                <a href="#" class="page-link disabled">← Previous</a>
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">4</a>
+                <a href="#" class="page-link">5</a>
+                <span class="page-link disabled">...</span>
+                <a href="#" class="page-link">12</a>
+                <a href="#" class="page-link">Next →</a>
+            </nav>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor<br>
+                All research is for informational purposes only and should not be considered investment advice.
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Disclosures</a>
+                <a href="#">RSS Feed</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category filtering
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Year filtering
+        document.querySelectorAll('.year-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Filter by year:', this.textContent.trim());
+            });
+        });
+
+        // Tag filtering
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Filter by tag:', this.textContent.trim());
+            });
+        });
+
+        // Sort functionality
+        document.querySelector('.filter-select').addEventListener('change', function() {
+            console.log('Sort by:', this.value);
+        });
+
+        // Search functionality
+        let searchTimeout;
+        document.querySelector('.search-input').addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                console.log('Search for:', this.value);
+            }, 500);
+        });
+    </script>
+</body>
+</html>

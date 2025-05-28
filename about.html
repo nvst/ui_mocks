@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Ethical Capital Investment Collaborative</title>
+    <style>
+        /* Dewey Design System Variables */
+        :root {
+            --ec-purple: #553C9A;
+            --ec-purple-light: #6B46C1;
+            --ec-purple-pale: #E9D8FD;
+            --ec-text: #1A202C;
+            --ec-text-muted: #718096;
+            --ec-border: #E2E8F0;
+            --ec-bg: #FAFAFA;
+            --ec-bg-gray: #F3F4F6;
+            --ec-bg-white: #FFFFFF;
+            --ec-positive: #22C55E;
+            --ec-negative: #EF4444;
+            --ec-caution: #F59E0B;
+            --ec-info: #3B82F6;
+            --ec-footer: #1A202C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Mono", Monaco, "Courier New", monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--ec-text);
+            background: var(--ec-bg);
+        }
+
+        /* Platform Header */
+        .platform-header {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 24px;
+            border-bottom: 2px solid var(--ec-purple-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .platform-logo {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .platform-nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-item {
+            color: white;
+            opacity: 0.9;
+            text-decoration: none;
+            padding-bottom: 2px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item:hover {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            border-bottom: 2px solid white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--ec-bg-white);
+            padding: 48px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--ec-border);
+        }
+
+        .hero h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .hero .tagline {
+            font-size: 16px;
+            color: var(--ec-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        /* Section Headers */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 24px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--ec-purple);
+            display: inline-block;
+        }
+
+        /* Story Section */
+        .story-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .story-content {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .story-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 16px;
+        }
+
+        .story-content p {
+            margin-bottom: 16px;
+            color: var(--ec-text-muted);
+        }
+
+        .story-image {
+            background: var(--ec-bg-gray);
+            padding: 48px;
+            text-align: center;
+            border: 1px solid var(--ec-border);
+            color: var(--ec-text-muted);
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Values Grid */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .value-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 24px;
+        }
+
+        .value-card:hover {
+            border-color: var(--ec-purple);
+        }
+
+        .value-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .value-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ec-purple);
+            margin-bottom: 12px;
+        }
+
+        .value-description {
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Team Section */
+        .team-member {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 32px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--ec-purple);
+            color: white;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .member-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .member-title {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+            margin-bottom: 16px;
+        }
+
+        .member-bio {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+            line-height: 1.8;
+        }
+
+        /* Differentiators */
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .diff-card {
+            background: var(--ec-purple);
+            color: white;
+            padding: 24px;
+            position: relative;
+        }
+
+        .diff-number {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 48px;
+            font-weight: 600;
+            opacity: 0.2;
+        }
+
+        .diff-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .diff-text {
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: var(--ec-bg-gray);
+            padding: 32px;
+            margin: 48px 0;
+            text-align: center;
+            border-left: 4px solid var(--ec-purple);
+        }
+
+        .quote-text {
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ec-text);
+            margin-bottom: 16px;
+        }
+
+        .quote-author {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+        }
+
+        /* Contact Section */
+        .contact-card {
+            background: var(--ec-bg-white);
+            border: 1px solid var(--ec-border);
+            padding: 32px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .contact-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--ec-purple);
+        }
+
+        .contact-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: var(--ec-text-muted);
+            line-height: 1.6;
+        }
+
+        .contact-info a {
+            color: var(--ec-purple);
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--ec-bg-gray);
+            padding: 48px 24px;
+            text-align: center;
+            border-top: 1px solid var(--ec-border);
+        }
+
+        .cta-title {
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            color: var(--ec-text-muted);
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            background: var(--ec-purple);
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: inherit;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--ec-purple-light);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ec-footer);
+            color: white;
+            padding: 24px;
+            font-size: 11px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: white;
+            opacity: 0.8;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .story-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Platform Header -->
+    <header class="platform-header">
+        <div class="platform-logo">ETHICAL CAPITAL</div>
+        <nav class="platform-nav">
+            <a href="#" class="nav-item">PROCESS</a>
+            <a href="#" class="nav-item">RESEARCH</a>
+            <a href="#" class="nav-item">HOLDINGS</a>
+            <a href="#" class="nav-item active">ABOUT</a>
+            <a href="#" class="nav-item">START</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>We're Not Like Other Firms. Good.</h1>
+        <p class="tagline">Radically accessible fiduciary investment management that proves stringent ethical screening leads to better outcomes.</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Our Story -->
+        <section class="section">
+            <h2 class="section-header">OUR STORY</h2>
+            <div class="story-section">
+                <div class="story-content">
+                    <h3>Built from Frustration, Driven by Purpose</h3>
+                    <p>
+                        Ethical Capital started because we were tired of the investment industry's "original sin"—
+                        prioritizing the wealthy while claiming to democratize finance. We saw brilliant people 
+                        locked out of quality investment management simply because they didn't have $100,000 to start.
+                    </p>
+                    <p>
+                        We also saw the greenwashing. Companies with terrible ethics getting top ESG ratings. 
+                        Investment firms claiming sustainability while holding weapons manufacturers and fossil fuel 
+                        giants. The gap between marketing and reality was enormous.
+                    </p>
+                    <p>
+                        So we built something different. A registered investment advisor with a $1 minimum. 
+                        Hand-screening thousands of companies. We do things differently because the traditional 
+                        approach has failed both investors and society.
+                    </p>
+                    <p>
+                        <strong>We're finding the weird little flowers that grow to the sky.</strong>
+                    </p>
+                </div>
+                <div class="story-image">
+                    [Company Timeline / Milestone Visual]
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Values -->
+        <section class="section">
+            <h2 class="section-header">OUR VALUES IN ACTION</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🔍</div>
+                    <div class="value-title">Radical Transparency</div>
+                    <div class="value-description">
+                        Full access to our exclusion lists, methodologies, and research processes. Our exclusion 
+                        policy is public. We document everything and maintain complete openness about how we 
+                        make investment decisions. We believe transparency builds trust.
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🌍</div>
+                    <div class="value-title">Genuine Impact</div>
+                    <div class="value-description">
+                        We seek companies generating positive impact through their core business model, not 
+                        as a side effect. Revenue should equal impact. When a company makes money by making 
+                        the world better, everyone wins.
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <div class="value-title">Client Partnership</div>
+                    <div class="value-description">
+                        Your ethical concerns drive portfolio-wide policy updates. When you raise an issue, 
+                        we research it and potentially update screening for all portfolios. Every client 
+                        becomes a research partner in our cumulative intelligence system.
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <div class="value-title">Fiduciary Excellence</div>
+                    <div class="value-description">
+                        As a Registered Investment Advisor, we're legally bound to act in your best interest. 
+                        But we go beyond legal requirements. Our fee structure, radical accessibility, and 
+                        continuous improvement reflect deep fiduciary commitment.
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🔬</div>
+                    <div class="value-title">Rigorous Research</div>
+                    <div class="value-description">
+                        Hand-screening, lie detection technology, multi-agentic analysis—we use every tool 
+                        available to identify both risks and opportunities. Our 40% proprietary exclusion 
+                        rate reflects research depth that rating agencies miss.
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🎨</div>
+                    <div class="value-title">Ethics as Art</div>
+                    <div class="value-description">
+                        We treat ethics as a liberal art requiring human judgment, not algorithmic scoring. 
+                        Every decision contributes to our cumulative intelligence. Investing, like ethics, is 
+                        as much art as science.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What Makes Us Different -->
+        <section class="section">
+            <h2 class="section-header">OUR APPROACH</h2>
+            <div class="story-content">
+                <p style="font-size: 16px; line-height: 1.8; margin-bottom: 24px;">
+                    <strong>If a company harms living things in any form, we have no business investing in it.</strong>
+                </p>
+                <p>
+                    Whether it's a slaughterhouse trafficking in flesh, a tech firm helping implement apartheid, 
+                    or a manufacturer poisoning communities—we exclude them all. Our screening goes far beyond 
+                    traditional ESG ratings. We're fossil fuel free, forced labor free, weapons free, and 
+                    committed to excluding any business model that profits from harm.
+                </p>
+                <p>
+                    This isn't just about BDS compliance or environmental sustainability or workers' rights. 
+                    It's about recognizing that all forms of harm are interconnected, and that truly ethical 
+                    investing requires looking at the whole picture. When you invest with us, you're not just 
+                    avoiding the bad—you're actively supporting companies building a better world.
+                </p>
+                <p>
+                    Our $1 minimum investment ensures this approach is accessible to everyone, not just the 
+                    wealthy. Because we believe ethical investing shouldn't be a luxury good.
+                </p>
+            </div>
+        </section>
+
+        <div class="quote-box">
+            <p class="quote-text">
+                "We're not trying to be all things to all people. We're trying to be the right thing 
+                for people who care about what we care about."
+            </p>
+            <p class="quote-author">— Sloane Ortel, Chief Investment Officer</p>
+        </div>
+
+        <!-- Our Team -->
+        <section class="section">
+            <h2 class="section-header">MEET THE FOUNDER</h2>
+            <div class="team-member">
+                <div class="member-avatar">SO</div>
+                <h3 class="member-name">Sloane Ortel</h3>
+                <p class="member-title">Chief Investment Officer & Founder</p>
+                <p class="member-bio">
+                    Got tired of the investment industry's bullshit and decided to build something better. 
+                    Co-authored the CFA Institute textbook on Investment Idea Generation. Believes ethics and returns 
+                    are positively correlated when you look deep enough. Founded Ethical Capital to prove 
+                    that radical accessibility and rigorous ethics can coexist with strong performance.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section">
+            <h2 class="section-header">GET IN TOUCH</h2>
+            <div class="contact-card">
+                <div class="contact-icon">📅</div>
+                <h3 class="contact-title">Schedule a Conversation</h3>
+                <div class="contact-info">
+                    <a href="#">Book a 30-minute intro call</a><br><br>
+                    Let's talk about your values, your goals, and how we might help align them.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">Ready to invest with genuine conviction?</h2>
+        <p class="cta-subtitle">Join investors who refuse to choose between values and returns.</p>
+        <a href="#" class="btn-primary">START A CONVERSATION</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                © 2025 Ethical Capital Investment Collaborative | Registered Investment Advisor<br>
+                CRD# 123456 | Form ADV available upon request
+            </div>
+            <div class="footer-links">
+                <a href="#">Form ADV</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
